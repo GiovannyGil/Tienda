@@ -12,12 +12,20 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const conexion_1 = require("./database/conexion");
 const typeorm_1 = require("@nestjs/typeorm");
+const auth_module_1 = require("./auth/auth.module");
+const roles_module_1 = require("./roles/roles.module");
+const usuarios_module_1 = require("./usuarios/usuarios.module");
+const role_entity_1 = require("./roles/entities/role.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forRoot(conexion_1.default)],
+        imports: [
+            typeorm_1.TypeOrmModule.forRoot(conexion_1.default),
+            typeorm_1.TypeOrmModule.forFeature([role_entity_1.Role]),
+            auth_module_1.AuthModule, roles_module_1.RolesModule, usuarios_module_1.UsuariosModule
+        ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
