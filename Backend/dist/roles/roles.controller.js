@@ -21,20 +21,23 @@ let RolesController = class RolesController {
     constructor(rolesService) {
         this.rolesService = rolesService;
     }
-    create(createRoleDto) {
-        return this.rolesService.create(createRoleDto);
+    async create(createRoleDto) {
+        return await this.rolesService.create(createRoleDto);
     }
-    findAll() {
-        return this.rolesService.findAll();
+    async findAll() {
+        return await this.rolesService.findAll();
     }
-    findOne(id) {
-        return this.rolesService.findOne(+id);
+    async findOneByID(id) {
+        return await this.rolesService.findOneByID(+id);
     }
-    update(id, updateRoleDto) {
-        return this.rolesService.update(+id, updateRoleDto);
+    async findOneByNombre(nombreRol) {
+        return await this.rolesService.findOneByNombre(nombreRol);
     }
-    remove(id) {
-        return this.rolesService.remove(+id);
+    async update(id, updateRoleDto) {
+        return await this.rolesService.update(+id, updateRoleDto);
+    }
+    async remove(id) {
+        return await this.rolesService.softDelete(+id);
     }
 };
 exports.RolesController = RolesController;
@@ -43,35 +46,42 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_role_dto_1.CreateRoleDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], RolesController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], RolesController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], RolesController.prototype, "findOne", null);
+    __metadata("design:returntype", Promise)
+], RolesController.prototype, "findOneByID", null);
+__decorate([
+    (0, common_1.Get)(':nombreRol'),
+    __param(0, (0, common_1.Param)('nombreRol')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], RolesController.prototype, "findOneByNombre", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_role_dto_1.UpdateRoleDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], RolesController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], RolesController.prototype, "remove", null);
 exports.RolesController = RolesController = __decorate([
     (0, common_1.Controller)('roles'),

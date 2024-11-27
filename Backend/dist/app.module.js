@@ -15,7 +15,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const auth_module_1 = require("./auth/auth.module");
 const roles_module_1 = require("./roles/roles.module");
 const usuarios_module_1 = require("./usuarios/usuarios.module");
-const role_entity_1 = require("./roles/entities/role.entity");
+const schedule_1 = require("@nestjs/schedule");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -23,7 +23,7 @@ exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             typeorm_1.TypeOrmModule.forRoot(conexion_1.default),
-            typeorm_1.TypeOrmModule.forFeature([role_entity_1.Role]),
+            schedule_1.ScheduleModule.forRoot(),
             auth_module_1.AuthModule, roles_module_1.RolesModule, usuarios_module_1.UsuariosModule
         ],
         controllers: [app_controller_1.AppController],

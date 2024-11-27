@@ -8,12 +8,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { RolesModule } from './roles/roles.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
-import { Role } from './roles/entities/role.entity';
+
+
+// Importar el módulo de tareas
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(ConexionDDBB),
-    TypeOrmModule.forFeature([Role]), 
+    ScheduleModule.forRoot(), // Habilita la programación de tareas
     AuthModule, RolesModule, UsuariosModule],
   controllers: [AppController],
   providers: [AppService],

@@ -12,6 +12,7 @@ const roles_service_1 = require("./roles.service");
 const roles_controller_1 = require("./roles.controller");
 const role_entity_1 = require("./entities/role.entity");
 const typeorm_1 = require("@nestjs/typeorm");
+const roles_task_service_1 = require("./extends/roles-task.service");
 let RolesModule = class RolesModule {
 };
 exports.RolesModule = RolesModule;
@@ -19,7 +20,7 @@ exports.RolesModule = RolesModule = __decorate([
     (0, common_1.Module)({
         imports: [typeorm_1.TypeOrmModule.forFeature([role_entity_1.Role])],
         controllers: [roles_controller_1.RolesController],
-        providers: [roles_service_1.RolesService],
+        providers: [roles_service_1.RolesService, roles_task_service_1.RolesTaskService],
         exports: [roles_service_1.RolesService]
     })
 ], RolesModule);

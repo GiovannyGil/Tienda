@@ -11,8 +11,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Role = void 0;
 const typeorm_1 = require("typeorm");
-class Role {
-}
+let Role = class Role {
+};
 exports.Role = Role;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
@@ -27,7 +27,7 @@ __decorate([
     __metadata("design:type", String)
 ], Role.prototype, "descripcion", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "int", length: 1, nullable: false }),
+    (0, typeorm_1.Column)({ type: "int", nullable: false }),
     __metadata("design:type", Number)
 ], Role.prototype, "estado", void 0);
 __decorate([
@@ -42,4 +42,7 @@ __decorate([
     (0, typeorm_1.Column)({ type: "date", nullable: false }),
     __metadata("design:type", Date)
 ], Role.prototype, "deleteAt", void 0);
+exports.Role = Role = __decorate([
+    (0, typeorm_1.Entity)({ name: 'Roles' })
+], Role);
 //# sourceMappingURL=role.entity.js.map

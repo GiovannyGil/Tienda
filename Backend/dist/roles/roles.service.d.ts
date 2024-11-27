@@ -1,9 +1,16 @@
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
+import { Role } from './entities/role.entity';
+import { Repository } from 'typeorm';
 export declare class RolesService {
-    create(createRoleDto: CreateRoleDto): string;
-    findAll(): string;
-    findOne(id: number): string;
-    update(id: number, updateRoleDto: UpdateRoleDto): string;
-    remove(id: number): string;
+    private roleRepository;
+    constructor(roleRepository: Repository<Role>);
+    verifyExistROL(nombreRol: string): Promise<Boolean>;
+    create(createRoleDto: CreateRoleDto): Promise<Role>;
+    findAll(): Promise<Role[]>;
+    findOneByID(id: number): Promise<Role>;
+    findOneByNombre(nombreRol: string): Promise<Role>;
+    update(id: number, updateRoleDto: UpdateRoleDto): Promise<import("typeorm").UpdateResult>;
+    softDelete(id: number): Promise<string>;
+    remove(): Promise<void>;
 }
