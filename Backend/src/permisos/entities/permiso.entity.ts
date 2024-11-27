@@ -1,12 +1,13 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BadRequestException } from "@nestjs/common";
 
-@Entity({ name: 'Roles' })
-export class Role {
+@Entity({ name: "permisos" })
+export class Permiso {
     @PrimaryGeneratedColumn()
     id: number
 
     @Column({ type: "varchar", length: 20, nullable: false })
-    nombreRol: string
+    nombrePermiso: string
 
     @Column({ type: "varchar", length: 100, nullable: false })
     descripcion: string
@@ -21,7 +22,7 @@ export class Role {
     updatedAt: Date
 
     @Column({ type: "date", nullable: true })
-    deleteAt: Date
+    deletedAt: Date
 
     // relaciones aqui
 }

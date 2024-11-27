@@ -3,7 +3,7 @@ import { RolesService } from './roles.service';
 import { RolesController } from './roles.controller';
 import { Role } from './entities/role.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RolesTaskService } from './extends/roles-task.service';
+import { RolesTaskService } from './complements/roles-task.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Role])],

@@ -79,7 +79,7 @@ export class RolesService {
   async findOneByNombre(nombreRol: string): Promise<Role> {
     try {
       // buscar el rol
-      const rol = await this.roleRepository.findOneBy({ nombreRol })
+      const rol = await this.roleRepository.findOneBy({ nombreRol, deleteAt: null })
       // si no encuentra el rol devolver un null
       if (!rol) return null
       // retornar el rol
