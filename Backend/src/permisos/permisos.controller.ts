@@ -18,8 +18,13 @@ export class PermisosController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.permisosService.findOne(+id);
+  findOneByID(@Param('id') id: string) {
+    return this.permisosService.findOneByID(+id);
+  }
+
+  @Get(':nombrePermiso')
+  findOneByNombre(@Param('nombrePermiso') nombrePermiso: string) {
+    return this.permisosService.findOneByNombre(nombrePermiso);
   }
 
   @Patch(':id')
@@ -29,6 +34,6 @@ export class PermisosController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.permisosService.remove(+id);
+    return this.permisosService.remove();
   }
 }

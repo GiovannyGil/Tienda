@@ -1,3 +1,15 @@
 node_modules
 /node_modules
 ./node_modules
+
+dist
+/dist
+./dist
+
+test
+/tests
+./test
+
+.vscode
+/.vscode
+./.vscode

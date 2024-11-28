@@ -1,9 +1,10 @@
 import { IsDate, IsInt, IsNotEmpty, IsString, Length, IsOptional } from "class-validator";
 
 export class CreateVentaDto {
-    @IsDate()
+    @IsString()
     @IsNotEmpty()
-    fechaVenta: Date
+    @Length(1, 100)
+    descripcion: string
 
     @IsInt()
     @IsNotEmpty()

@@ -35,11 +35,11 @@ __decorate([
     __metadata("design:type", Date)
 ], Role.prototype, "createdAt", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "date", nullable: false }),
+    (0, typeorm_1.Column)({ type: "date", nullable: true }),
     __metadata("design:type", Date)
 ], Role.prototype, "updatedAt", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "date", nullable: false }),
+    (0, typeorm_1.Column)({ type: "date", nullable: true }),
     __metadata("design:type", Date)
 ], Role.prototype, "deleteAt", void 0);
 exports.Role = Role = __decorate([

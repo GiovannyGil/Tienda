@@ -12,7 +12,7 @@ const roles_service_1 = require("./roles.service");
 const roles_controller_1 = require("./roles.controller");
 const role_entity_1 = require("./entities/role.entity");
 const typeorm_1 = require("@nestjs/typeorm");
-const roles_task_service_1 = require("./extends/roles-task.service");
+const roles_task_service_1 = require("./complements/roles-task.service");
 let RolesModule = class RolesModule {
 };
 exports.RolesModule = RolesModule;

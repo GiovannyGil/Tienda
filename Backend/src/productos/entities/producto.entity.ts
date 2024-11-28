@@ -26,6 +26,9 @@ export class Producto {
     @Column({ type: "date", nullable: true })
     fechaVencimiento: Date;
 
+    @Column({ type: "int", nullable: false })
+    categoriaId: number
+
     @Column({ type: "date", nullable: false })
     createdAt: Date;
 

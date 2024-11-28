@@ -5,8 +5,8 @@ export class Venta {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: Date, nullable: false })
-    fechaVenta: Date;
+    @Column({ type: "varchar", length: 100, nullable: false })
+    descripcion: string;
 
     @Column({ type: 'int', nullable: false })
     productoid: number;

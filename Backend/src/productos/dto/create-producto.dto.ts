@@ -32,6 +32,10 @@ export class CreateProductoDto {
     @IsOptional()
     fechaVencimiento: Date
 
+    @IsInt()
+    @IsNotEmpty()
+    categoriaId: number
+
     @IsDate()
     @IsNotEmpty()
     createdAt: Date;

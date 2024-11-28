@@ -11,4 +11,4 @@ import { RolesTaskService } from './complements/roles-task.service';
   providers: [RolesService, RolesTaskService],
   exports: [RolesService]
 })
-export class RolesModule {}
+export class RolesModule { }

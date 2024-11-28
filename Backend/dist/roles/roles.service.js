@@ -68,7 +68,7 @@ let RolesService = class RolesService {
     }
     async findOneByNombre(nombreRol) {
         try {
-            const rol = await this.roleRepository.findOneBy({ nombreRol });
+            const rol = await this.roleRepository.findOneBy({ nombreRol, deleteAt: null });
             if (!rol)
                 return null;
             return rol;

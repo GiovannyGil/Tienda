@@ -16,6 +16,12 @@ const auth_module_1 = require("./auth/auth.module");
 const roles_module_1 = require("./roles/roles.module");
 const usuarios_module_1 = require("./usuarios/usuarios.module");
 const schedule_1 = require("@nestjs/schedule");
+const permisos_module_1 = require("./permisos/permisos.module");
+const productos_module_1 = require("./productos/productos.module");
+const ventas_module_1 = require("./ventas/ventas.module");
+const compras_module_1 = require("./compras/compras.module");
+const categorias_module_1 = require("./categorias/categorias.module");
+const proveedores_module_1 = require("./proveedores/proveedores.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -24,7 +30,7 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             typeorm_1.TypeOrmModule.forRoot(conexion_1.default),
             schedule_1.ScheduleModule.forRoot(),
-            auth_module_1.AuthModule, roles_module_1.RolesModule, usuarios_module_1.UsuariosModule
+            auth_module_1.AuthModule, roles_module_1.RolesModule, usuarios_module_1.UsuariosModule, permisos_module_1.PermisosModule, productos_module_1.ProductosModule, ventas_module_1.VentasModule, compras_module_1.ComprasModule, categorias_module_1.CategoriasModule, proveedores_module_1.ProveedoresModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

@@ -5,11 +5,14 @@ export class Compra {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: Date, nullable: false })
-    fechaCompra: Date;
+    @Column({ type: "varchar", length: 100, nullable: false })
+    descripcion: string;
 
     @Column({ type: 'int', nullable: false })
     proveedorId: number;
+
+    @Column({ type: 'int', nullable: false })
+    productoId: number;
 
     @Column({ type: 'int', nullable: false })
     usuarioId: number;
