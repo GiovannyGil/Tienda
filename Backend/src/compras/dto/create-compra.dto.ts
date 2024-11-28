@@ -29,8 +29,4 @@ export class CreateCompraDto {
     @IsNotEmpty()
     @Length(1, 100)
     metodoPago: string
-
-    @IsDate()
-    @IsNotEmpty()
-    createdAt: Date
 }

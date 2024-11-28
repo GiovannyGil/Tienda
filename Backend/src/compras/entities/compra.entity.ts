@@ -1,4 +1,5 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Usuario } from "src/usuarios/entities/usuario.entity";
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'Compras' })
 export class Compra {
@@ -22,6 +23,15 @@ export class Compra {
 
     @Column({ type: 'varchar', length: 20, nullable: false })
     metodoPago: string;
+
+    /**
+     * Relacion N:1 con Usuario
+     * Una compra solo puede tener un usuario
+     * Un usuario puede tener varias compras
+     */
+    @OneToMany(() => Usuario, (usuario) => usuario.compras)
+    @JoinColumn({ name: "usuarioId" })
+    usuario: Usuario[];
 
     @Column({ type: "date", nullable: false })
     createdAt: Date;

@@ -30,8 +30,4 @@ export class CreateProveedoreDto {
     @IsNotEmpty()
     @Length(1, 100)
     direccion: string
-
-    @IsDate()
-    @IsNotEmpty()
-    createdAt: Date
 }

@@ -15,8 +15,4 @@ export class CreatePermisoDto {
     @IsNotEmpty()
     @Length(1)
     estado: number
-
-    @IsDate()
-    @IsNotEmpty()
-    createdAt: Date;
 }

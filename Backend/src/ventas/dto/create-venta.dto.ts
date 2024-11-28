@@ -24,8 +24,4 @@ export class CreateVentaDto {
     @IsNotEmpty()
     @Length(1, 100)
     metodoPago: string
-
-    @IsDate()
-    @IsNotEmpty()
-    createdAt: Date
 }

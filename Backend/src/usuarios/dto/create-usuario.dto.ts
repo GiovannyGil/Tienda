@@ -1,4 +1,4 @@
-import { IsDate, IsInt, IsNotEmpty, IsString, Length } from "class-validator";
+import { IsDate, IsIn, IsInt, IsNotEmpty, IsOptional, IsString, Length } from "class-validator";
 
 export class CreateUsuarioDto {
     @IsString()
@@ -7,7 +7,7 @@ export class CreateUsuarioDto {
     PrimerNombre: string
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     @Length(1, 30)
     SegundoNombre: string
 
@@ -17,7 +17,7 @@ export class CreateUsuarioDto {
     PrimerApellido: string
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     @Length(1, 30)
     SegundoApellido: string
 
@@ -39,7 +39,7 @@ export class CreateUsuarioDto {
     @IsNotEmpty()
     añoNace: Date;
 
-    @IsDate()
+    @IsInt()
     @IsNotEmpty()
     genero: number
 
@@ -52,8 +52,4 @@ export class CreateUsuarioDto {
     @IsNotEmpty()
     @Length(1, 30)
     correo: string
-
-    @IsDate()
-    @IsNotEmpty()
-    createdAt: Date;
 }

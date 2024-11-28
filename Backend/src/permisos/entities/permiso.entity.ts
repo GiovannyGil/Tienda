@@ -1,5 +1,6 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { BadRequestException } from "@nestjs/common";
+import { Role } from "src/roles/entities/role.entity";
 
 @Entity({ name: "permisos" })
 export class Permiso {
@@ -25,4 +26,11 @@ export class Permiso {
     deletedAt: Date
 
     // relaciones aqui
+    /**
+     * Relacion N:M con Role
+     * Un permiso puede estar asociado a varios roles
+     * Un rol puede tener varios permisos
+     */
+    @ManyToMany(() => Role, (role) => role.permisos)
+    roles: Role[]
 }

@@ -1,4 +1,4 @@
-import { IsDate, IsInt, IsNotEmpty, IsString, Length } from "class-validator";
+import { IsArray, IsDate, IsInt, IsNotEmpty, IsString, Length } from "class-validator";
 
 export class CreateRoleDto {
     @IsString()
@@ -16,7 +16,7 @@ export class CreateRoleDto {
     @Length(1)
     estado: number
 
-    @IsDate()
     @IsNotEmpty()
-    createdAt: Date;
+    @IsArray() // Valida que sea un array
+    permisosIds: number[]; // IDs de los permisos que tendrá el rol
 }

@@ -35,8 +35,4 @@ export class CreateProductoDto {
     @IsInt()
     @IsNotEmpty()
     categoriaId: number
-
-    @IsDate()
-    @IsNotEmpty()
-    createdAt: Date;
 }
