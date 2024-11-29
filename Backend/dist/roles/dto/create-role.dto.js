@@ -33,8 +33,8 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateRoleDto.prototype, "estado", void 0);
 __decorate([
-    (0, class_validator_1.IsDate)(),
     (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", Date)
-], CreateRoleDto.prototype, "createdAt", void 0);
+    (0, class_validator_1.IsArray)(),
+    __metadata("design:type", Array)
+], CreateRoleDto.prototype, "permisosIds", void 0);
 //# sourceMappingURL=create-role.dto.js.map

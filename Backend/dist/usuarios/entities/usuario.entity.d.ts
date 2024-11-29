@@ -1,3 +1,6 @@
+import { Compra } from "src/compras/entities/compra.entity";
+import { Role } from "src/roles/entities/role.entity";
+import { Venta } from "src/ventas/entities/venta.entity";
 export declare class Usuario {
     id: number;
     PrimerNombre: string;
@@ -5,12 +8,14 @@ export declare class Usuario {
     PrimerApellido: string;
     SegundoApellido: string;
     NombreUsuario: string;
-    rolId: number;
+    rol: Role;
     clave: string;
     añoNace: Date;
     genero: number;
     celular: string;
     correo: string;
+    ventas: Venta[];
+    compras: Compra[];
     createdAt: Date;
     updatedAt: Date;
     deleteAt: Date;

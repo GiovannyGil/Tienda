@@ -3,7 +3,7 @@ import { IsArray, IsDate, IsInt, IsNotEmpty, IsString, Length } from "class-vali
 export class CreateRoleDto {
     @IsString()
     @IsNotEmpty()
-    @Length(1,20)
+    @Length(1, 20)
     nombreRol: string
 
     @IsString()

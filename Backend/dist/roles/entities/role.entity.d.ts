@@ -1,3 +1,5 @@
+import { Permiso } from "src/permisos/entities/permiso.entity";
+import { Usuario } from "src/usuarios/entities/usuario.entity";
 export declare class Role {
     id: number;
     nombreRol: string;
@@ -6,4 +8,6 @@ export declare class Role {
     createdAt: Date;
     updatedAt: Date;
     deleteAt: Date;
+    usuarios: Usuario[];
+    permisos: Permiso[];
 }

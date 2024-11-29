@@ -1,4 +1,4 @@
-import { IsDate, IsInt, IsNotEmpty, IsString, Length, IsOptional } from "class-validator";
+import { IsDate, IsInt, IsNotEmpty, IsString, Length, IsOptional, IsArray } from "class-validator";
 
 export class CreateCompraDto {
     @IsString()
@@ -9,17 +9,15 @@ export class CreateCompraDto {
     @IsInt()
     @IsNotEmpty()
     @IsNotEmpty()
-    proveedorId: number
+    proveedorIds: number[]
 
-    @IsInt()
     @IsNotEmpty()
-    @IsNotEmpty()
-    productoid: number
+    @IsArray() // Valida que sea un array
+    productosIds: number[]
 
-    @IsInt()
     @IsNotEmpty()
-    @IsNotEmpty()
-    usuarioId: number
+    @IsArray() // Valida que sea un array
+    usuariosIds: number[]
 
     @IsInt()
     @IsNotEmpty()

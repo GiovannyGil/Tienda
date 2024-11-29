@@ -30,7 +30,7 @@ export class Role {
     - un usuario solo tiene un rol
     - un rol se puede repetir en varios usuarios
     */
-   @OneToMany(() => Usuario, (usuario) => usuario.rol)
+    @OneToMany(() => Usuario, (usuario) => usuario.rol)
     usuarios: Usuario[]
 
     /*

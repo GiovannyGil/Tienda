@@ -1,5 +1,6 @@
+import { Producto } from "src/productos/entities/producto.entity";
 import { Usuario } from "src/usuarios/entities/usuario.entity";
-import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'Ventas' })
 export class Venta {
@@ -9,11 +10,13 @@ export class Venta {
     @Column({ type: "varchar", length: 100, nullable: false })
     descripcion: string;
 
-    @Column({ type: 'int', nullable: false })
-    productoid: number;
-
-    @Column({ type: 'int', nullable: false })
-    usuarioId: number;
+    @ManyToMany(() => Producto, (producto) => producto.ventas)
+    @JoinTable({
+        name: 'ventas_productos', // Nombre de la tabla intermedia
+        joinColumn: { name: 'ventaId', referencedColumnName: 'id' },
+        inverseJoinColumn: { name: 'productoId', referencedColumnName: 'id' },
+    })
+    productos: Producto[];
 
     @Column({ type: 'int', nullable: false })
     montoTotal: number;
@@ -26,9 +29,9 @@ export class Venta {
      * Una venta solo puede tener un usuario
      * Un usuario puede tener varias ventas
      */
-    @OneToMany(() => Usuario, (usuario) => usuario.ventas)
+    @ManyToOne(() => Usuario, (usuario) => usuario.ventas)
     @JoinColumn({ name: "usuarioId" })
-    usuario: Usuario[];
+    usuario: Usuario;
 
     @Column({ type: "date", nullable: false })
     createdAt: Date;

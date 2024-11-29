@@ -22,7 +22,7 @@ __decorate([
 ], CreateUsuarioDto.prototype, "PrimerNombre", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.Length)(1, 30),
     __metadata("design:type", String)
 ], CreateUsuarioDto.prototype, "SegundoNombre", void 0);
@@ -34,7 +34,7 @@ __decorate([
 ], CreateUsuarioDto.prototype, "PrimerApellido", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.Length)(1, 30),
     __metadata("design:type", String)
 ], CreateUsuarioDto.prototype, "SegundoApellido", void 0);
@@ -61,7 +61,7 @@ __decorate([
     __metadata("design:type", Date)
 ], CreateUsuarioDto.prototype, "a\u00F1oNace", void 0);
 __decorate([
-    (0, class_validator_1.IsDate)(),
+    (0, class_validator_1.IsInt)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)
 ], CreateUsuarioDto.prototype, "genero", void 0);
@@ -77,9 +77,4 @@ __decorate([
     (0, class_validator_1.Length)(1, 30),
     __metadata("design:type", String)
 ], CreateUsuarioDto.prototype, "correo", void 0);
-__decorate([
-    (0, class_validator_1.IsDate)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", Date)
-], CreateUsuarioDto.prototype, "createdAt", void 0);
 //# sourceMappingURL=create-usuario.dto.js.map

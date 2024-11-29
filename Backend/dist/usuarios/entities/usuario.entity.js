@@ -10,6 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Usuario = void 0;
+const compra_entity_1 = require("../../compras/entities/compra.entity");
+const role_entity_1 = require("../../roles/entities/role.entity");
+const venta_entity_1 = require("../../ventas/entities/venta.entity");
 const typeorm_1 = require("typeorm");
 let Usuario = class Usuario {
 };
@@ -39,11 +42,12 @@ __decorate([
     __metadata("design:type", String)
 ], Usuario.prototype, "NombreUsuario", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "int", nullable: false }),
-    __metadata("design:type", Number)
-], Usuario.prototype, "rolId", void 0);
+    (0, typeorm_1.ManyToOne)(() => role_entity_1.Role, (role) => role.usuarios),
+    (0, typeorm_1.JoinColumn)({ name: "rolId" }),
+    __metadata("design:type", role_entity_1.Role)
+], Usuario.prototype, "rol", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", length: 20, nullable: false }),
+    (0, typeorm_1.Column)({ type: "varchar", length: 100, nullable: false }),
     __metadata("design:type", String)
 ], Usuario.prototype, "clave", void 0);
 __decorate([
@@ -62,6 +66,14 @@ __decorate([
     (0, typeorm_1.Column)({ type: "varchar", length: 30, nullable: false, unique: true }),
     __metadata("design:type", String)
 ], Usuario.prototype, "correo", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => venta_entity_1.Venta, (venta) => venta.usuario),
+    __metadata("design:type", Array)
+], Usuario.prototype, "ventas", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => compra_entity_1.Compra, (compra) => compra.usuario),
+    __metadata("design:type", Array)
+], Usuario.prototype, "compras", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "date", nullable: false }),
     __metadata("design:type", Date)

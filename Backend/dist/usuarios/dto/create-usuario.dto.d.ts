@@ -10,5 +10,4 @@ export declare class CreateUsuarioDto {
     genero: number;
     celular: string;
     correo: string;
-    createdAt: Date;
 }

@@ -1,4 +1,7 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Categoria } from "src/categorias/entities/categoria.entity";
+import { Compra } from "src/compras/entities/compra.entity";
+import { Venta } from "src/ventas/entities/venta.entity";
+import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'Productos' })
 export class Producto {
@@ -26,8 +29,26 @@ export class Producto {
     @Column({ type: "date", nullable: true })
     fechaVencimiento: Date;
 
-    @Column({ type: "int", nullable: false })
-    categoriaId: number
+    /**
+    * Relación N:1 con Categorías
+    * Un producto pertenece a una categoría
+    */
+    @ManyToOne(() => Categoria, (categoria) => categoria.productos)
+    categoria: Categoria;
+
+    /**
+     * Relación N:M con Ventas
+     * Un producto puede estar en múltiples ventas
+     */
+    @ManyToMany(() => Venta, (venta) => venta.productos)
+    ventas: Venta[];
+
+    /**
+     * Relación N:M con Compras
+     * Un producto puede estar en múltiples compras.
+     */
+    @ManyToMany(() => Compra, (compra) => compra.productos)
+    compras: Compra[];
 
     @Column({ type: "date", nullable: false })
     createdAt: Date;
