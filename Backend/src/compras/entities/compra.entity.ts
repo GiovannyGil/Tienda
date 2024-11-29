@@ -48,4 +48,14 @@ export class Compra {
 
     @Column({ type: "date", nullable: true })
     deletedAt: Date
+
+    @BeforeInsert()
+    setCreatedAt() {
+        this.createdAt = new Date();
+    }
+
+    @BeforeUpdate()
+    setUpdatedAt() {
+        this.updatedAt = new Date();
+    }
 }

@@ -18,8 +18,18 @@ export class UsuariosController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usuariosService.findOne(+id);
+  findOneByID(@Param('id') id: string) {
+    return this.usuariosService.findOneByID(+id);
+  }
+
+  @Get(':id')
+  findOneByNombreUsuario(@Param('NombreUsuario') NombreUsuario: string) {
+    return this.usuariosService.findOneByNombreUsuario(NombreUsuario);
+  }
+
+  @Get(':correo')
+  findOneByCorreo(@Param('correo') correo: string) {
+    return this.usuariosService.findOneByCorreo(correo);
   }
 
   @Patch(':id')
@@ -29,6 +39,6 @@ export class UsuariosController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usuariosService.remove(+id);
+    return this.usuariosService.softDelete(+id);
   }
 }

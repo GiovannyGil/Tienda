@@ -49,5 +49,13 @@ export class Proveedore {
     @Column({ type: "date", nullable: true })
     deleteAt: Date
 
-    // relaciones aqui
+    @BeforeInsert()
+    setCreatedAt() {
+        this.createdAt = new Date();
+    }
+
+    @BeforeUpdate()
+    setUpdatedAt() {
+        this.updatedAt = new Date();
+    }
 }

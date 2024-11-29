@@ -29,6 +29,6 @@ export class ComprasController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.comprasService.remove(+id);
+    return this.comprasService.softDelete(+id);
   }
 }

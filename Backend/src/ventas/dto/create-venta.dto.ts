@@ -12,7 +12,7 @@ export class CreateVentaDto {
 
     @IsNotEmpty()
     @IsArray() // Valida que sea un array
-    usuariosIds: number[]
+    usuariosId: number
 
     @IsInt()
     @IsNotEmpty()

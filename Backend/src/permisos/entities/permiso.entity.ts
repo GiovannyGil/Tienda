@@ -33,4 +33,15 @@ export class Permiso {
      */
     @ManyToMany(() => Role, (role) => role.permisos)
     roles: Role[]
+
+
+    @BeforeInsert()
+    setCreatedAt() {
+        this.createdAt = new Date();
+    }
+
+    @BeforeUpdate()
+    setUpdatedAt() {
+        this.updatedAt = new Date();
+    }
 }

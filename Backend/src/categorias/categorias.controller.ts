@@ -19,7 +19,7 @@ export class CategoriasController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.categoriasService.findOne(+id);
+    return this.categoriasService.findOneByID(+id);
   }
 
   @Patch(':id')
@@ -29,6 +29,6 @@ export class CategoriasController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.categoriasService.remove(+id);
+    return this.categoriasService.softDelete(+id);
   }
 }

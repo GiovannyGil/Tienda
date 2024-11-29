@@ -19,7 +19,7 @@ export class VentasController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.ventasService.findOne(+id);
+    return this.ventasService.findOneByID(+id);
   }
 
   @Patch(':id')
@@ -29,6 +29,6 @@ export class VentasController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.ventasService.remove(+id);
+    return this.ventasService.softDelete(+id);
   }
 }

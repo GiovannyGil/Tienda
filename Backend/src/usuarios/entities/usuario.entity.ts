@@ -70,5 +70,15 @@ export class Usuario {
     updatedAt: Date
 
     @Column({ type: "date", nullable: true })
-    deleteAt: Date
+    deletedAt: Date
+
+    @BeforeInsert()
+    setCreatedAt() {
+        this.createdAt = new Date();
+    }
+
+    @BeforeUpdate()
+    setUpdatedAt() {
+        this.updatedAt = new Date();
+    }
 }

@@ -19,7 +19,7 @@ export class ProductosController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.productosService.findOne(+id);
+    return this.productosService.findOneByID(+id);
   }
 
   @Patch(':id')
@@ -29,6 +29,6 @@ export class ProductosController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.productosService.remove(+id);
+    return this.productosService.softDelete(+id);
   }
 }

@@ -38,4 +38,14 @@ export class Categoria {
 
     @Column({ type: "date", nullable: true })
     deleteAt: Date
+
+    @BeforeInsert()
+    setCreatedAt() {
+        this.createdAt = new Date();
+    }
+
+    @BeforeUpdate()
+    setUpdatedAt() {
+        this.updatedAt = new Date();
+    }
 }

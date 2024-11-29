@@ -23,7 +23,7 @@ export class Role {
     updatedAt: Date
 
     @Column({ type: "date", nullable: true })
-    deleteAt: Date
+    deletedAt: Date
 
     // relaciones aqui
     /* relación con usuario (un rol por usuario) 
@@ -41,5 +41,16 @@ export class Role {
     @ManyToMany(() => Permiso, (permiso) => permiso.roles)
     @JoinTable({ name: 'roles_permisos' }) // tabla intermedia (detalles) > se pone en la tabla que tiene la llave foranea
     permisos: Permiso[]
+
+
+    @BeforeInsert()
+    setCreatedAt() {
+        this.createdAt = new Date();
+    }
+
+    @BeforeUpdate()
+    setUpdatedAt() {
+        this.updatedAt = new Date();
+    }
 
 }
