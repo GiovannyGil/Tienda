@@ -37,7 +37,7 @@ export class Categoria {
     updatedAt: Date
 
     @Column({ type: "date", nullable: true })
-    deleteAt: Date
+    deletedAt: Date
 
     @BeforeInsert()
     setCreatedAt() {

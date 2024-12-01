@@ -22,6 +22,11 @@ export class CategoriasController {
     return this.categoriasService.findOneByID(+id);
   }
 
+  @Get('nombre/:nombre')
+  findOneByName(@Param('nombre') nombre: string) {
+    return this.categoriasService.findOneByName(nombre);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCategoriaDto: UpdateCategoriaDto) {
     return this.categoriasService.update(+id, updateCategoriaDto);

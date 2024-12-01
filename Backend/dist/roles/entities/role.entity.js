@@ -14,6 +14,12 @@ const permiso_entity_1 = require("../../permisos/entities/permiso.entity");
 const usuario_entity_1 = require("../../usuarios/entities/usuario.entity");
 const typeorm_1 = require("typeorm");
 let Role = class Role {
+    setCreatedAt() {
+        this.createdAt = new Date();
+    }
+    setUpdatedAt() {
+        this.updatedAt = new Date();
+    }
 };
 exports.Role = Role;
 __decorate([
@@ -43,7 +49,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ type: "date", nullable: true }),
     __metadata("design:type", Date)
-], Role.prototype, "deleteAt", void 0);
+], Role.prototype, "deletedAt", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => usuario_entity_1.Usuario, (usuario) => usuario.rol),
     __metadata("design:type", Array)
@@ -53,6 +59,18 @@ __decorate([
     (0, typeorm_1.JoinTable)({ name: 'roles_permisos' }),
     __metadata("design:type", Array)
 ], Role.prototype, "permisos", void 0);
+__decorate([
+    (0, typeorm_1.BeforeInsert)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], Role.prototype, "setCreatedAt", null);
+__decorate([
+    (0, typeorm_1.BeforeUpdate)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], Role.prototype, "setUpdatedAt", null);
 exports.Role = Role = __decorate([
     (0, typeorm_1.Entity)({ name: 'Roles' })
 ], Role);

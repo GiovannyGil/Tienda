@@ -15,7 +15,7 @@ export class RolesService {
   async verifyExistROL(nombreRol: string): Promise<Boolean> {
     try {
       // buscar el rol
-      const RolExiste = await this.roleRepository.findOne({ where : { nombreRol, deleteAt: null }})
+      const RolExiste = await this.roleRepository.findOne({ where : { nombreRol, deletedAt: null }})
   
       // devuleve true si existe o false si no existe
       return !!RolExiste
@@ -50,7 +50,7 @@ export class RolesService {
   async findAll(): Promise<Role[]> {
     try {
       // buscar los roles
-      const roles = await this.roleRepository.find({ where: { deleteAt: null } })
+      const roles = await this.roleRepository.find({ where: { deletedAt: null } })
 
       // si no encuentra nada, devolver un array vacio
       if(!roles || roles.length === 0) return []
@@ -65,7 +65,7 @@ export class RolesService {
   async findOneByID(id: number): Promise<Role> {
     try {
       // buscar el rol
-      const rol = await this.roleRepository.findOneBy({id, deleteAt: null})
+      const rol = await this.roleRepository.findOneBy({id, deletedAt: null})
       // si no encuentra el rol devolver un null
       if(!rol) return null
       // retornar el rol
@@ -79,7 +79,7 @@ export class RolesService {
   async findOneByNombre(nombreRol: string): Promise<Role> {
     try {
       // buscar el rol
-      const rol = await this.roleRepository.findOneBy({ nombreRol, deleteAt: null })
+      const rol = await this.roleRepository.findOneBy({ nombreRol, deletedAt: null })
       // si no encuentra el rol devolver un null
       if (!rol) return null
       // retornar el rol
@@ -115,7 +115,7 @@ export class RolesService {
       }
 
       // marcar el rol como eliminado estableciendo la fecha en deletedAt
-      rol.deleteAt = new Date()
+      rol.deletedAt = new Date()
 
       // guardar los cambios
       await this.roleRepository.save(rol)
@@ -135,12 +135,12 @@ export class RolesService {
 
       // optener los roles marcados para eliminar
       const rolesParaEliminar = await this.roleRepository.find({
-        where: { deleteAt: LessThan(fechaLimite) },
+        where: { deletedAt: LessThan(fechaLimite) },
       })
 
       // Eliminar permanentemente los roles
       if(rolesParaEliminar.length > 0) {
-        await this.roleRepository.delete({ deleteAt: LessThan(fechaLimite) })
+        await this.roleRepository.delete({ deletedAt: LessThan(fechaLimite) })
         console.warn(`Eliminados permanentemente los ${rolesParaEliminar.length} roles`)
       } else {
         console.warn('No hay Roles para Eliminar')

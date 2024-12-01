@@ -46,7 +46,7 @@ export class PermisosService {
       const permisos = await this.permisoRepository.find({ where: { deletedAt: null } })
 
       // si no encuentra nada, devolver un array vacio
-      if(!permisos || permisos.length === 0) return []
+      if(!permisos) { throw new BadRequestException('No hay permisos') }
 
       // devolver los permisos
       return permisos
@@ -61,7 +61,7 @@ export class PermisosService {
       const permiso = await this.permisoRepository.findOneBy({id, deletedAt: null})
 
       // si no encuentra nada, devolver un null
-      if(!permiso) return null
+      if(!permiso) { throw new BadRequestException('El permiso no existe') }
 
       // devolver el permiso
       return permiso
@@ -76,7 +76,7 @@ export class PermisosService {
       const permiso = await this.permisoRepository.findOneBy({nombrePermiso, deletedAt: null})
 
       // si no encuentra nada, devolver un null
-      if(!permiso) return null
+      if(!permiso) { throw new BadRequestException('El permiso no existe') }
 
       // devolver el permiso
       return permiso

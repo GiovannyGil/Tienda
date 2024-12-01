@@ -11,7 +11,7 @@ export class UsuariosService {
 
   constructor(
     @InjectRepository(Usuario) private usuarioRepository: Repository<Usuario>,
-    @InjectRepository(Role) private roleRepository: Repository<Role>,
+    @InjectRepository(Role) private roleRepository: Repository<Role>
   ) {}
 
   // metodo para crear un usuario
@@ -21,7 +21,7 @@ export class UsuariosService {
   
       // Buscar el rol y verificar si existe
       const rol = await this.roleRepository.findOne({
-        where: { id: rolId },
+        where: { id: rolId, deletedAt: null },
       });
   
       // Si no existe el rol, lanzar una excepción de tipo BadRequestException
@@ -52,7 +52,7 @@ export class UsuariosService {
       // buscar todos los usuarios
       const usuarios = await this.usuarioRepository.find({ where: { deletedAt: null }, relations: ['rol'] })
       // si no encuentra nada, devolver un array vacio
-      if (!usuarios) return []
+      if (!usuarios) { throw new NotFoundException('No hay usuarios registrados.') }
       return usuarios
     } catch (error) {
       throw new BadRequestException(`Error al encontrar los usuarios ${error.message}`)
@@ -60,12 +60,12 @@ export class UsuariosService {
   }
 
   // metodo para buscar un usuario por id
-  findOneByID(id: number) {
+  async findOneByID(id: number) {
     try {
       // buscar el usuario por id
-      const usuario = this.usuarioRepository.findOne({ where: { id , deletedAt: null} })
+      const usuario = await this.usuarioRepository.findOne({ where: { id , deletedAt: null} })
       // si no encuentra nada, devolver un array vacio
-      if (!usuario) return null
+      if (!usuario) { throw new NotFoundException(`El usuario con ID ${id} no existe o ya fue eliminado.`) }
       // devolver el usuario
       return usuario
     } catch (error) {
@@ -80,7 +80,7 @@ export class UsuariosService {
       const usuario = await this.usuarioRepository.findOne({ where: { NombreUsuario: nombreUsuario, deletedAt: null } })
 
       // si no encuentra nada, devolver un array vacio
-      if (!usuario) return null
+      if (!usuario) { throw new NotFoundException(`El usuario con NombreUsuario ${nombreUsuario} no existe o ya fue eliminado.`) }
       // devolver el usuario
       return usuario
     } catch (error) {
@@ -95,7 +95,7 @@ export class UsuariosService {
       const usuario = await this.usuarioRepository.findOne({ where: { correo: correo, deletedAt: null } })
 
       // si no encuentra nada, devolver un array vacio
-      if (!usuario) return null
+      if (!usuario) { throw new NotFoundException(`El usuario con correo ${correo} no existe o ya fue eliminado.`) }
       // devolver el usuario
       return usuario
     } catch (error) {

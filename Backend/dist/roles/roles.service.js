@@ -23,7 +23,7 @@ let RolesService = class RolesService {
     }
     async verifyExistROL(nombreRol) {
         try {
-            const RolExiste = await this.roleRepository.findOne({ where: { nombreRol, deleteAt: null } });
+            const RolExiste = await this.roleRepository.findOne({ where: { nombreRol, deletedAt: null } });
             return !!RolExiste;
         }
         catch (error) {
@@ -46,7 +46,7 @@ let RolesService = class RolesService {
     }
     async findAll() {
         try {
-            const roles = await this.roleRepository.find({ where: { deleteAt: null } });
+            const roles = await this.roleRepository.find({ where: { deletedAt: null } });
             if (!roles || roles.length === 0)
                 return [];
             return roles;
@@ -57,7 +57,7 @@ let RolesService = class RolesService {
     }
     async findOneByID(id) {
         try {
-            const rol = await this.roleRepository.findOneBy({ id, deleteAt: null });
+            const rol = await this.roleRepository.findOneBy({ id, deletedAt: null });
             if (!rol)
                 return null;
             return rol;
@@ -68,7 +68,7 @@ let RolesService = class RolesService {
     }
     async findOneByNombre(nombreRol) {
         try {
-            const rol = await this.roleRepository.findOneBy({ nombreRol, deleteAt: null });
+            const rol = await this.roleRepository.findOneBy({ nombreRol, deletedAt: null });
             if (!rol)
                 return null;
             return rol;
@@ -94,7 +94,7 @@ let RolesService = class RolesService {
             if (!rol) {
                 throw new common_1.BadRequestException('El rol no existe o ya está eliminado');
             }
-            rol.deleteAt = new Date();
+            rol.deletedAt = new Date();
             await this.roleRepository.save(rol);
             return "ROL eliminado Correctamente";
         }
@@ -107,10 +107,10 @@ let RolesService = class RolesService {
             const fechaLimite = new Date();
             fechaLimite.setDate(fechaLimite.getDate() - 30);
             const rolesParaEliminar = await this.roleRepository.find({
-                where: { deleteAt: (0, typeorm_2.LessThan)(fechaLimite) },
+                where: { deletedAt: (0, typeorm_2.LessThan)(fechaLimite) },
             });
             if (rolesParaEliminar.length > 0) {
-                await this.roleRepository.delete({ deleteAt: (0, typeorm_2.LessThan)(fechaLimite) });
+                await this.roleRepository.delete({ deletedAt: (0, typeorm_2.LessThan)(fechaLimite) });
                 console.warn(`Eliminados permanentemente los ${rolesParaEliminar.length} roles`);
             }
             else {

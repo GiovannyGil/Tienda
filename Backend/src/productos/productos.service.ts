@@ -47,7 +47,7 @@ export class ProductosService {
       // buscar todos los productos
       const productos = await this.productoRepository.find()
       // si no encuentra nada, devolver un array vacio
-      if (!productos) return []
+      if (!productos) { throw new NotFoundException('No hay productos') }
       // devolver los productos
       return productos
     } catch (error) {

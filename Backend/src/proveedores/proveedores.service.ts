@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateProveedoreDto } from './dto/create-proveedore.dto';
 import { UpdateProveedoreDto } from './dto/update-proveedore.dto';
 import { Proveedore } from './entities/proveedore.entity';
@@ -10,7 +10,7 @@ export class ProveedoresService {
 
   constructor(
     @InjectRepository(Proveedore) private proveedorRepository: Repository<Proveedore>
-  ) {}
+  ) { }
 
   async create(createProveedorDto: CreateProveedoreDto): Promise<Proveedore> {
     try {
@@ -27,7 +27,7 @@ export class ProveedoresService {
     }
   }
 
-  async findAll():Promise<Proveedore[]> {
+  async findAll(): Promise<Proveedore[]> {
     try {
       // buscar todas las proveedors
       const proveedores = await this.proveedorRepository.find()
@@ -40,10 +40,23 @@ export class ProveedoresService {
     }
   }
 
+  async findOneByName(nombreEmpresa: string): Promise<Proveedore> {
+    try {
+      // buscar la proveedor por nombre
+      const proveedor = await this.proveedorRepository.findOneBy({ nombreEmpresa, deletedAt: null })
+      // si no encuentra nada, devolver un array vacio
+      if (!proveedor) return null
+      // devolver la proveedor
+      return proveedor
+    } catch (error) {
+      throw new BadRequestException('Error Algo Salió Mal')
+    }
+  }
+
   async findOneByID(id: number): Promise<Proveedore> {
     try {
       // buscar la proveedor por id
-      const proveedor = await this.proveedorRepository.findOneBy({id, deleteAt: null})
+      const proveedor = await this.proveedorRepository.findOneBy({ id, deletedAt: null })
       // si no encuentra nada, devolver un array vacio
       if (!proveedor) return null
       // devolver la proveedor
@@ -77,7 +90,7 @@ export class ProveedoresService {
       }
 
       // marcar la proveedor como eliminada
-      proveedor.deleteAt = new Date()
+      proveedor.deletedAt = new Date()
       // guardar los cambios
       await this.proveedorRepository.save(proveedor)
       // devolver un mensaje

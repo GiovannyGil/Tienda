@@ -15,6 +15,12 @@ const role_entity_1 = require("../../roles/entities/role.entity");
 const venta_entity_1 = require("../../ventas/entities/venta.entity");
 const typeorm_1 = require("typeorm");
 let Usuario = class Usuario {
+    setCreatedAt() {
+        this.createdAt = new Date();
+    }
+    setUpdatedAt() {
+        this.updatedAt = new Date();
+    }
 };
 exports.Usuario = Usuario;
 __decorate([
@@ -85,7 +91,19 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ type: "date", nullable: true }),
     __metadata("design:type", Date)
-], Usuario.prototype, "deleteAt", void 0);
+], Usuario.prototype, "deletedAt", void 0);
+__decorate([
+    (0, typeorm_1.BeforeInsert)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], Usuario.prototype, "setCreatedAt", null);
+__decorate([
+    (0, typeorm_1.BeforeUpdate)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], Usuario.prototype, "setUpdatedAt", null);
 exports.Usuario = Usuario = __decorate([
     (0, typeorm_1.Entity)({ name: 'Usuarios' })
 ], Usuario);

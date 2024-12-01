@@ -18,5 +18,7 @@ export declare class Usuario {
     compras: Compra[];
     createdAt: Date;
     updatedAt: Date;
-    deleteAt: Date;
+    deletedAt: Date;
+    setCreatedAt(): void;
+    setUpdatedAt(): void;
 }

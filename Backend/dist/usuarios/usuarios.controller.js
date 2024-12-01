@@ -27,14 +27,20 @@ let UsuariosController = class UsuariosController {
     findAll() {
         return this.usuariosService.findAll();
     }
-    findOne(id) {
-        return this.usuariosService.findOne(+id);
+    findOneByID(id) {
+        return this.usuariosService.findOneByID(+id);
+    }
+    findOneByNombreUsuario(NombreUsuario) {
+        return this.usuariosService.findOneByNombreUsuario(NombreUsuario);
+    }
+    findOneByCorreo(correo) {
+        return this.usuariosService.findOneByCorreo(correo);
     }
     update(id, updateUsuarioDto) {
         return this.usuariosService.update(+id, updateUsuarioDto);
     }
     remove(id) {
-        return this.usuariosService.remove(+id);
+        return this.usuariosService.softDelete(+id);
     }
 };
 exports.UsuariosController = UsuariosController;
@@ -57,7 +63,21 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], UsuariosController.prototype, "findOne", null);
+], UsuariosController.prototype, "findOneByID", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('NombreUsuario')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], UsuariosController.prototype, "findOneByNombreUsuario", null);
+__decorate([
+    (0, common_1.Get)(':correo'),
+    __param(0, (0, common_1.Param)('correo')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], UsuariosController.prototype, "findOneByCorreo", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),

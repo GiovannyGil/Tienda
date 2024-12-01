@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 import { Categoria } from './entities/categoria.entity';
@@ -30,7 +30,7 @@ export class CategoriasService {
   async findAll():Promise<Categoria[]> {
     try {
       // buscar todas las categorias
-      const categorias = await this.categoriaRepository.find()
+      const categorias = await this.categoriaRepository.find({ where: { deletedAt: null } })
       // si no encuentra nada, devolver un array vacio
       if (!categorias) return []
       // devolver las categorias
@@ -43,13 +43,26 @@ export class CategoriasService {
   async findOneByID(id: number): Promise<Categoria> {
     try {
       // buscar la categoria por id
-      const categoria = await this.categoriaRepository.findOneBy({id, deleteAt: null})
+      const categoria = await this.categoriaRepository.findOneBy({id, deletedAt: null})
       // si no encuentra nada, devolver un array vacio
       if (!categoria) return null
       // devolver la categoria
       return categoria
     } catch (error) {
       throw new Error('Error Algo Salió Mal')
+    }
+  }
+
+  async findOneByName(nombre: string): Promise<Categoria>{
+    try {
+      // buscar la categoria
+      const categoria = await this.categoriaRepository.findOneBy({nombre, deletedAt: null})
+      // si no encuentra nada
+      if (!categoria) { throw new NotFoundException('La categoria no existe') }
+      // devolver la categoria
+      return categoria
+    } catch (error) {
+      throw new BadRequestException('Error Algo Salió Mal')
     }
   }
 
@@ -77,7 +90,7 @@ export class CategoriasService {
       }
 
       // marcar la categoria como eliminada
-      categoria.deleteAt = new Date()
+      categoria.deletedAt = new Date()
       // guardar los cambios
       await this.categoriaRepository.save(categoria)
       // devolver un mensaje

@@ -4,9 +4,11 @@ import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 export declare class UsuariosController {
     private readonly usuariosService;
     constructor(usuariosService: UsuariosService);
-    create(createUsuarioDto: CreateUsuarioDto): string;
-    findAll(): string;
-    findOne(id: string): string;
-    update(id: string, updateUsuarioDto: UpdateUsuarioDto): string;
-    remove(id: string): string;
+    create(createUsuarioDto: CreateUsuarioDto): Promise<import("./entities/usuario.entity").Usuario>;
+    findAll(): Promise<import("./entities/usuario.entity").Usuario[]>;
+    findOneByID(id: string): Promise<import("./entities/usuario.entity").Usuario>;
+    findOneByNombreUsuario(NombreUsuario: string): Promise<import("./entities/usuario.entity").Usuario>;
+    findOneByCorreo(correo: string): Promise<import("./entities/usuario.entity").Usuario>;
+    update(id: string, updateUsuarioDto: UpdateUsuarioDto): Promise<import("./entities/usuario.entity").Usuario>;
+    remove(id: string): Promise<string>;
 }

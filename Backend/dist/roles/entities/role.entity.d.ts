@@ -7,7 +7,9 @@ export declare class Role {
     estado: number;
     createdAt: Date;
     updatedAt: Date;
-    deleteAt: Date;
+    deletedAt: Date;
     usuarios: Usuario[];
     permisos: Permiso[];
+    setCreatedAt(): void;
+    setUpdatedAt(): void;
 }

@@ -9,6 +9,6 @@ import { PermisosDeleteService } from './complements/permisos-delete.service';
   imports: [TypeOrmModule.forFeature([Permiso])],
   controllers: [PermisosController],
   providers: [PermisosService, PermisosDeleteService],
-  exports: [PermisosService],
+  exports: [PermisosService, TypeOrmModule],
 })
 export class PermisosModule { }

@@ -47,7 +47,7 @@ export class Proveedore {
     updatedAt: Date
 
     @Column({ type: "date", nullable: true })
-    deleteAt: Date
+    deletedAt: Date
 
     @BeforeInsert()
     setCreatedAt() {
