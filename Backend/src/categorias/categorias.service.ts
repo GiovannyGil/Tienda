@@ -1,9 +1,10 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 import { Categoria } from './entities/categoria.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, LessThan, Repository } from 'typeorm';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class CategoriasService {
@@ -97,6 +98,30 @@ export class CategoriasService {
       return 'La categoria fue eliminada'
     } catch (error) {
       throw new Error('Error Algo Salió Mal')
+    }
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT) // Tarea programada diariamente a la medianoche
+  async cleanDeletedRecords() {
+    try {
+      const thresholdDate = new Date();
+      thresholdDate.setDate(thresholdDate.getDate() - 30); // Fecha límite (30 días atrás)
+
+      const categoriaParaEliminar = await this.categoriaRepository.find({
+        where: {
+          deletedAt: In([LessThan(thresholdDate)]), // categoria con deletedAt anterior al límite
+        },
+      });
+
+      if (categoriaParaEliminar.length > 0) {
+        await this.categoriaRepository.remove(categoriaParaEliminar); // Eliminación definitiva
+        console.log(`Eliminadas ${categoriaParaEliminar.length} categoria obsoletas.`);
+      }
+    } catch (error) {
+      console.error('Error al limpiar registros eliminados:', error);
+      throw new InternalServerErrorException(
+        'Ocurrió un error al eliminar categoria obsoletas.',
+      );
     }
   }
 }

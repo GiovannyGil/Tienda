@@ -2,10 +2,11 @@ import { BadRequestException, Inject, Injectable, InternalServerErrorException, 
 import { CreateVentaDto } from './dto/create-venta.dto';
 import { UpdateVentaDto } from './dto/update-venta.dto';
 import { Venta } from './entities/venta.entity';
-import { In, Repository } from 'typeorm';
+import { In, LessThan, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Producto } from 'src/productos/entities/producto.entity';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class VentasService {
@@ -169,6 +170,30 @@ export class VentasService {
     } catch (error) {
       if(error instanceof NotFoundException) throw error;
       throw new InternalServerErrorException('Ocurrió un error inesperado');
+    }
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT) // Tarea programada diariamente a la medianoche
+  async cleanDeletedRecords() {
+    try {
+      const thresholdDate = new Date();
+      thresholdDate.setDate(thresholdDate.getDate() - 30); // Fecha límite (30 días atrás)
+
+      const ventasParaEliminar = await this.ventasRepository.find({
+        where: {
+          deletedAt: In([LessThan(thresholdDate)]), // Ventas con deletedAt anterior al límite
+        },
+      });
+
+      if (ventasParaEliminar.length > 0) {
+        await this.ventasRepository.remove(ventasParaEliminar); // Eliminación definitiva
+        console.log(`Eliminadas ${ventasParaEliminar.length} ventas obsoletas.`);
+      }
+    } catch (error) {
+      console.error('Error al limpiar registros eliminados:', error);
+      throw new InternalServerErrorException(
+        'Ocurrió un error al eliminar ventas obsoletas.',
+      );
     }
   }
 }

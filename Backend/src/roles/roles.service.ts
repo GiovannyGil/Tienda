@@ -1,9 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from './entities/role.entity';
-import { LessThan, Repository } from 'typeorm';
+import { In, LessThan, Repository } from 'typeorm';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class RolesService {
@@ -126,27 +127,27 @@ export class RolesService {
     }
   }
 
-  // metodo para eliminar un rol
-  async remove(): Promise<void> {
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT) // Tarea programada diariamente a la medianoche
+  async cleanDeletedRecords() {
     try {
-      // establecer fecha/plazo para eliminar los roles permanentemente
-      const fechaLimite = new Date()
-      fechaLimite.setDate(fechaLimite.getDate() - 30)
+      const thresholdDate = new Date();
+      thresholdDate.setDate(thresholdDate.getDate() - 30); // Fecha límite (30 días atrás)
 
-      // optener los roles marcados para eliminar
-      const rolesParaEliminar = await this.roleRepository.find({
-        where: { deletedAt: LessThan(fechaLimite) },
-      })
+      const roleParaEliminar = await this.roleRepository.find({
+        where: {
+          deletedAt: In([LessThan(thresholdDate)]), // role con deletedAt anterior al límite
+        },
+      });
 
-      // Eliminar permanentemente los roles
-      if(rolesParaEliminar.length > 0) {
-        await this.roleRepository.delete({ deletedAt: LessThan(fechaLimite) })
-        console.warn(`Eliminados permanentemente los ${rolesParaEliminar.length} roles`)
-      } else {
-        console.warn('No hay Roles para Eliminar')
+      if (roleParaEliminar.length > 0) {
+        await this.roleRepository.remove(roleParaEliminar); // Eliminación definitiva
+        console.log(`Eliminadas ${roleParaEliminar.length} role obsoletas.`);
       }
     } catch (error) {
-      throw new Error('Error al eliminar el rol')
+      console.error('Error al limpiar registros eliminados:', error);
+      throw new InternalServerErrorException(
+        'Ocurrió un error al eliminar role obsoletas.',
+      );
     }
   }
 }

@@ -36,4 +36,10 @@ export class RolesController {
   async remove(@Param('id') id: string) {
     return await this.rolesService.softDelete(+id);
   }
+
+  // ejecución manual de eliminaciones permanentes
+  @Delete('cleanup')
+  cleanDeletedRecords() {
+    return this.rolesService.cleanDeletedRecords();
+  }
 }

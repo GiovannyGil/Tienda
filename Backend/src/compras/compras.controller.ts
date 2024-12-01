@@ -31,4 +31,10 @@ export class ComprasController {
   remove(@Param('id') id: string) {
     return this.comprasService.softDelete(+id);
   }
+
+  // ejecución manual de eliminaciones permanentes
+  @Delete('cleanup')
+  cleanDeletedRecords() {
+    return this.comprasService.cleanDeletedRecords();
+  }
 }

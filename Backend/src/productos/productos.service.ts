@@ -1,10 +1,11 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateProductoDto } from './dto/create-producto.dto';
 import { UpdateProductoDto } from './dto/update-producto.dto';
 import { Producto } from './entities/producto.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, LessThan, Repository } from 'typeorm';
 import { Categoria } from 'src/categorias/entities/categoria.entity';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class ProductosService {
@@ -122,6 +123,30 @@ export class ProductosService {
       return `El producto con ID ${id} fue eliminado correctamente.`;
     } catch (error) {
       throw new BadRequestException('Error al eliminar el producto')
+    }
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT) // Tarea programada diariamente a la medianoche
+  async cleanDeletedRecords() {
+    try {
+      const thresholdDate = new Date();
+      thresholdDate.setDate(thresholdDate.getDate() - 30); // Fecha límite (30 días atrás)
+
+      const productoParaEliminar = await this.productoRepository.find({
+        where: {
+          deletedAt: In([LessThan(thresholdDate)]), // producto con deletedAt anterior al límite
+        },
+      });
+
+      if (productoParaEliminar.length > 0) {
+        await this.productoRepository.remove(productoParaEliminar); // Eliminación definitiva
+        console.log(`Eliminadas ${productoParaEliminar.length} producto obsoletas.`);
+      }
+    } catch (error) {
+      console.error('Error al limpiar registros eliminados:', error);
+      throw new InternalServerErrorException(
+        'Ocurrió un error al eliminar producto obsoletas.',
+      );
     }
   }
 }

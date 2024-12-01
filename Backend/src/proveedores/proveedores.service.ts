@@ -1,9 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateProveedoreDto } from './dto/create-proveedore.dto';
 import { UpdateProveedoreDto } from './dto/update-proveedore.dto';
 import { Proveedore } from './entities/proveedore.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, LessThan, Repository } from 'typeorm';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class ProveedoresService {
@@ -97,6 +98,30 @@ export class ProveedoresService {
       return 'La proveedor fue eliminada'
     } catch (error) {
       throw new Error('Error Algo Salió Mal')
+    }
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT) // Tarea programada diariamente a la medianoche
+  async cleanDeletedRecords() {
+    try {
+      const thresholdDate = new Date();
+      thresholdDate.setDate(thresholdDate.getDate() - 30); // Fecha límite (30 días atrás)
+
+      const proveedoreParaEliminar = await this.proveedorRepository.find({
+        where: {
+          deletedAt: In([LessThan(thresholdDate)]), // proveedore con deletedAt anterior al límite
+        },
+      });
+
+      if (proveedoreParaEliminar.length > 0) {
+        await this.proveedorRepository.remove(proveedoreParaEliminar); // Eliminación definitiva
+        console.log(`Eliminadas ${proveedoreParaEliminar.length} proveedore obsoletas.`);
+      }
+    } catch (error) {
+      console.error('Error al limpiar registros eliminados:', error);
+      throw new InternalServerErrorException(
+        'Ocurrió un error al eliminar proveedore obsoletas.',
+      );
     }
   }
 }

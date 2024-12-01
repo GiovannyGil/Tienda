@@ -36,4 +36,10 @@ export class PermisosController {
   remove(@Param('id') id: string) {
     return this.permisosService.remove();
   }
+
+  // ejecución manual de eliminaciones permanentes
+  @Delete('cleanup')
+  cleanDeletedRecords() {
+    return this.permisosService.cleanDeletedRecords();
+  }
 }

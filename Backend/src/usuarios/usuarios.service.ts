@@ -1,10 +1,11 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { Usuario } from './entities/usuario.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, LessThan, Repository } from 'typeorm';
 import { Role } from 'src/roles/entities/role.entity';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class UsuariosService {
@@ -145,26 +146,50 @@ export class UsuariosService {
 
   // metodo para eliminar un usuario
   async softDelete(id: number) {
-  try {
-    // buscar el usuario por id
-    const usuario = await this.usuarioRepository.findOne({
-      where: { id, deletedAt: null },
-    });
+    try {
+      // buscar el usuario por id
+      const usuario = await this.usuarioRepository.findOne({
+        where: { id, deletedAt: null },
+      });
 
-    // verificar si el usuario existe
-    if (!usuario) {
-      throw new NotFoundException('El usuario no existe o ya fue eliminado');
+      // verificar si el usuario existe
+      if (!usuario) {
+        throw new NotFoundException('El usuario no existe o ya fue eliminado');
+      }
+
+      // marcar el usuario como eliminado
+      usuario.deletedAt = new Date();
+
+      // guardar los cambios
+      await this.usuarioRepository.save(usuario);
+
+      return "Usuario eliminado Correctamente";
+    } catch (error) {
+      throw new BadRequestException(`Error al eliminar el usuario ${error.message}`);
     }
-
-    // marcar el usuario como eliminado
-    usuario.deletedAt = new Date();
-
-    // guardar los cambios
-    await this.usuarioRepository.save(usuario);
-
-    return "Usuario eliminado Correctamente";
-  } catch (error) {
-    throw new BadRequestException(`Error al eliminar el usuario ${error.message}`);
   }
-}
+
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT) // Tarea programada diariamente a la medianoche
+  async cleanDeletedRecords() {
+    try {
+      const thresholdDate = new Date();
+      thresholdDate.setDate(thresholdDate.getDate() - 30); // Fecha límite (30 días atrás)
+
+      const usuariosParaEliminar = await this.usuarioRepository.find({
+        where: {
+          deletedAt: In([LessThan(thresholdDate)]), // usuarios con deletedAt anterior al límite
+        },
+      });
+
+      if (usuariosParaEliminar.length > 0) {
+        await this.usuarioRepository.remove(usuariosParaEliminar); // Eliminación definitiva
+        console.log(`Eliminadas ${usuariosParaEliminar.length} usuarios obsoletas.`);
+      }
+    } catch (error) {
+      console.error('Error al limpiar registros eliminados:', error);
+      throw new InternalServerErrorException(
+        'Ocurrió un error al eliminar usuarios obsoletas.',
+      );
+    }
+  }
 }

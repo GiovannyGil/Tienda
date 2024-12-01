@@ -1,9 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreatePermisoDto } from './dto/create-permiso.dto';
 import { UpdatePermisoDto } from './dto/update-permiso.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Permiso } from './entities/permiso.entity';
-import { LessThan, Repository } from 'typeorm';
+import { In, LessThan, Repository } from 'typeorm';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class PermisosService {
@@ -136,6 +137,30 @@ export class PermisosService {
       await this.permisoRepository.delete({ deletedAt: LessThan(fechaLimite) })
     } catch (error) {
       throw new Error('Error al eliminar el permiso')
+    }
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT) // Tarea programada diariamente a la medianoche
+  async cleanDeletedRecords() {
+    try {
+      const thresholdDate = new Date();
+      thresholdDate.setDate(thresholdDate.getDate() - 30); // Fecha límite (30 días atrás)
+
+      const permisoParaEliminar = await this.permisoRepository.find({
+        where: {
+          deletedAt: In([LessThan(thresholdDate)]), // permiso con deletedAt anterior al límite
+        },
+      });
+
+      if (permisoParaEliminar.length > 0) {
+        await this.permisoRepository.remove(permisoParaEliminar); // Eliminación definitiva
+        console.log(`Eliminadas ${permisoParaEliminar.length} permiso obsoletas.`);
+      }
+    } catch (error) {
+      console.error('Error al limpiar registros eliminados:', error);
+      throw new InternalServerErrorException(
+        'Ocurrió un error al eliminar permiso obsoletas.',
+      );
     }
   }
 }

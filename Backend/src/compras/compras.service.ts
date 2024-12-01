@@ -1,12 +1,13 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateCompraDto } from './dto/create-compra.dto';
 import { UpdateCompraDto } from './dto/update-compra.dto';
 import { Compra } from './entities/compra.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In, LessThan, Repository } from 'typeorm';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
 import { Proveedore } from 'src/proveedores/entities/proveedore.entity';
 import { Producto } from 'src/productos/entities/producto.entity';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class ComprasService {
@@ -180,6 +181,30 @@ export class ComprasService {
       return "compra eliminada correctamente"
     } catch (error) {
       throw new BadRequestException('Error al eliminar la compra')
+    }
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT) // Tarea programada diariamente a la medianoche
+  async cleanDeletedRecords() {
+    try {
+      const thresholdDate = new Date();
+      thresholdDate.setDate(thresholdDate.getDate() - 30); // Fecha límite (30 días atrás)
+
+      const comprasParaEliminar = await this.comprasRepository.find({
+        where: {
+          deletedAt: In([LessThan(thresholdDate)]), // compras con deletedAt anterior al límite
+        },
+      });
+
+      if (comprasParaEliminar.length > 0) {
+        await this.comprasRepository.remove(comprasParaEliminar); // Eliminación definitiva
+        console.log(`Eliminadas ${comprasParaEliminar.length} compras obsoletas.`);
+      }
+    } catch (error) {
+      console.error('Error al limpiar registros eliminados:', error);
+      throw new InternalServerErrorException(
+        'Ocurrió un error al eliminar compras obsoletas.',
+      );
     }
   }
 }

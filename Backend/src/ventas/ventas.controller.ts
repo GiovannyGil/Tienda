@@ -31,4 +31,10 @@ export class VentasController {
   remove(@Param('id') id: string) {
     return this.ventasService.softDelete(+id);
   }
+
+  // ejecución manual de eliminaciones permanentes
+  @Delete('cleanup')
+  cleanDeletedRecords() {
+    return this.ventasService.cleanDeletedRecords();
+  }
 }
