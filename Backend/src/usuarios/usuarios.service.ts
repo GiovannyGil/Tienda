@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, LessThan, Repository } from 'typeorm';
 import { Role } from 'src/roles/entities/role.entity';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuariosService {
@@ -18,7 +19,7 @@ export class UsuariosService {
   // metodo para crear un usuario
   async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
     try {
-      const { rolId, ...usuarioData } = createUsuarioDto;
+      const { rolId, clave, ...usuarioData } = createUsuarioDto;
   
       // Buscar el rol y verificar si existe
       const rol = await this.roleRepository.findOne({
@@ -29,10 +30,16 @@ export class UsuariosService {
       if (!rol) {
         throw new NotFoundException(`El rol con ID ${rolId} no existe`);
       }
+      
+      // encriptar la contraseña
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(clave, salt);
+  
   
       // Crear el usuario y asignarle el rol
       const nuevoUsuario = this.usuarioRepository.create({
         ...usuarioData,
+        clave: hashedPassword,
         rol,
       });
   
@@ -140,6 +147,15 @@ export class UsuariosService {
       return await this.usuarioRepository.save(usuario);
     } catch (error) {
       throw new BadRequestException(`Error al actualizar el usuario: ${error.message}`);
+    }
+  }
+
+  // metodo para actualizar la contraseña de un usuario
+  async updatePassword(id: number, password: string, updateUsuarioDto: UpdateUsuarioDto) {
+    try {
+      
+    } catch (error) {
+      throw new BadRequestException(`Error al actualizar la contraseña del usuario: ${error.message}`);
     }
   }
   

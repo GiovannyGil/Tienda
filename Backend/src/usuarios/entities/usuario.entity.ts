@@ -2,6 +2,7 @@ import { Compra } from "src/compras/entities/compra.entity";
 import { Role } from "src/roles/entities/role.entity";
 import { Venta } from "src/ventas/entities/venta.entity";
 import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import * as bcrypt from 'bcrypt';
 
 @Entity({ name: 'Usuarios' })
 export class Usuario {
@@ -80,5 +81,14 @@ export class Usuario {
     @BeforeUpdate()
     setUpdatedAt() {
         this.updatedAt = new Date();
+    }
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    async hashPassword() {
+        if(this.clave) {
+            const salt = await bcrypt.genSalt(10);
+            this.clave = await bcrypt.hash(this.clave, salt);
+        }
     }
 }
