@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
+import { UpdateClaveDto } from './dto/update-clave.dto';
 
 @Controller('usuarios')
 export class UsuariosController {
@@ -35,6 +36,11 @@ export class UsuariosController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUsuarioDto: UpdateUsuarioDto) {
     return this.usuariosService.update(+id, updateUsuarioDto);
+  }
+
+  @Patch(':id/cambiar-clave')
+  updatePassword(@Param('id', ParseIntPipe) id: string, @Body() updateClaveDto: UpdateClaveDto) {
+    return this.usuariosService.updatePassword(+id, updateClaveDto);
   }
 
   @Delete(':id')

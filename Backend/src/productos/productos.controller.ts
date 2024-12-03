@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ProductosService } from './productos.service';
 import { CreateProductoDto } from './dto/create-producto.dto';
 import { UpdateProductoDto } from './dto/update-producto.dto';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 
 @Controller('productos')
 export class ProductosController {
@@ -13,6 +14,7 @@ export class ProductosController {
   }
 
   @Get()
+  // @UseGuards(JwtAuthGuard)
   findAll() {
     return this.productosService.findAll();
   }

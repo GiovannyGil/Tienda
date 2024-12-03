@@ -1,9 +1,15 @@
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { UsuariosService } from 'src/usuarios/usuarios.service';
+import { JwtService } from '@nestjs/jwt';
+import { Usuario } from 'src/usuarios/entities/usuario.entity';
 export declare class AuthService {
-    create(createAuthDto: CreateAuthDto): string;
-    findAll(): string;
-    findOne(id: number): string;
-    update(id: number, updateAuthDto: UpdateAuthDto): string;
-    remove(id: number): string;
+    private readonly usuariosService;
+    private readonly jwtService;
+    constructor(usuariosService: UsuariosService, jwtService: JwtService);
+    validateUser(nombreUsuario: string, clave: string): Promise<Usuario | null>;
+    login(nombreUsuario: string, clave: string): Promise<{
+        accessToken: string;
+    }>;
+    logout(): Promise<{
+        message: string;
+    }>;
 }

@@ -12,5 +12,5 @@ export declare class RolesService {
     findOneByNombre(nombreRol: string): Promise<Role>;
     update(id: number, updateRoleDto: UpdateRoleDto): Promise<import("typeorm").UpdateResult>;
     softDelete(id: number): Promise<string>;
-    remove(): Promise<void>;
+    cleanDeletedRecords(): Promise<void>;
 }

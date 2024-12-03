@@ -8,7 +8,7 @@ const ConnexionDDBB = {
     password: '',
     database: 'tienda',
     entities: [__dirname + './../**/*.entity{.ts,.js}'],
-    synchronize: true,
+    synchronize: false,
     logging: true,
 };
 exports.default = ConnexionDDBB;

@@ -1,6 +1,4 @@
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
-import { Role } from "src/roles/entities/role.entity";
-import { Usuario } from "src/usuarios/entities/usuario.entity";
 
 
 const ConnexionDDBB: TypeOrmModuleOptions = {
@@ -11,7 +9,7 @@ const ConnexionDDBB: TypeOrmModuleOptions = {
     password: '',
     database: 'tienda',
     entities: [__dirname + './../**/*.entity{.ts,.js}'],
-    synchronize: true,
+    synchronize: false,
     logging: true,
 }
 

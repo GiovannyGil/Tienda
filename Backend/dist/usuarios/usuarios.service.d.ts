@@ -3,6 +3,7 @@ import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { Usuario } from './entities/usuario.entity';
 import { Repository } from 'typeorm';
 import { Role } from 'src/roles/entities/role.entity';
+import { UpdateClaveDto } from './dto/update-clave.dto';
 export declare class UsuariosService {
     private usuarioRepository;
     private roleRepository;
@@ -13,5 +14,7 @@ export declare class UsuariosService {
     findOneByNombreUsuario(nombreUsuario: string): Promise<Usuario>;
     findOneByCorreo(correo: string): Promise<Usuario>;
     update(id: number, updateUsuarioDto: UpdateUsuarioDto): Promise<Usuario>;
+    updatePassword(id: number, updateClaveDto: UpdateClaveDto): Promise<string>;
     softDelete(id: number): Promise<string>;
+    cleanDeletedRecords(): Promise<void>;
 }

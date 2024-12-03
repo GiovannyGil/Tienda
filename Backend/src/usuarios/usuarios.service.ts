@@ -7,6 +7,7 @@ import { In, LessThan, Repository } from 'typeorm';
 import { Role } from 'src/roles/entities/role.entity';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import * as bcrypt from 'bcrypt';
+import { UpdateClaveDto } from './dto/update-clave.dto';
 
 @Injectable()
 export class UsuariosService {
@@ -151,9 +152,30 @@ export class UsuariosService {
   }
 
   // metodo para actualizar la contraseña de un usuario
-  async updatePassword(id: number, password: string, updateUsuarioDto: UpdateUsuarioDto) {
+  async updatePassword(id: number, updateClaveDto: UpdateClaveDto) {
     try {
-      
+      const { claveActual, nuevaClave } = updateClaveDto
+
+      // buscar el usuario por id
+      const usuario = await this.usuarioRepository.findOne({
+        where: { id, deletedAt: null },
+      });
+
+      // verificar si el usuario existe
+      if (!usuario) { throw new NotFoundException('El usuario no existe o ya fue eliminado'); }
+
+      // verificar si la contraseña actual es correcta
+      const claveValida = await bcrypt.compare(claveActual, usuario.clave);
+      if(!claveValida) { throw new BadRequestException('La contraseña actual no es correcta') }
+
+      // encriptar la nueva contraseña
+      const salt = await bcrypt.genSalt(10);
+      usuario.clave = await bcrypt.hash(nuevaClave, salt);
+
+      // guardar los cambios
+      await this.usuarioRepository.save(usuario);
+
+      return "Contraseña actualizada correctamente";
     } catch (error) {
       throw new BadRequestException(`Error al actualizar la contraseña del usuario: ${error.message}`);
     }

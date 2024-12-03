@@ -41,6 +41,7 @@ export class Role {
     @ManyToMany(() => Permiso, (permiso) => permiso.roles)
     @JoinTable({ name: 'roles_permisos' }) // tabla intermedia (detalles) > se pone en la tabla que tiene la llave foranea
     permisos: Permiso[]
+  nombre: any;
 
 
     @BeforeInsert()

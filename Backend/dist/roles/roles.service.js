@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const role_entity_1 = require("./entities/role.entity");
 const typeorm_2 = require("typeorm");
+const schedule_1 = require("@nestjs/schedule");
 let RolesService = class RolesService {
     constructor(roleRepository) {
         this.roleRepository = roleRepository;
@@ -102,27 +103,33 @@ let RolesService = class RolesService {
             throw new Error('Error al eliminar el ROL');
         }
     }
-    async remove() {
+    async cleanDeletedRecords() {
         try {
-            const fechaLimite = new Date();
-            fechaLimite.setDate(fechaLimite.getDate() - 30);
-            const rolesParaEliminar = await this.roleRepository.find({
-                where: { deletedAt: (0, typeorm_2.LessThan)(fechaLimite) },
+            const thresholdDate = new Date();
+            thresholdDate.setDate(thresholdDate.getDate() - 30);
+            const roleParaEliminar = await this.roleRepository.find({
+                where: {
+                    deletedAt: (0, typeorm_2.In)([(0, typeorm_2.LessThan)(thresholdDate)]),
+                },
             });
-            if (rolesParaEliminar.length > 0) {
-                await this.roleRepository.delete({ deletedAt: (0, typeorm_2.LessThan)(fechaLimite) });
-                console.warn(`Eliminados permanentemente los ${rolesParaEliminar.length} roles`);
-            }
-            else {
-                console.warn('No hay Roles para Eliminar');
+            if (roleParaEliminar.length > 0) {
+                await this.roleRepository.remove(roleParaEliminar);
+                console.log(`Eliminadas ${roleParaEliminar.length} role obsoletas.`);
             }
         }
         catch (error) {
-            throw new Error('Error al eliminar el rol');
+            console.error('Error al limpiar registros eliminados:', error);
+            throw new common_1.InternalServerErrorException('Ocurrió un error al eliminar role obsoletas.');
         }
     }
 };
 exports.RolesService = RolesService;
+__decorate([
+    (0, schedule_1.Cron)(schedule_1.CronExpression.EVERY_DAY_AT_MIDNIGHT),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], RolesService.prototype, "cleanDeletedRecords", null);
 exports.RolesService = RolesService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(role_entity_1.Role)),

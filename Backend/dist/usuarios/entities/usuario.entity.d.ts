@@ -21,4 +21,5 @@ export declare class Usuario {
     deletedAt: Date;
     setCreatedAt(): void;
     setUpdatedAt(): void;
+    hashPassword(): Promise<void>;
 }

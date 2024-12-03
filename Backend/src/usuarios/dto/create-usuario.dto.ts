@@ -32,7 +32,7 @@ export class CreateUsuarioDto {
 
     @IsString()
     @IsNotEmpty()
-    @Length(1, 20)
+    @Length(6, 100)
     clave: string
 
     @IsDate()

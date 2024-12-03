@@ -18,6 +18,8 @@ const usuario_entity_1 = require("./entities/usuario.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const role_entity_1 = require("../roles/entities/role.entity");
+const schedule_1 = require("@nestjs/schedule");
+const bcrypt = require("bcrypt");
 let UsuariosService = class UsuariosService {
     constructor(usuarioRepository, roleRepository) {
         this.usuarioRepository = usuarioRepository;
@@ -25,15 +27,18 @@ let UsuariosService = class UsuariosService {
     }
     async create(createUsuarioDto) {
         try {
-            const { rolId, ...usuarioData } = createUsuarioDto;
+            const { rolId, clave, ...usuarioData } = createUsuarioDto;
             const rol = await this.roleRepository.findOne({
                 where: { id: rolId, deletedAt: null },
             });
             if (!rol) {
                 throw new common_1.NotFoundException(`El rol con ID ${rolId} no existe`);
             }
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(clave, salt);
             const nuevoUsuario = this.usuarioRepository.create({
                 ...usuarioData,
+                clave: hashedPassword,
                 rol,
             });
             return await this.usuarioRepository.save(nuevoUsuario);
@@ -114,6 +119,28 @@ let UsuariosService = class UsuariosService {
             throw new common_1.BadRequestException(`Error al actualizar el usuario: ${error.message}`);
         }
     }
+    async updatePassword(id, updateClaveDto) {
+        try {
+            const { claveActual, nuevaClave } = updateClaveDto;
+            const usuario = await this.usuarioRepository.findOne({
+                where: { id, deletedAt: null },
+            });
+            if (!usuario) {
+                throw new common_1.NotFoundException('El usuario no existe o ya fue eliminado');
+            }
+            const claveValida = await bcrypt.compare(claveActual, usuario.clave);
+            if (!claveValida) {
+                throw new common_1.BadRequestException('La contraseña actual no es correcta');
+            }
+            const salt = await bcrypt.genSalt(10);
+            usuario.clave = await bcrypt.hash(nuevaClave, salt);
+            await this.usuarioRepository.save(usuario);
+            return "Contraseña actualizada correctamente";
+        }
+        catch (error) {
+            throw new common_1.BadRequestException(`Error al actualizar la contraseña del usuario: ${error.message}`);
+        }
+    }
     async softDelete(id) {
         try {
             const usuario = await this.usuarioRepository.findOne({
@@ -130,8 +157,33 @@ let UsuariosService = class UsuariosService {
             throw new common_1.BadRequestException(`Error al eliminar el usuario ${error.message}`);
         }
     }
+    async cleanDeletedRecords() {
+        try {
+            const thresholdDate = new Date();
+            thresholdDate.setDate(thresholdDate.getDate() - 30);
+            const usuariosParaEliminar = await this.usuarioRepository.find({
+                where: {
+                    deletedAt: (0, typeorm_2.In)([(0, typeorm_2.LessThan)(thresholdDate)]),
+                },
+            });
+            if (usuariosParaEliminar.length > 0) {
+                await this.usuarioRepository.remove(usuariosParaEliminar);
+                console.log(`Eliminadas ${usuariosParaEliminar.length} usuarios obsoletas.`);
+            }
+        }
+        catch (error) {
+            console.error('Error al limpiar registros eliminados:', error);
+            throw new common_1.InternalServerErrorException('Ocurrió un error al eliminar usuarios obsoletas.');
+        }
+    }
 };
 exports.UsuariosService = UsuariosService;
+__decorate([
+    (0, schedule_1.Cron)(schedule_1.CronExpression.EVERY_DAY_AT_MIDNIGHT),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UsuariosService.prototype, "cleanDeletedRecords", null);
 exports.UsuariosService = UsuariosService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(usuario_entity_1.Usuario)),

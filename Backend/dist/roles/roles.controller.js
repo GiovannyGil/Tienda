@@ -39,6 +39,9 @@ let RolesController = class RolesController {
     async remove(id) {
         return await this.rolesService.softDelete(+id);
     }
+    cleanDeletedRecords() {
+        return this.rolesService.cleanDeletedRecords();
+    }
 };
 exports.RolesController = RolesController;
 __decorate([
@@ -83,6 +86,12 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], RolesController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Delete)('cleanup'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], RolesController.prototype, "cleanDeletedRecords", null);
 exports.RolesController = RolesController = __decorate([
     (0, common_1.Controller)('roles'),
     __metadata("design:paramtypes", [roles_service_1.RolesService])

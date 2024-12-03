@@ -52,7 +52,7 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.Length)(1, 20),
+    (0, class_validator_1.Length)(6, 100),
     __metadata("design:type", String)
 ], CreateUsuarioDto.prototype, "clave", void 0);
 __decorate([
