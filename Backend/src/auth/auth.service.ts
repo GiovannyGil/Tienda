@@ -14,14 +14,25 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(nombreUsuario: string, clave: string): Promise<Usuario | null> {
+  async validateUser(nombreUsuario: string, clave: string): Promise<any> {
     const usuario = await this.usuariosService.findOneByNombreUsuario(nombreUsuario);
 
-    if (usuario && (await bcrypt.compare(clave, usuario.clave))) {
-      return usuario; // Retorna el usuario si las credenciales son correctas
+    // Verifica si el usuario existe
+    if (!usuario) {
+      throw new UnauthorizedException('Credenciales inválidas');
     }
-    return null;
+
+    // Verifica si las contraseñas coinciden
+    const isPasswordMatching = await bcrypt.compare(clave, usuario.clave);
+
+    if (!isPasswordMatching) {
+      throw new UnauthorizedException('Credenciales inválidas');
+    }
+
+    // Si todo es correcto, retorna el usuario
+    return usuario;
   }
+
 
   async login(nombreUsuario: string, clave: string): Promise<{ accessToken: string }> {
     const usuario = await this.validateUser(nombreUsuario, clave);
@@ -36,7 +47,7 @@ export class AuthService {
   }
 
   async logout(): Promise<{ message: string }> {
-    // Aquí puedes implementar la invalidación del token si utilizas una blacklist
+    // Este método es funcional pero puede extenderse con una blacklist de tokens
     return { message: 'Logout exitoso' };
   }
 }

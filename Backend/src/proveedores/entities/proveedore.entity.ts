@@ -8,7 +8,7 @@ export class Proveedore {
     id: number
 
     @Column({ type: "varchar", length: 30, nullable: false })
-    nombreAccesor: string
+    nombreAsesor: string
 
     @Column({ type: "varchar", length: 100, nullable: false, unique: true })
     nombreEmpresa: string

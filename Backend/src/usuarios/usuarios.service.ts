@@ -83,7 +83,7 @@ export class UsuariosService {
   }
 
   // meotodo para buscar un usuario por NombreUsuario
-  async findOneByNombreUsuario(nombreUsuario: string): Promise<Usuario> {
+  async findOneByNombreUsuario(nombreUsuario: string): Promise<Usuario | null> {
     try {
       // buscr el usuario por nombreUsuario
       const usuario = await this.usuarioRepository.findOne({ where: { NombreUsuario: nombreUsuario, deletedAt: null } })

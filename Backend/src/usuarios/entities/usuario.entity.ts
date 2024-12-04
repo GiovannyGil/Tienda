@@ -86,7 +86,7 @@ export class Usuario {
     @BeforeInsert()
     @BeforeUpdate()
     async hashPassword() {
-        if(this.clave) {
+        if (this.clave && !this.clave.startsWith('$2b$')) { // Verifica si no está ya encriptada
             const salt = await bcrypt.genSalt(10);
             this.clave = await bcrypt.hash(this.clave, salt);
         }

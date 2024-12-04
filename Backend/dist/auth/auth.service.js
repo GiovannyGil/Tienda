@@ -21,10 +21,14 @@ let AuthService = class AuthService {
     }
     async validateUser(nombreUsuario, clave) {
         const usuario = await this.usuariosService.findOneByNombreUsuario(nombreUsuario);
-        if (usuario && (await bcrypt.compare(clave, usuario.clave))) {
-            return usuario;
+        if (!usuario) {
+            throw new common_1.UnauthorizedException('Credenciales inválidas');
         }
-        return null;
+        const isPasswordMatching = await bcrypt.compare(clave, usuario.clave);
+        if (!isPasswordMatching) {
+            throw new common_1.UnauthorizedException('Credenciales inválidas');
+        }
+        return usuario;
     }
     async login(nombreUsuario, clave) {
         const usuario = await this.validateUser(nombreUsuario, clave);

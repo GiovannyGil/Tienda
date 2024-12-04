@@ -3,7 +3,7 @@ import { IsDate, IsInt, IsNotEmpty, IsString, Length } from "class-validator";
 export class CreateCategoriaDto {
     @IsString()
     @IsNotEmpty()
-    @Length(1,50)
+    @Length(1, 50)
     nombre: string
 
     @IsString()

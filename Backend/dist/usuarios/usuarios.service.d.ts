@@ -11,7 +11,7 @@ export declare class UsuariosService {
     create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario>;
     findAll(): Promise<Usuario[]>;
     findOneByID(id: number): Promise<Usuario>;
-    findOneByNombreUsuario(nombreUsuario: string): Promise<Usuario>;
+    findOneByNombreUsuario(nombreUsuario: string): Promise<Usuario | null>;
     findOneByCorreo(correo: string): Promise<Usuario>;
     update(id: number, updateUsuarioDto: UpdateUsuarioDto): Promise<Usuario>;
     updatePassword(id: number, updateClaveDto: UpdateClaveDto): Promise<string>;

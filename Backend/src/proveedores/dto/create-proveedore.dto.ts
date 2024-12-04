@@ -1,16 +1,16 @@
-import { IsDate, IsInt, IsNotEmpty, IsString, Length } from "class-validator";
+import { ArrayNotEmpty, IsArray, IsDate, IsInt, IsNotEmpty, IsOptional, IsString, Length } from "class-validator";
 
 export class CreateProveedoreDto {
     @IsString()
     @IsNotEmpty()
     @Length(1, 100)
-    nombreAccesor: string
+    nombreAsesor: string
 
     @IsString()
     @IsNotEmpty()
     @Length(1, 100)
     nombreEmpresa: string
-    
+
     @IsString()
     @IsNotEmpty()
     @Length(1, 100)
@@ -30,4 +30,9 @@ export class CreateProveedoreDto {
     @IsNotEmpty()
     @Length(1, 100)
     direccion: string
+
+    @IsArray()
+    @IsInt({ each: true })
+    @IsOptional()
+    categoriasIds?: number[];
 }

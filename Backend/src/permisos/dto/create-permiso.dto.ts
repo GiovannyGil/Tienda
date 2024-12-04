@@ -3,7 +3,7 @@ import { IsDate, IsInt, IsNotEmpty, IsString, Length } from "class-validator";
 export class CreatePermisoDto {
     @IsString()
     @IsNotEmpty()
-    @Length(1,20)
+    @Length(1, 20)
     nombrePermiso: string
 
     @IsString()

@@ -3,7 +3,7 @@ import { IsDate, IsInt, IsNotEmpty, IsString, Length, IsOptional } from "class-v
 export class CreateProductoDto {
     @IsString()
     @IsNotEmpty()
-    @Length(1,20)
+    @Length(1, 20)
     nombre: string
 
     @IsString()

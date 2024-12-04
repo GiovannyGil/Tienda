@@ -1,0 +1,70 @@
+
+// PERMISOS
+{
+   "nombrePermiso": "",
+   "descripcion": "",
+   "estado": 1
+}
+// ROLES
+{
+    "nombreRol": "",
+    "descripcion": "",
+    "estado": 1
+}
+
+// usuarios
+
+{
+   "PrimerNombre": "Arbey",
+   "SegundoNombre": "Giovanny",
+   "PrimerApellido": "Chica",
+   "SegundoApellido": "Gil",
+   "NombreUsuario": "GioGil",
+   "rolId": 2,
+   "clave": "12345",
+   "añoNace": "01/03/2001",
+   "genero": 1,
+   "celular": "3043209834",
+   "correo": "arvey@ejemplo.com"
+}
+
+
+
+// CATEGORIAS
+{
+    "nombre": "",
+    "descripcion": "",
+    "estado": 1
+}
+
+// PROVEEDORES
+{
+    "nombreAccesor": "hernan",
+    "nombreEmpresa": "coca cola"
+    "email": "asesor2",
+    "celular": "303552",
+    "telefono": "5415152",
+    "direccion": "clle2",
+    "categoriaIds": [2,3]
+}
+{
+    "nombreAccesor": "Juan Pérez",
+    "nombreEmpresa": "Empresa XYZ",
+    "email": "juan@example.com",
+    "celular": "3001234567",
+    "telefono": "6041234567",
+    "direccion": "Calle Falsa 123",
+    "categoriasIds": [1, 3, 5]
+}
+
+// PRODUCTOS
+{
+    "nombre": "",
+    "descripcion": "",
+    "precio": ,
+    "marca": "",
+    "stock": ,
+    "estado": ,
+    "fechaVencimiento": "",
+    "categoriaId": 
+}

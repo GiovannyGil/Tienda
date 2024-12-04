@@ -42,6 +42,7 @@ export class CreateUsuarioDto {
     @IsInt()
     @IsNotEmpty()
     genero: number
+    // 1 : Masculino | 2 : Femenino | 3 : Otro
 
     @IsString()
     @IsNotEmpty()

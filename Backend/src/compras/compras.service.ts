@@ -35,7 +35,7 @@ export class ComprasService {
       // verificar que los proveedores existen
       const proveedores = await this.proveedoresRepository.find({
         where: { id: In(proveedorIds), deletedAt: null }, select: [
-          'id', 'nombreAccesor', 'nombreEmpresa', 'email', 'celular', 'telefono', 'direccion'
+          'id', 'nombreAsesor', 'nombreEmpresa', 'email', 'celular', 'telefono', 'direccion'
         ] });
       if (proveedores.length !== proveedorIds.length) {
         throw new NotFoundException('Uno o más proveedores no existen o han sido eliminados') 
@@ -131,7 +131,7 @@ export class ComprasService {
       // verificar que los proveedores existen
       if (proveedorIds) {
         const proveedores = await this.proveedoresRepository.find({ where: { id: In(updateCompraDto.proveedorIds), deletedAt: null }, select: [
-          'id', 'nombreAccesor', 'nombreEmpresa', 'email', 'celular', 'telefono', 'direccion'
+          'id', 'nombreAsesor', 'nombreEmpresa', 'email', 'celular', 'telefono', 'direccion'
         ] });
         if (proveedores.length !== updateCompraDto.proveedorIds.length) {
           throw new NotFoundException('Uno o más proveedores no existen o han sido eliminados') 
