@@ -3,12 +3,13 @@ import { JwtService } from '@nestjs/jwt';
 export declare class AuthService {
     private readonly usuariosService;
     private readonly jwtService;
+    private invalidatedTokens;
     constructor(usuariosService: UsuariosService, jwtService: JwtService);
-    validateUser(nombreUsuario: string, clave: string): Promise<any>;
     login(nombreUsuario: string, clave: string): Promise<{
-        accessToken: string;
+        access_token: string;
     }>;
-    logout(): Promise<{
+    logout(token: string): Promise<{
         message: string;
     }>;
+    isTokenInvalidated(token: string): boolean;
 }

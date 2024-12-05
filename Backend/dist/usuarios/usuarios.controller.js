@@ -18,6 +18,7 @@ const usuarios_service_1 = require("./usuarios.service");
 const create_usuario_dto_1 = require("./dto/create-usuario.dto");
 const update_usuario_dto_1 = require("./dto/update-usuario.dto");
 const update_clave_dto_1 = require("./dto/update-clave.dto");
+const jwt_guard_1 = require("../auth/jwt/jwt.guard");
 let UsuariosController = class UsuariosController {
     constructor(usuariosService) {
         this.usuariosService = usuariosService;
@@ -116,6 +117,7 @@ __decorate([
 ], UsuariosController.prototype, "cleanDeletedRecords", null);
 exports.UsuariosController = UsuariosController = __decorate([
     (0, common_1.Controller)('usuarios'),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard),
     __metadata("design:paramtypes", [usuarios_service_1.UsuariosService])
 ], UsuariosController);
 //# sourceMappingURL=usuarios.controller.js.map

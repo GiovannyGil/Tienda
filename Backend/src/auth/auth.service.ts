@@ -8,46 +8,40 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
+  // Definir la propiedad invalidatedTokens como un conjunto (Set) de strings
+  private invalidatedTokens: Set<string> = new Set(); // Lista negra de tokens
 
   constructor(
     private readonly usuariosService: UsuariosService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
-  async validateUser(nombreUsuario: string, clave: string): Promise<any> {
+  async login(nombreUsuario: string, clave: string): Promise<{ access_token: string }> {
     const usuario = await this.usuariosService.findOneByNombreUsuario(nombreUsuario);
-
-    // Verifica si el usuario existe
     if (!usuario) {
-      throw new UnauthorizedException('Credenciales inválidas');
+      throw new UnauthorizedException('Usuario Inválido');
     }
 
-    // Verifica si las contraseñas coinciden
-    const isPasswordMatching = await bcrypt.compare(clave, usuario.clave);
-
-    if (!isPasswordMatching) {
-      throw new UnauthorizedException('Credenciales inválidas');
+    const isPasswordValid = await bcrypt.compare(clave, usuario.clave);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Clave inválida');
     }
 
-    // Si todo es correcto, retorna el usuario
-    return usuario;
+    const payload = { nombreUsuario: usuario.NombreUsuario, sub: usuario.id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 
-
-  async login(nombreUsuario: string, clave: string): Promise<{ accessToken: string }> {
-    const usuario = await this.validateUser(nombreUsuario, clave);
-    if (!usuario) {
-      throw new UnauthorizedException('Credenciales inválidas');
-    }
-
-    const payload = { sub: usuario.id, nombreUsuario: usuario.NombreUsuario, rol: usuario.rol?.nombre };
-    const token = this.jwtService.sign(payload);
-
-    return { accessToken: token };
+  async logout(token: string): Promise<{ message: string }> {
+    // Añadir el token a la lista negra
+    this.invalidatedTokens.add(token);
+    return { message: 'Sesión cerrada exitosamente' };
   }
 
-  async logout(): Promise<{ message: string }> {
-    // Este método es funcional pero puede extenderse con una blacklist de tokens
-    return { message: 'Logout exitoso' };
+  isTokenInvalidated(token: string): boolean {
+    // Verificar si el token está en la lista negra
+    return this.invalidatedTokens.has(token);
   }
+
 }

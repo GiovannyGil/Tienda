@@ -5,6 +5,7 @@ import { UpdateProductoDto } from './dto/update-producto.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 
 @Controller('productos')
+@UseGuards(JwtAuthGuard)
 export class ProductosController {
   constructor(private readonly productosService: ProductosService) {}
 
@@ -14,7 +15,6 @@ export class ProductosController {
   }
 
   @Get()
-  // @UseGuards(JwtAuthGuard)
   findAll() {
     return this.productosService.findAll();
   }

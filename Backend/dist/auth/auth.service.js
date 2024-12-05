@@ -18,29 +18,28 @@ let AuthService = class AuthService {
     constructor(usuariosService, jwtService) {
         this.usuariosService = usuariosService;
         this.jwtService = jwtService;
-    }
-    async validateUser(nombreUsuario, clave) {
-        const usuario = await this.usuariosService.findOneByNombreUsuario(nombreUsuario);
-        if (!usuario) {
-            throw new common_1.UnauthorizedException('Credenciales inválidas');
-        }
-        const isPasswordMatching = await bcrypt.compare(clave, usuario.clave);
-        if (!isPasswordMatching) {
-            throw new common_1.UnauthorizedException('Credenciales inválidas');
-        }
-        return usuario;
+        this.invalidatedTokens = new Set();
     }
     async login(nombreUsuario, clave) {
-        const usuario = await this.validateUser(nombreUsuario, clave);
+        const usuario = await this.usuariosService.findOneByNombreUsuario(nombreUsuario);
         if (!usuario) {
-            throw new common_1.UnauthorizedException('Credenciales inválidas');
+            throw new common_1.UnauthorizedException('Usuario Inválido');
         }
-        const payload = { sub: usuario.id, nombreUsuario: usuario.NombreUsuario, rol: usuario.rol?.nombre };
-        const token = this.jwtService.sign(payload);
-        return { accessToken: token };
+        const isPasswordValid = await bcrypt.compare(clave, usuario.clave);
+        if (!isPasswordValid) {
+            throw new common_1.UnauthorizedException('Clave inválida');
+        }
+        const payload = { nombreUsuario: usuario.NombreUsuario, sub: usuario.id };
+        return {
+            access_token: this.jwtService.sign(payload),
+        };
     }
-    async logout() {
-        return { message: 'Logout exitoso' };
+    async logout(token) {
+        this.invalidatedTokens.add(token);
+        return { message: 'Sesión cerrada exitosamente' };
+    }
+    isTokenInvalidated(token) {
+        return this.invalidatedTokens.has(token);
     }
 };
 exports.AuthService = AuthService;
