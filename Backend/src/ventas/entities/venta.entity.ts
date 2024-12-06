@@ -4,10 +4,10 @@ import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, JoinTable, Many
 
 @Entity({ name: 'Ventas' })
 export class Venta {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ name: 'id', type: 'int' })
     id: number;
 
-    @Column({ type: "varchar", length: 100, nullable: false })
+    @Column({ type: "varchar", length: 100, nullable: false, name: 'descripcion' })
     descripcion: string;
 
     @ManyToMany(() => Producto, (producto) => producto.ventas)
@@ -18,10 +18,10 @@ export class Venta {
     })
     productos: Producto[];
 
-    @Column({ type: 'int', nullable: false })
+    @Column({ type: 'int', nullable: false, name: "montoTotal" })
     montoTotal: number;
 
-    @Column({ type: 'varchar', length: 20, nullable: false })
+    @Column({ type: 'varchar', length: 20, nullable: false, name: "metodoPago" })
     metodoPago: string;
 
     /**

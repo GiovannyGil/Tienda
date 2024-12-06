@@ -4,16 +4,16 @@ import { Role } from "src/roles/entities/role.entity";
 
 @Entity({ name: "permisos" })
 export class Permiso {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ type: "int", name: "id" })
     id: number
 
-    @Column({ type: "varchar", length: 20, nullable: false })
+    @Column({ type: "varchar", length: 20, nullable: false, unique: true, name: "nombrePermiso" })
     nombrePermiso: string
 
-    @Column({ type: "varchar", length: 100, nullable: false })
+    @Column({ type: "varchar", length: 100, nullable: false, name: "descripcion" })
     descripcion: string
 
-    @Column({ type: "int", nullable: false })
+    @Column({ type: "int", nullable: false, default: 1, name: "estado" })
     estado: number
 
     @Column({ type: "date", nullable: false })

@@ -5,28 +5,28 @@ import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, ManyToOne, OneT
 
 @Entity({ name: 'Productos' })
 export class Producto {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ type: "int", name: "id" })
     id: number;
 
-    @Column({ type: "varchar", length: 20, nullable: false })
+    @Column({ type: "varchar", length: 20, nullable: false, name: "codigo" })
     nombre: string;
 
-    @Column({ type: "varchar", length: 100, nullable: false })
+    @Column({ type: "varchar", length: 100, nullable: false, name: "descripcion" })
     descripcion: string;
 
-    @Column({ type: "int", nullable: false })
+    @Column({ type: "int", nullable: false, name: "precio" })
     precio: number;
 
-    @Column({ type: "varchar", length: 30, nullable: true })
+    @Column({ type: "varchar", length: 30, nullable: true, name: "marca" })
     marca: string;
 
-    @Column({ type: "int", nullable: false, default: 0 })
+    @Column({ type: "int", nullable: false, default: 0, name: "stock" })
     stock: number;
 
-    @Column({ type: "int", nullable: false, default: 1 })
+    @Column({ type: "int", nullable: false, default: 1, name: "estado" })
     estado: number;
 
-    @Column({ type: "date", nullable: true })
+    @Column({ type: "date", nullable: true, name: "fechaVencimiento" })
     fechaVencimiento: Date;
 
     /**

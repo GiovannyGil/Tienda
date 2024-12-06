@@ -6,22 +6,22 @@ import * as bcrypt from 'bcrypt';
 
 @Entity({ name: 'Usuarios' })
 export class Usuario {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ name: 'id', type: 'int' })
     id: number
 
-    @Column({ type: "varchar", length: 30, nullable: false })
+    @Column({ type: "varchar", length: 30, nullable: false, name: 'primerNombre' })
     PrimerNombre: string 
 
-    @Column({ type: "varchar", length: 30, nullable: true })
+    @Column({ type: "varchar", length: 30, nullable: true, name: 'segundoNombre'})
     SegundoNombre: string
 
-    @Column({ type: "varchar", length: 30, nullable: false })
+    @Column({ type: "varchar", length: 30, nullable: false, name: 'primerApellido'})
     PrimerApellido: string
 
-    @Column({ type: "varchar", length: 30, nullable: true })
+    @Column({ type: "varchar", length: 30, nullable: true, name: 'segundoApellido'})
     SegundoApellido: string
 
-    @Column({ type: "varchar", length: 100, nullable: false, unique: true })
+    @Column({ type: "varchar", length: 100, nullable: false, unique: true, name: 'nombreUsuario' })
     NombreUsuario: string
 
     /**
@@ -33,19 +33,19 @@ export class Usuario {
     @JoinColumn({ name: "rolId" }) // tabla intermedia (detalles) > se pone en la tabla que tiene la llave foranea
     rol: Role
 
-    @Column({ type: "varchar", length: 100, nullable: false })
+    @Column({ type: "varchar", length: 100, nullable: false, name: 'clave' })
     clave: string
 
-    @Column({ type: "date", nullable: false })
+    @Column({ type: "date", nullable: false, name: 'añoNace' })
     añoNace: Date
 
-    @Column({ type: "int", nullable: false })
+    @Column({ type: "int", nullable: false, name: 'genero' })
     genero: number
 
-    @Column({ type: "varchar", length: 11, nullable: false, unique: true })
+    @Column({ type: "varchar", length: 11, nullable: false, unique: true, name: 'celular'})
     celular: string
 
-    @Column({ type: "varchar", length: 30, nullable: false, unique: true })
+    @Column({ type: "varchar", length: 30, nullable: false, unique: true, name: 'correo'})
     correo: string
 
     /**
@@ -53,6 +53,7 @@ export class Usuario {
      * una venta solo puede tener un usuario
     */
 
+    // @OneToMany(() => Venta, (venta) => venta.usuario, { onDelete: 'CASCADE' }) -> si se elimina un usuario se eliminan todas sus ventas
     @OneToMany(() => Venta, (venta) => venta.usuario)
     ventas: Venta[]
 

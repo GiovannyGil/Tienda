@@ -1,18 +1,20 @@
 import { IsDate, IsInt, IsNotEmpty, IsString, Length } from "class-validator";
+import { Unique } from "typeorm";
 
 export class CreatePermisoDto {
-    @IsString()
-    @IsNotEmpty()
-    @Length(1, 20)
+    @IsString({ message: 'El nombre del permiso debe ser un texto' })
+    @IsNotEmpty({ message: 'El nombre del permiso no debe estar vacío' })
+    @Unique({ message: 'El nombre del permiso ya existe' })
+    @Length(1, 20, { message: 'El nombre del permiso debe tener entre 1 y 20 caracteres' })
     nombrePermiso: string
 
-    @IsString()
-    @IsNotEmpty()
-    @Length(1, 100)
+    @IsString({ message: 'La descripción del permiso debe ser un texto' })
+    @IsNotEmpty({ message: 'La descripción del permiso no debe estar vacía' })
+    @Length(1, 100, { message: 'La descripción del permiso debe tener entre 1 y 100 caracteres' })
     descripcion: string
 
-    @IsInt()
-    @IsNotEmpty()
-    @Length(1)
+    @IsInt({ message: 'El estado del permiso debe ser un número entero' })
+    @IsNotEmpty({ message: 'El estado del permiso no debe estar vacío' })
+    @Length(1, 1, { message: 'El estado del permiso debe tener 1 caracteres' })
     estado: number
 }

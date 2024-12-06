@@ -4,25 +4,25 @@ import { BeforeInsert, BeforeUpdate, Column, Entity, JoinTable, ManyToMany, OneT
 
 @Entity({ name: 'Proveedores' })
 export class Proveedore {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ type: "int", name: "id" })
     id: number
 
-    @Column({ type: "varchar", length: 30, nullable: false })
+    @Column({ type: "varchar", length: 30, nullable: false, name: "nombreAsesor" })
     nombreAsesor: string
 
-    @Column({ type: "varchar", length: 100, nullable: false, unique: true })
+    @Column({ type: "varchar", length: 100, nullable: false, unique: true, name: "nombreEmpresa" })
     nombreEmpresa: string
 
-    @Column({ type: "varchar", length: 30, nullable: false })
+    @Column({ type: "varchar", length: 30, nullable: false, name: "nombreContacto", unique: true })
     email: string
 
-    @Column({ type: "varchar", length: 11, nullable: false })
+    @Column({ type: "varchar", length: 11, nullable: false, unique: true, name: "celular" })
     celular: string
 
-    @Column({ type: "varchar", length: 11, nullable: false })
+    @Column({ type: "varchar", length: 11, nullable: false, unique: true, name: "telefono" })
     telefono: string
 
-    @Column({ type: "varchar", length: 100, nullable: false })
+    @Column({ type: "varchar", length: 100, nullable: false, name: "direccion" })
     direccion: string
 
     /**

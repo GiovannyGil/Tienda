@@ -4,16 +4,16 @@ import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, OneToMany, Prim
 
 @Entity({ name: "Categorias" })
 export class Categoria {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ type: "int", name: "id" })
     id: number
 
-    @Column({ type: "varchar", length: 50, nullable: false })
+    @Column({ type: "varchar", length: 50, nullable: false, unique: true, name: "nombre" })
     nombre: string
 
-    @Column({ type: "varchar", length: 100, nullable: false })
+    @Column({ type: "varchar", length: 100, nullable: false, name: "descripcion" })
     descripcion: string
 
-    @Column({ type: "int", nullable: false })
+    @Column({ type: "int", nullable: false, name: "estado" })
     estado: number
 
     /**

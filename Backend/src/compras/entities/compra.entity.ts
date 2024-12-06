@@ -5,10 +5,10 @@ import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, JoinTable, Many
 
 @Entity({ name: 'Compras' })
 export class Compra {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
     id: number;
 
-    @Column({ type: "varchar", length: 100, nullable: false })
+    @Column({ type: "varchar", length: 100, nullable: false, name: 'descripcion' })
     descripcion: string;
 
     /**
@@ -27,10 +27,10 @@ export class Compra {
     @JoinTable({ name: "productos_compras" })
     productos: Producto[];
 
-    @Column({ type: 'int', nullable: false })
+    @Column({ type: 'int', nullable: false, name: 'montoTotal' })
     montoTotal: number;
 
-    @Column({ type: 'varchar', length: 20, nullable: false })
+    @Column({ type: 'varchar', length: 20, nullable: false, name: 'metodoPago' })
     metodoPago: string;
 
     /**
