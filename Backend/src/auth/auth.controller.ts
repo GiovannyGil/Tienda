@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UnauthorizedException, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -11,5 +12,15 @@ export class AuthController {
   @Post('login')
   async login(@Body('nombreUsuario') nombreUsuario: string, @Body('clave') clave: string) {
     return this.authService.login(nombreUsuario, clave);
+  }
+
+  @Post('logout')
+  logout(@Req() req: Request) {
+    const token = req.headers.authorization?.split(' ')[1]; // Extraer el token del header
+    if (!token) {
+      throw new UnauthorizedException('Token no proporcionado');
+    }
+    this.authService.logout(token);
+    return { message: 'Logout exitoso' };
   }
 }

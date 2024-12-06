@@ -10,7 +10,7 @@ const ConnexionDDBB: TypeOrmModuleOptions = {
     database: 'tienda',
     entities: [__dirname + './../**/*.entity{.ts,.js}'],
     synchronize: false,
-    logging: true,
+    logging: false,
 }
 
 export default ConnexionDDBB

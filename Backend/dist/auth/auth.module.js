@@ -14,13 +14,7 @@ const usuarios_module_1 = require("../usuarios/usuarios.module");
 const jwt_1 = require("@nestjs/jwt");
 const jwt_strategy_1 = require("./jwt/jwt.strategy");
 const passport_1 = require("@nestjs/passport");
-const token_blacklist_middleware_1 = require("./blackList/token-blacklist.middleware");
 let AuthModule = class AuthModule {
-    configure(consumer) {
-        consumer
-            .apply(token_blacklist_middleware_1.TokenBlacklistMiddleware)
-            .forRoutes('*');
-    }
 };
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([

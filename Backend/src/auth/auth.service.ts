@@ -18,29 +18,23 @@ export class AuthService {
 
   async login(nombreUsuario: string, clave: string): Promise<{ access_token: string }> {
     const usuario = await this.usuariosService.findOneByNombreUsuario(nombreUsuario);
-    if (!usuario) {
-      throw new UnauthorizedException('Usuario Inválido');
-    }
+    if (!usuario) { throw new UnauthorizedException('Usuario Inválido'); }
 
     const isPasswordValid = await bcrypt.compare(clave, usuario.clave);
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Clave inválida');
-    }
+    if (!isPasswordValid) { throw new UnauthorizedException('Clave inválida'); }
 
-    const payload = { nombreUsuario: usuario.NombreUsuario, sub: usuario.id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+    const payload = { sub: usuario.id, nombreUsuario: usuario.NombreUsuario, clave: usuario.clave };
+    const token = await this.jwtService.signAsync(payload);
+    return { access_token: token };
   }
 
-  async logout(token: string): Promise<{ message: string }> {
-    // Añadir el token a la lista negra
-    this.invalidatedTokens.add(token);
-    return { message: 'Sesión cerrada exitosamente' };
+  // Método para invalidar un token
+  logout(token: string): void {
+    this.invalidatedTokens.add(token); // Agregar el token a la lista negra
   }
 
+  // Validar si el token está en la lista negra
   isTokenInvalidated(token: string): boolean {
-    // Verificar si el token está en la lista negra
     return this.invalidatedTokens.has(token);
   }
 

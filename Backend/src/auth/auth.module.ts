@@ -5,7 +5,7 @@ import { UsuariosModule } from 'src/usuarios/usuarios.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
-import { TokenBlacklistMiddleware } from './blackList/token-blacklist.middleware';
+// import { TokenBlacklistMiddleware } from './blackList/token-blacklist.middleware';
 
 @Module({
   imports: [
@@ -19,10 +19,4 @@ import { TokenBlacklistMiddleware } from './blackList/token-blacklist.middleware
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
 })
-export class AuthModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(TokenBlacklistMiddleware)
-      .forRoutes('*');
-  }
-}
+export class AuthModule {}

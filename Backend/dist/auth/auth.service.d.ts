@@ -8,8 +8,6 @@ export declare class AuthService {
     login(nombreUsuario: string, clave: string): Promise<{
         access_token: string;
     }>;
-    logout(token: string): Promise<{
-        message: string;
-    }>;
+    logout(token: string): void;
     isTokenInvalidated(token: string): boolean;
 }

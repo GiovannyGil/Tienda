@@ -29,14 +29,12 @@ let AuthService = class AuthService {
         if (!isPasswordValid) {
             throw new common_1.UnauthorizedException('Clave inválida');
         }
-        const payload = { nombreUsuario: usuario.NombreUsuario, sub: usuario.id };
-        return {
-            access_token: this.jwtService.sign(payload),
-        };
+        const payload = { sub: usuario.id, nombreUsuario: usuario.NombreUsuario, clave: usuario.clave };
+        const token = await this.jwtService.signAsync(payload);
+        return { access_token: token };
     }
-    async logout(token) {
+    logout(token) {
         this.invalidatedTokens.add(token);
-        return { message: 'Sesión cerrada exitosamente' };
     }
     isTokenInvalidated(token) {
         return this.invalidatedTokens.has(token);

@@ -9,7 +9,7 @@ const ConnexionDDBB = {
     database: 'tienda',
     entities: [__dirname + './../**/*.entity{.ts,.js}'],
     synchronize: false,
-    logging: true,
+    logging: false,
 };
 exports.default = ConnexionDDBB;
 //# sourceMappingURL=conexion.js.map
