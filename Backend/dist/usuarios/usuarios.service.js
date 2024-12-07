@@ -61,7 +61,7 @@ let UsuariosService = class UsuariosService {
     }
     async findOneByID(id) {
         try {
-            const usuario = await this.usuarioRepository.findOne({ where: { id, deletedAt: null } });
+            const usuario = await this.usuarioRepository.findOne({ where: { id, deletedAt: null }, relations: ['rol'] });
             if (!usuario) {
                 throw new common_1.NotFoundException(`El usuario con ID ${id} no existe o ya fue eliminado.`);
             }

@@ -4,7 +4,6 @@ import { Unique } from "typeorm";
 export class CreatePermisoDto {
     @IsString({ message: 'El nombre del permiso debe ser un texto' })
     @IsNotEmpty({ message: 'El nombre del permiso no debe estar vacío' })
-    @Unique({ message: 'El nombre del permiso ya existe' })
     @Length(1, 20, { message: 'El nombre del permiso debe tener entre 1 y 20 caracteres' })
     nombrePermiso: string
 

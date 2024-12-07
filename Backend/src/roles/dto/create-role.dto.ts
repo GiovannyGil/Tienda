@@ -1,9 +1,9 @@
-import { IsArray, IsDate, IsInt, IsNotEmpty, IsString, Length } from "class-validator";
+import { IsArray, IsDate, IsInt, IsNotEmpty, IsString, Length, } from "class-validator";
+import { Unique } from "typeorm";
 
 export class CreateRoleDto {
     @IsString({ message: 'El nombre del rol debe ser un texto' })
     @IsNotEmpty({ message: 'El nombre del rol no puede estar vacío' })
-    @Unique({ message: 'El nombre del rol ya existe' })
     @Length(1, 20, { message: 'El nombre del rol debe tener entre 1 y 20 caracteres' })
     nombreRol: string
 

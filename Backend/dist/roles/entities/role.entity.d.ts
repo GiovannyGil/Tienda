@@ -10,7 +10,6 @@ export declare class Role {
     deletedAt: Date;
     usuarios: Usuario[];
     permisos: Permiso[];
-    nombre: any;
     setCreatedAt(): void;
     setUpdatedAt(): void;
 }

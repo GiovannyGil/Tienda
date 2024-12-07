@@ -72,7 +72,7 @@ export class UsuariosService {
   async findOneByID(id: number) {
     try {
       // buscar el usuario por id
-      const usuario = await this.usuarioRepository.findOne({ where: { id , deletedAt: null} })
+      const usuario = await this.usuarioRepository.findOne({ where: { id, deletedAt: null }, relations: ['rol'] })
       // si no encuentra nada, devolver un array vacio
       if (!usuario) { throw new NotFoundException(`El usuario con ID ${id} no existe o ya fue eliminado.`) }
       // devolver el usuario

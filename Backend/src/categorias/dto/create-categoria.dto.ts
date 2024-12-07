@@ -3,7 +3,6 @@ import { IsDate, IsInt, IsNotEmpty, IsString, Length } from "class-validator";
 export class CreateCategoriaDto {
     @IsString({ message: "El nombre de la categoría debe ser un texto" })
     @IsNotEmpty({ message: "El nombre de la categoría no puede estar vacío" })
-    @Unique({ message: "El nombre de la categoría ya existe" })
     @Length(1, 50, { message: "El nombre de la categoría debe tener entre 1 y 50 caracteres" })
     nombre: string
 

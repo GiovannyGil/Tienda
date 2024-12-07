@@ -26,11 +26,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             throw new UnauthorizedException('Token inválido');
         }
 
-        // Validar usuario
+        // Recuperar el usuario con su rol desde el servicio
         const usuario = await this.usuariosService.findOneByID(payload.sub);
-        if (!usuario) {
-            throw new UnauthorizedException('Usuario no encontrado');
+        if (!usuario || !usuario.rol) {
+            throw new UnauthorizedException('Usuario no encontrado o sin rol');
         }
-        return usuario; // Devuelve el usuario validado
+
+        // Retornar el usuario completo con su rol
+        return {
+            id: usuario.id,
+            nombreUsuario: usuario.NombreUsuario,
+            rol: usuario.rol, // Asegúrate de que 'rol' esté definido aquí
+        };
     }
 }

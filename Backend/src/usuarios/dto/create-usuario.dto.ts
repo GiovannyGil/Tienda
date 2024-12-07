@@ -23,7 +23,6 @@ export class CreateUsuarioDto {
 
     @IsString({ message: 'El nombre de usuario debe ser un string' })
     @IsNotEmpty({ message: 'El nombre de usuario es requerido' })
-    @Unique({ message: 'El nombre de usuario ya está en uso' })
     @Length(1, 100, { message: 'El nombre de usuario no puede tener más de 100 caracteres' })
     NombreUsuario: string
 

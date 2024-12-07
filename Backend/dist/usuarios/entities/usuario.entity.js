@@ -31,27 +31,27 @@ let Usuario = class Usuario {
 };
 exports.Usuario = Usuario;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)({ name: 'id', type: 'int' }),
     __metadata("design:type", Number)
 ], Usuario.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", length: 30, nullable: false }),
+    (0, typeorm_1.Column)({ type: "varchar", length: 30, nullable: false, name: 'primerNombre' }),
     __metadata("design:type", String)
 ], Usuario.prototype, "PrimerNombre", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", length: 30, nullable: true }),
+    (0, typeorm_1.Column)({ type: "varchar", length: 30, nullable: true, name: 'segundoNombre' }),
     __metadata("design:type", String)
 ], Usuario.prototype, "SegundoNombre", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", length: 30, nullable: false }),
+    (0, typeorm_1.Column)({ type: "varchar", length: 30, nullable: false, name: 'primerApellido' }),
     __metadata("design:type", String)
 ], Usuario.prototype, "PrimerApellido", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", length: 30, nullable: true }),
+    (0, typeorm_1.Column)({ type: "varchar", length: 30, nullable: true, name: 'segundoApellido' }),
     __metadata("design:type", String)
 ], Usuario.prototype, "SegundoApellido", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", length: 100, nullable: false, unique: true }),
+    (0, typeorm_1.Column)({ type: "varchar", length: 100, nullable: false, unique: true, name: 'nombreUsuario' }),
     __metadata("design:type", String)
 ], Usuario.prototype, "NombreUsuario", void 0);
 __decorate([
@@ -60,23 +60,23 @@ __decorate([
     __metadata("design:type", role_entity_1.Role)
 ], Usuario.prototype, "rol", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", length: 100, nullable: false }),
+    (0, typeorm_1.Column)({ type: "varchar", length: 100, nullable: false, name: 'clave' }),
     __metadata("design:type", String)
 ], Usuario.prototype, "clave", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "date", nullable: false }),
+    (0, typeorm_1.Column)({ type: "date", nullable: false, name: 'añoNace' }),
     __metadata("design:type", Date)
 ], Usuario.prototype, "a\u00F1oNace", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "int", nullable: false }),
+    (0, typeorm_1.Column)({ type: "int", nullable: false, name: 'genero' }),
     __metadata("design:type", Number)
 ], Usuario.prototype, "genero", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", length: 11, nullable: false, unique: true }),
+    (0, typeorm_1.Column)({ type: "varchar", length: 11, nullable: false, unique: true, name: 'celular' }),
     __metadata("design:type", String)
 ], Usuario.prototype, "celular", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", length: 30, nullable: false, unique: true }),
+    (0, typeorm_1.Column)({ type: "varchar", length: 30, nullable: false, unique: true, name: 'correo' }),
     __metadata("design:type", String)
 ], Usuario.prototype, "correo", void 0);
 __decorate([

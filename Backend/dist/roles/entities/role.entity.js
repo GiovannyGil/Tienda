@@ -23,19 +23,19 @@ let Role = class Role {
 };
 exports.Role = Role;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)({ type: "int", name: "id" }),
     __metadata("design:type", Number)
 ], Role.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", length: 20, nullable: false }),
+    (0, typeorm_1.Column)({ type: "varchar", length: 20, nullable: false, unique: true, name: "nombreRol" }),
     __metadata("design:type", String)
 ], Role.prototype, "nombreRol", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", length: 100, nullable: false }),
+    (0, typeorm_1.Column)({ type: "varchar", length: 100, nullable: false, name: "descripcion" }),
     __metadata("design:type", String)
 ], Role.prototype, "descripcion", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "int", nullable: false }),
+    (0, typeorm_1.Column)({ type: "int", nullable: false, default: 1, name: "estado" }),
     __metadata("design:type", Number)
 ], Role.prototype, "estado", void 0);
 __decorate([

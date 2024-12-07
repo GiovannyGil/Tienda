@@ -4,6 +4,7 @@ import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { UpdateClaveDto } from './dto/update-clave.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { PermissionsGuard } from 'src/common/guards/permissions.guard';
 
 @Controller('usuarios')
 @UseGuards(JwtAuthGuard)
