@@ -1,4 +1,4 @@
-import { IsArray, IsDate, IsInt, IsNotEmpty, IsString, Length, } from "class-validator";
+import { ArrayMinSize, ArrayNotEmpty, IsArray, IsDate, IsInt, IsNotEmpty, IsString, Length, Max, Min, } from "class-validator";
 import { Unique } from "typeorm";
 
 export class CreateRoleDto {
@@ -14,10 +14,14 @@ export class CreateRoleDto {
 1
     @IsInt({ message: 'El estado del rol debe ser un número entero' })
     @IsNotEmpty({ message: 'El estado del rol no puede estar vacío' })
-    @Length(1, 1, { message: 'El estado del rol debe tener un solo dígito' })
+    @Min(1, { message: 'El estado debe ser al menos 1 caracter' })
+    @Max(1, { message: 'El estado debe ser máximo 1 caracter' })
     estado: number
 
     @IsNotEmpty({ message: 'los permisos no deben ir vacios' })
-    @IsArray({ message: 'los permisos son un array' }) // Valida que sea un array
+    @IsArray({ message: 'Los permisos deben ser un array' })
+    @ArrayNotEmpty({ message: 'Los permisos no pueden estar vacios' })
+    @ArrayMinSize(1, { message: 'Debe haber al menos un permiso asociado' })
+    @IsInt({ each: true, message: 'Cada ID de permiso debe ser un número entero' })
     permisosIds: number[]; // IDs de los permisos que tendrá el rol
 }
