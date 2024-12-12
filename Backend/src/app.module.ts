@@ -19,12 +19,20 @@ import { ComprasModule } from './compras/compras.module';
 import { CategoriasModule } from './categorias/categorias.module';
 import { ProveedoresModule } from './proveedores/proveedores.module';
 
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/guards/roles.guard';
+
+
 @Module({
   imports: [
     TypeOrmModule.forRoot(ConexionDDBB),
     ScheduleModule.forRoot(), // Habilita la programación de tareas
     AuthModule, RolesModule, UsuariosModule, PermisosModule, ProductosModule, VentasModule, ComprasModule, CategoriasModule, ProveedoresModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [{
+    provide: APP_GUARD,
+    useClass: RolesGuard,
+  },
+  AppService],
 })
 export class AppModule { }
