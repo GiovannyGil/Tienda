@@ -21,13 +21,14 @@ import { ProveedoresModule } from './proveedores/proveedores.module';
 
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(ConexionDDBB),
     ScheduleModule.forRoot(), // Habilita la programación de tareas
-    AuthModule, RolesModule, UsuariosModule, PermisosModule, ProductosModule, VentasModule, ComprasModule, CategoriasModule, ProveedoresModule],
+    AuthModule, RolesModule, UsuariosModule, PermisosModule, ProductosModule, VentasModule, ComprasModule, CategoriasModule, ProveedoresModule, DashboardModule],
   controllers: [AppController],
   providers: [{
     provide: APP_GUARD,

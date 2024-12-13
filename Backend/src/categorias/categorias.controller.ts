@@ -19,7 +19,7 @@ export class CategoriasController {
   }
 
   @Get()
-  @Roles('admin', 'empleado', 'contador') // aplicar el guard a un método específico (permisos)
+  @Roles('administrador', 'empleado', 'contador') // aplicar el guard a un método específico (permisos)
   findAll() {
     return this.categoriasService.findAll();
   }
