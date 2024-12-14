@@ -1,6 +1,4 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateDashboardDto } from './dto/create-dashboard.dto';
-import { UpdateDashboardDto } from './dto/update-dashboard.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
 import { Repository } from 'typeorm';
@@ -10,6 +8,8 @@ import { Proveedore } from 'src/proveedores/entities/proveedore.entity';
 import { Producto } from 'src/productos/entities/producto.entity';
 import { Venta } from 'src/ventas/entities/venta.entity';
 import { Compra } from 'src/compras/entities/compra.entity';
+import { GeneralStatisticsDto } from './dto/estadisticas.dto';
+import { startOfMonth, endOfMonth } from 'date-fns';
 
 @Injectable()
 export class DashboardService {
@@ -26,43 +26,56 @@ export class DashboardService {
 
 
   // metodos de consulta -> DASHBOARD
-  async optenerEstadisticasGenerales() {
+  async obtenerEstadisticasGenerales(): Promise<GeneralStatisticsDto> {
     try {
-      // cantidades
-      const CantidadUsuarios = await this.usuarioRepo.count();
-      const CantidadRoles = await this.RoleRepo.count();
-      const CantidadCategorias = await this.CategoriaRepo.count();
-      const CantidadProveedores = await this.ProveedoreRepo.count();
-      const CantidadProductos = await this.ProductoRepo.count();
-      const CantidadVentas = await this.VentaRepo.count();
-      const CantidadCompras = await this.CompraRepo.count();
-
-      return { CantidadUsuarios, CantidadRoles, CantidadCategorias, CantidadProveedores, CantidadProductos, CantidadVentas, CantidadCompras }
+      return {
+        userCount: await this.usuarioRepo.count(),
+        roleCount: await this.RoleRepo.count(),
+        categoryCount: await this.CategoriaRepo.count(),
+        providerCount: await this.ProveedoreRepo.count(),
+        productCount: await this.ProductoRepo.count(),
+        saleCount: await this.VentaRepo.count(),
+        purchaseCount: await this.CompraRepo.count(),
+      };
     } catch (error) {
       throw new BadRequestException(`Error al obtener las estadisticas generales: ${error.message}`);
     }
   }
 
-  async optenerEstadisticasProductos() {
+  async obtenerEstadisticasProductos() {
     try {
       // cantidades
       const CantidadProductos = await this.ProductoRepo.count();
       // cantidad de productos por categoria
-      const CantidadProductosPorCategoria = await this.ProductoRepo.createQueryBuilder('producto').select('COUNT(producto.id)', 'cantidad').addSelect('categoria.nombre', 'categoria').innerJoin('producto.categoria', 'categoria').groupBy('categoria.nombre').getRawMany();
+      const CantidadProductosPorCategoria = await this.ProductoRepo.createQueryBuilder('producto')
+        .select('COUNT(producto.id)', 'cantidad')
+        .addSelect('categoria.nombre', 'categoria')
+        .innerJoin('producto.categoria', 'categoria')
+        .groupBy('categoria.nombre')
+        .getRawMany();
+
 
       // cantidad vendida por producto (5 mas vendidos)
-      const CantidadVendidaPorProducto = await this.VentaRepo.createQueryBuilder('venta').select('SUM(detalle.cantidad)', 'cantidad').addSelect('producto.nombre', 'producto').innerJoin('venta.detalles', 'detalle').innerJoin('detalle.producto', 'producto').groupBy('producto.nombre').orderBy('cantidad', 'DESC').limit(5).getRawMany();
+      const CantidadVendidaPorProducto = await this.VentaRepo.createQueryBuilder('venta')
+        .select('SUM(producto.stock)', 'cantidad') // Asegúrate de tener un campo relacionado
+        .addSelect('producto.nombre', 'producto')
+        .innerJoin('venta.productos', 'producto')
+        .groupBy('producto.nombre')
+        .orderBy('cantidad', 'DESC')
+        .limit(5)
+        .getRawMany();
+
 
       // total por cada producto
       const TotalPorProducto = await this.VentaRepo.createQueryBuilder('venta').select('SUM(detalle.cantidad * detalle.precio)', 'total').addSelect('producto.nombre', 'producto').innerJoin('venta.detalles', 'detalle').innerJoin('detalle.producto', 'producto').groupBy('producto.nombre').getRawMany();
 
-      return { CantidadProductos, CantidadProductosPorCategoria, CantidadVendidaPorProducto }
+      return { CantidadProductos, CantidadProductosPorCategoria, CantidadVendidaPorProducto, TotalPorProducto }
     } catch (error) {
       throw new BadRequestException(`Error al obtener las estadisticas de productos: ${error.message}`);      
     }
   }
 
-  async optenerProductosMasVendidos() {
+  async obtenerProductosMasVendidos() {
     try {
       // cantidad de productos vendidos
       const ProductosMasVendidos = await this.VentaRepo.createQueryBuilder('venta').select('SUM(detalle.cantidad)', 'cantidad').addSelect('producto.nombre', 'producto').innerJoin('venta.detalles', 'detalle').innerJoin('detalle.producto', 'producto').groupBy('producto.nombre').orderBy('cantidad', 'DESC').getRawMany();
@@ -73,7 +86,7 @@ export class DashboardService {
     }
   }
 
-  async optenerEstadisticasUsuarios() {
+  async obtenerEstadisticasUsuarios() {
     try {
       // cantidades
       const CantidadUsuarios = await this.usuarioRepo.count();
@@ -86,7 +99,7 @@ export class DashboardService {
     }
   }
 
-  async optenerEstadisticasRoles() {
+  async obtenerEstadisticasRoles() {
     try {
       // cantidad de roles
       const CantidadRoles = await this.RoleRepo.count();
@@ -97,7 +110,7 @@ export class DashboardService {
     }
   }
 
-  async optenerEstadisticasCategorias() {
+  async obtenerEstadisticasCategorias() {
     try {
       // cantidad de categorias
       const CantidadCategorias = await this.CategoriaRepo.count();
@@ -107,7 +120,7 @@ export class DashboardService {
     }
   }
 
-  async optenerEstadisticasProveedores() {
+  async obtenerEstadisticasProveedores() {
     try {
       // cantidad de proveedores
       const CantidadProveedores = await this.ProveedoreRepo.count();
@@ -117,16 +130,20 @@ export class DashboardService {
     }
   }
 
-  async optenerEstadisticasVentas() {
+  async obtenerEstadisticasVentas() {
     try {
       const totalVentas = await this.VentaRepo.count()
+
+      // Calcula rangos antes del query
+      const inicioMes = startOfMonth(new Date());
+      const finMes = endOfMonth(new Date());
   
       const totalVentasMES = await this.VentaRepo.count({})
       const totalVentasAÑO = await this.VentaRepo.count({})
   
       const ingresos = await this.VentaRepo.createQueryBuilder('venta').select('SUM(venta.montoTotal)', 'ingresos').getRawOne()
-      const ingresosMES = await this.VentaRepo.createQueryBuilder('venta').select('SUM(venta.montoTotal)', 'ingresos').where('MONTH(venta.createdAt) = MONTH(CURDATE())').getRawOne()
-      const ingresosAÑO = await this.VentaRepo.createQueryBuilder('venta').select('SUM(venta.montoTotal)', 'ingresos').where('YEAR(venta.createdAt) = YEAR(CURDATE())').getRawOne()
+      const ingresosMES = await this.VentaRepo.createQueryBuilder('venta').select('SUM(venta.montoTotal)', 'ingresos').where('venta.createdAt BETWEEN :inicio AND :fin', { inicio: inicioMes, fin: finMes }).getRawOne()
+      const ingresosAÑO = await this.VentaRepo.createQueryBuilder('venta').select('SUM(venta.montoTotal)', 'ingresos').where('venta.createdAt BETWEEN :inicio AND :fin', { inicio: inicioMes, fin: finMes }).getRawOne()
   
       return {
         totalVentas, 
@@ -141,7 +158,7 @@ export class DashboardService {
     }
   }
 
-  async optenerEstadisticasCompras() {
+  async obtenerEstadisticasCompras() {
     try {
       const totalCompras = await this.CompraRepo.count();
   
