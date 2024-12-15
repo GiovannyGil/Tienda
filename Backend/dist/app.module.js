@@ -22,6 +22,9 @@ const ventas_module_1 = require("./ventas/ventas.module");
 const compras_module_1 = require("./compras/compras.module");
 const categorias_module_1 = require("./categorias/categorias.module");
 const proveedores_module_1 = require("./proveedores/proveedores.module");
+const core_1 = require("@nestjs/core");
+const roles_guard_1 = require("./auth/guards/roles.guard");
+const dashboard_module_1 = require("./dashboard/dashboard.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -30,10 +33,14 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             typeorm_1.TypeOrmModule.forRoot(conexion_1.default),
             schedule_1.ScheduleModule.forRoot(),
-            auth_module_1.AuthModule, roles_module_1.RolesModule, usuarios_module_1.UsuariosModule, permisos_module_1.PermisosModule, productos_module_1.ProductosModule, ventas_module_1.VentasModule, compras_module_1.ComprasModule, categorias_module_1.CategoriasModule, proveedores_module_1.ProveedoresModule
+            auth_module_1.AuthModule, roles_module_1.RolesModule, usuarios_module_1.UsuariosModule, permisos_module_1.PermisosModule, productos_module_1.ProductosModule, ventas_module_1.VentasModule, compras_module_1.ComprasModule, categorias_module_1.CategoriasModule, proveedores_module_1.ProveedoresModule, dashboard_module_1.DashboardModule
         ],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        providers: [{
+                provide: core_1.APP_GUARD,
+                useClass: roles_guard_1.RolesGuard,
+            },
+            app_service_1.AppService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

@@ -13,33 +13,37 @@ export class CategoriasController {
   constructor(private readonly categoriasService: CategoriasService) {}
 
   @Post()
-  @Roles('admin')
+  @Roles('administrador')
   create(@Body() createCategoriaDto: CreateCategoriaDto) {
     return this.categoriasService.create(createCategoriaDto);
   }
 
   @Get()
-  @Roles('administrador', 'empleado', 'contador') // aplicar el guard a un método específico (permisos)
+  @Roles('administrador', 'empleado', 'contador', 'analista') // aplicar el guard a un método específico (permisos)
   findAll() {
     return this.categoriasService.findAll();
   }
 
   @Get(':id')
+  @Roles('administrador', 'empleado', 'contador', 'analista') // aplicar el guard a un método específico (permisos)
   findOne(@Param('id') id: string) {
     return this.categoriasService.findOneByID(+id);
   }
 
   @Get('nombre/:nombre')
+  @Roles('administrador', 'empleado', 'contador', 'analista') // aplicar el guard a un método específico (permisos)
   findOneByName(@Param('nombre') nombre: string) {
     return this.categoriasService.findOneByName(nombre);
   }
 
   @Patch(':id')
+  @Roles('administrador')
   update(@Param('id') id: string, @Body() updateCategoriaDto: UpdateCategoriaDto) {
     return this.categoriasService.update(+id, updateCategoriaDto);
   }
 
   @Delete(':id')
+  @Roles('administrador')
   remove(@Param('id') id: string) {
     return this.categoriasService.softDelete(+id);
   }

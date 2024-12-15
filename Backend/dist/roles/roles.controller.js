@@ -38,7 +38,7 @@ let RolesController = class RolesController {
         return await this.rolesService.update(+id, updateRoleDto);
     }
     async remove(id) {
-        return await this.rolesService.softDelete(+id);
+        return await this.rolesService.softDelete(id);
     }
     cleanDeletedRecords() {
         return this.rolesService.cleanDeletedRecords();
@@ -82,9 +82,9 @@ __decorate([
 ], RolesController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], RolesController.prototype, "remove", null);
 __decorate([

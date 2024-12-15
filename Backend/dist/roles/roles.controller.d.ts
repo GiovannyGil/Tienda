@@ -8,7 +8,7 @@ export declare class RolesController {
     findAll(): Promise<import("./entities/role.entity").Role[]>;
     findOneByID(id: string): Promise<import("./entities/role.entity").Role>;
     findOneByNombre(nombreRol: string): Promise<import("./entities/role.entity").Role>;
-    update(id: string, updateRoleDto: UpdateRoleDto): Promise<import("typeorm").UpdateResult>;
-    remove(id: string): Promise<string>;
+    update(id: string, updateRoleDto: UpdateRoleDto): Promise<import("./entities/role.entity").Role>;
+    remove(id: number): Promise<string>;
     cleanDeletedRecords(): Promise<void>;
 }

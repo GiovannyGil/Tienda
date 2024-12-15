@@ -47,11 +47,11 @@ export class ProveedoresService {
       // buscar todas las proveedors
       const proveedores = await this.proveedorRepository.find()
       // si no encuentra nada, devolver un array vacio
-      if (!proveedores) return []
+      if (!proveedores) throw new NotFoundException('No se encontraron proveedores')
       // devolver las proveedors
       return proveedores
     } catch (error) {
-      throw new Error('Error Algo Salió Mal')
+      throw new InternalServerErrorException('Error Algo Salió Mal')
     }
   }
 

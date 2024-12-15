@@ -29,12 +29,16 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsInt)({ message: 'El estado del rol debe ser un número entero' }),
     (0, class_validator_1.IsNotEmpty)({ message: 'El estado del rol no puede estar vacío' }),
-    (0, class_validator_1.Length)(1, 1, { message: 'El estado del rol debe tener un solo dígito' }),
+    (0, class_validator_1.Min)(1, { message: 'El estado debe ser al menos 1 caracter' }),
+    (0, class_validator_1.Max)(1, { message: 'El estado debe ser máximo 1 caracter' }),
     __metadata("design:type", Number)
 ], CreateRoleDto.prototype, "estado", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'los permisos no deben ir vacios' }),
-    (0, class_validator_1.IsArray)({ message: 'los permisos son un array' }),
+    (0, class_validator_1.IsArray)({ message: 'Los permisos deben ser un array' }),
+    (0, class_validator_1.ArrayNotEmpty)({ message: 'Los permisos no pueden estar vacios' }),
+    (0, class_validator_1.ArrayMinSize)(1, { message: 'Debe haber al menos un permiso asociado' }),
+    (0, class_validator_1.IsInt)({ each: true, message: 'Cada ID de permiso debe ser un número entero' }),
     __metadata("design:type", Array)
 ], CreateRoleDto.prototype, "permisosIds", void 0);
 //# sourceMappingURL=create-role.dto.js.map

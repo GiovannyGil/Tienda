@@ -11,26 +11,30 @@ export class RolesGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-    const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-
-    if (!requiredRoles) {
-      // Si no hay roles definidos, se permite el acceso
-      return true;
+    try {
+      const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
+        context.getHandler(),
+        context.getClass(),
+      ]);
+  
+      if (!requiredRoles) {
+        // Si no hay roles definidos, se permite el acceso
+        return true;
+      }
+  
+      const request = context.switchToHttp().getRequest();
+      const user = request.user;
+  
+      // Validar que el usuario tiene los roles requeridos
+      const hasRole = requiredRoles.some((role) => user.roles?.includes(role));
+  
+      if (!hasRole) {
+        throw new ForbiddenException('No tienes permisos para realizar esta acción.');
+      }
+  
+      return hasRole;
+    } catch (error) {
+      throw new ForbiddenException('Algo salió mal o No tienes permisos para realizar esta acción.')
     }
-
-    const request = context.switchToHttp().getRequest();
-    const user = request.user;
-
-    // Validar que el usuario tiene los roles requeridos
-    const hasRole = requiredRoles.some((role) => user.roles?.includes(role));
-
-    if (!hasRole) {
-      throw new ForbiddenException('No tienes permisos para realizar esta acción.');
-    }
-
-    return hasRole;
   }
 }

@@ -3,11 +3,9 @@ import { ProductosService } from './productos.service';
 import { CreateProductoDto } from './dto/create-producto.dto';
 import { UpdateProductoDto } from './dto/update-producto.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { Permissions } from 'src/common/decorators/permissions.decorator';
-import { PermissionsGuard } from 'src/common/guards/permissions.guard';
 
 @Controller('productos')
-@UseGuards(JwtAuthGuard, PermissionsGuard)
+@UseGuards(JwtAuthGuard)
 export class ProductosController {
   constructor(private readonly productosService: ProductosService) {}
 
@@ -17,7 +15,6 @@ export class ProductosController {
   }
 
   @Get()
-  @Permissions('ver')
   findAll() {
     return this.productosService.findAll();
   }

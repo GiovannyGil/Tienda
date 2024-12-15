@@ -18,49 +18,55 @@ const typeorm_1 = require("@nestjs/typeorm");
 const role_entity_1 = require("./entities/role.entity");
 const typeorm_2 = require("typeorm");
 const schedule_1 = require("@nestjs/schedule");
+const permiso_entity_1 = require("../permisos/entities/permiso.entity");
 let RolesService = class RolesService {
-    constructor(roleRepository) {
+    constructor(roleRepository, permisoRepository) {
         this.roleRepository = roleRepository;
+        this.permisoRepository = permisoRepository;
     }
     async verifyExistROL(nombreRol) {
         try {
-            const RolExiste = await this.roleRepository.findOne({ where: { nombreRol, deletedAt: null } });
-            return !!RolExiste;
+            return !!(await this.roleRepository.findOne({ where: { nombreRol, deletedAt: null } }));
         }
         catch (error) {
-            throw new Error('Error al verificar la existencia del ROL');
+            throw new common_1.InternalServerErrorException('Error al verificar la existencia del ROL');
         }
     }
     async create(createRoleDto) {
         try {
+            const { nombreRol, estado, descripcion, permisosIds } = createRoleDto;
             const RolExiste = await this.verifyExistROL(createRoleDto.nombreRol);
             if (RolExiste)
                 throw new common_1.BadRequestException('El rol ya existe');
-            const NuevoRol = this.roleRepository.create(createRoleDto);
-            if (!NuevoRol)
-                return null;
-            return await this.roleRepository.save(NuevoRol);
+            const permisos = await this.permisoRepository.findByIds(createRoleDto.permisosIds);
+            if (permisos.length !== createRoleDto.permisosIds.length) {
+                throw new common_1.BadRequestException('Algunos permisos no existen');
+            }
+            const nuevoRol = this.roleRepository.create({ nombreRol, estado, descripcion, permisos });
+            if (!nuevoRol)
+                throw new common_1.BadRequestException('Error al crear el ROL');
+            return await this.roleRepository.save(nuevoRol);
         }
         catch (error) {
-            throw new Error('Error al crear el ROL');
+            throw new common_1.InternalServerErrorException('Error al crear el ROL');
         }
     }
     async findAll() {
         try {
-            const roles = await this.roleRepository.find({ where: { deletedAt: null } });
+            const roles = await this.roleRepository.find({ where: { deletedAt: null }, relations: ['permisos'] });
             if (!roles || roles.length === 0)
-                return [];
+                throw new common_1.BadRequestException('No hay roles registrados');
             return roles;
         }
         catch (error) {
-            throw new Error('Error al buscar los roles');
+            throw new common_1.InternalServerErrorException('Error al buscar los roles');
         }
     }
     async findOneByID(id) {
         try {
-            const rol = await this.roleRepository.findOneBy({ id, deletedAt: null });
+            const rol = await this.roleRepository.findOne({ where: { id, deletedAt: null }, relations: ['permisos'] });
             if (!rol)
-                return null;
+                throw new common_1.BadRequestException('El rol no existe');
             return rol;
         }
         catch (error) {
@@ -69,38 +75,43 @@ let RolesService = class RolesService {
     }
     async findOneByNombre(nombreRol) {
         try {
-            const rol = await this.roleRepository.findOneBy({ nombreRol, deletedAt: null });
+            const rol = await this.roleRepository.findOne({ where: { nombreRol, deletedAt: null }, relations: ['permisos'] });
             if (!rol)
-                return null;
+                throw new common_1.BadRequestException('El rol no existe');
             return rol;
         }
         catch (error) {
-            throw new Error('Error al buscar el rol');
+            throw new common_1.InternalServerErrorException('Error al buscar el rol');
         }
     }
     async update(id, updateRoleDto) {
         try {
-            const rol = await this.roleRepository.update(id, updateRoleDto);
-            if (!rol)
-                return null;
-            return rol;
+            const { nombreRol, estado, descripcion, permisosIds } = updateRoleDto;
+            const role = await this.findOneByID(id);
+            if (nombreRol && role.nombreRol !== nombreRol && (await this.verifyExistROL(nombreRol))) {
+                throw new common_1.BadRequestException('El nombre del rol ya está en uso');
+            }
+            if (permisosIds) {
+                const permisos = await this.permisoRepository.findByIds(permisosIds);
+                if (permisos.length !== permisosIds.length)
+                    throw new common_1.BadRequestException('Algunos permisos no existen');
+                role.permisos = permisos;
+            }
+            Object.assign(role, { nombreRol, estado, descripcion });
+            return await this.roleRepository.save(role);
         }
         catch (error) {
-            throw new Error('Error al actualizar el rol');
+            throw new common_1.InternalServerErrorException('Error al actualizar el rol');
         }
     }
     async softDelete(id) {
         try {
-            const rol = await this.findOneByID(id);
-            if (!rol) {
-                throw new common_1.BadRequestException('El rol no existe o ya está eliminado');
-            }
-            rol.deletedAt = new Date();
-            await this.roleRepository.save(rol);
-            return "ROL eliminado Correctamente";
+            const role = await this.findOneByID(id);
+            await this.roleRepository.softRemove(role);
+            return `El rol con ID ${id} ha sido eliminado (soft delete)`;
         }
         catch (error) {
-            throw new Error('Error al eliminar el ROL');
+            throw new common_1.InternalServerErrorException('Error al eliminar el ROL');
         }
     }
     async cleanDeletedRecords() {
@@ -133,6 +144,8 @@ __decorate([
 exports.RolesService = RolesService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(role_entity_1.Role)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(permiso_entity_1.Permiso)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository])
 ], RolesService);
 //# sourceMappingURL=roles.service.js.map

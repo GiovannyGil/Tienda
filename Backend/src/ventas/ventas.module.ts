@@ -10,6 +10,6 @@ import { UsuariosModule } from 'src/usuarios/usuarios.module';
   imports: [TypeOrmModule.forFeature([Venta]), ProductosModule, UsuariosModule],
   controllers: [VentasController],
   providers: [VentasService],
-  exports: [VentasService]
+  exports: [VentasService, TypeOrmModule]
 })
 export class VentasModule { }

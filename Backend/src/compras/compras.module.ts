@@ -11,6 +11,6 @@ import { UsuariosModule } from 'src/usuarios/usuarios.module';
   imports: [TypeOrmModule.forFeature([Compra]), ProductosModule, ProveedoresModule, UsuariosModule],
   controllers: [ComprasController],
   providers: [ComprasService],
-  exports: [ComprasService]
+  exports: [ComprasService, TypeOrmModule]
 })
 export class ComprasModule { }
