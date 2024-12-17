@@ -51,7 +51,7 @@ export class VentasService {
       if (error instanceof NotFoundException || error instanceof BadRequestException) {
         throw error;
       }
-      throw new BadRequestException('Error al crear la venta')
+      throw new BadRequestException('Error al crear la venta', error.message);
     }
   }
 
@@ -64,7 +64,7 @@ export class VentasService {
       // devolver las ventas
       return ventas;
     } catch (error) {
-      throw new BadRequestException('Error al buscar las ventas')
+      throw new BadRequestException('Error al buscar las ventas', error.message);
     }
   }
 

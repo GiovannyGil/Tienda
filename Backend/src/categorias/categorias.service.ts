@@ -24,7 +24,7 @@ export class CategoriasService {
       // guardar la categoria
       return await this.categoriaRepository.save(categoria)
     } catch (error) {
-      throw new Error('Error Algo Salió Mal')
+      throw new InternalServerErrorException('Error Algo Salió Mal', error.message)
     }
   }
 
@@ -37,7 +37,7 @@ export class CategoriasService {
       // devolver las categorias
       return categorias
     } catch (error) {
-      throw new Error('Error Algo Salió Mal')
+      throw new InternalServerErrorException('Error Algo Salió Mal', error.message)
     }
   }
 
@@ -50,7 +50,7 @@ export class CategoriasService {
       // devolver la categoria
       return categoria
     } catch (error) {
-      throw new Error('Error Algo Salió Mal')
+      throw new InternalServerErrorException('Error Algo Salió Mal', error.message)
     }
   }
 
@@ -63,7 +63,7 @@ export class CategoriasService {
       // devolver la categoria
       return categoria
     } catch (error) {
-      throw new BadRequestException('Error Algo Salió Mal')
+      throw new InternalServerErrorException('Error Algo Salió Mal', error.message)
     }
   }
 
@@ -77,7 +77,7 @@ export class CategoriasService {
       // devolver la categoria
       return categoriaUpdate
     } catch (error) {
-      throw new Error('Error Algo Salió Mal')
+      throw new InternalServerErrorException('Error Algo Salió Mal', error.message)
     }
   }
 
@@ -97,7 +97,7 @@ export class CategoriasService {
       // devolver un mensaje
       return 'La categoria fue eliminada'
     } catch (error) {
-      throw new Error('Error Algo Salió Mal')
+      throw new InternalServerErrorException('Error Algo Salió Mal', error.message)
     }
   }
 
@@ -120,7 +120,7 @@ export class CategoriasService {
     } catch (error) {
       console.error('Error al limpiar registros eliminados:', error);
       throw new InternalServerErrorException(
-        'Ocurrió un error al eliminar categoria obsoletas.',
+        'Ocurrió un error al eliminar categoria obsoletas.', error.message,
       );
     }
   }

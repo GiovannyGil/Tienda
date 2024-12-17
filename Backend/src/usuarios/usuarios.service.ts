@@ -48,7 +48,7 @@ export class UsuariosService {
       return await this.usuarioRepository.save(nuevoUsuario);
     } catch (error) {
       // Mejor manejo de errores
-      throw new BadRequestException(
+      throw new InternalServerErrorException(
         `Error al crear el usuario: ${error.message}`,
       );
     }
@@ -64,7 +64,7 @@ export class UsuariosService {
       if (!usuarios) { throw new NotFoundException('No hay usuarios registrados.') }
       return usuarios
     } catch (error) {
-      throw new BadRequestException(`Error al encontrar los usuarios ${error.message}`)
+      throw new InternalServerErrorException(`Error al encontrar los usuarios ${error.message}`)
     }
   }
 
@@ -78,7 +78,7 @@ export class UsuariosService {
       // devolver el usuario
       return usuario
     } catch (error) {
-      throw new BadRequestException(`Error al encontrar el usuario ${error.message}`)
+      throw new InternalServerErrorException(`Error al encontrar el usuario ${error.message}`)
     }
   }
 
@@ -93,7 +93,7 @@ export class UsuariosService {
       // devolver el usuario
       return usuario
     } catch (error) {
-      throw new BadRequestException(`Error al encontrar el usuario ${error.message}`)
+      throw new InternalServerErrorException(`Error al encontrar el usuario ${error.message}`)
     }
   }
 
@@ -108,7 +108,7 @@ export class UsuariosService {
       // devolver el usuario
       return usuario
     } catch (error) {
-      throw new BadRequestException(`Error al encontrar el usuario ${error.message}`)
+      throw new InternalServerErrorException(`Error al encontrar el usuario ${error.message}`)
     }
   }
 
@@ -147,7 +147,7 @@ export class UsuariosService {
       // Guardar los cambios en la base de datos
       return await this.usuarioRepository.save(usuario);
     } catch (error) {
-      throw new BadRequestException(`Error al actualizar el usuario: ${error.message}`);
+      throw new InternalServerErrorException(`Error al actualizar el usuario: ${error.message}`);
     }
   }
 
@@ -177,7 +177,7 @@ export class UsuariosService {
 
       return "Contraseña actualizada correctamente";
     } catch (error) {
-      throw new BadRequestException(`Error al actualizar la contraseña del usuario: ${error.message}`);
+      throw new InternalServerErrorException(`Error al actualizar la contraseña del usuario: ${error.message}`);
     }
   }
   
@@ -203,7 +203,7 @@ export class UsuariosService {
 
       return "Usuario eliminado Correctamente";
     } catch (error) {
-      throw new BadRequestException(`Error al eliminar el usuario ${error.message}`);
+      throw new InternalServerErrorException(`Error al eliminar el usuario ${error.message}`);
     }
   }
 

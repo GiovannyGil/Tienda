@@ -37,7 +37,7 @@ export class ProveedoresService {
       return await this.proveedorRepository.save(proveedor);
     } catch (error) {
       console.error(error);
-      throw new InternalServerErrorException('Error al crear el proveedor');
+      throw new InternalServerErrorException('Error al crear el proveedor', error.message);
     }
   }
 
@@ -51,7 +51,7 @@ export class ProveedoresService {
       // devolver las proveedors
       return proveedores
     } catch (error) {
-      throw new InternalServerErrorException('Error Algo Salió Mal')
+      throw new InternalServerErrorException('Error Algo Salió Mal', error.message)
     }
   }
 
@@ -64,7 +64,7 @@ export class ProveedoresService {
       // devolver la proveedor
       return proveedor
     } catch (error) {
-      throw new BadRequestException('Error Algo Salió Mal')
+      throw new BadRequestException('Error Algo Salió Mal', error.message)
     }
   }
 
@@ -77,7 +77,7 @@ export class ProveedoresService {
       // devolver la proveedor
       return proveedor
     } catch (error) {
-      throw new Error('Error Algo Salió Mal')
+      throw new Error('Error Algo Salió Mal', error.message)
     }
   }
 
@@ -91,7 +91,7 @@ export class ProveedoresService {
     });
 
     if (!proveedor) {
-      throw new BadRequestException('El proveedor no existe');
+      throw new BadRequestException('El proveedor no existe', error.message);
     }
 
     // Actualizar los campos del proveedor
@@ -103,7 +103,7 @@ export class ProveedoresService {
         const categorias = await this.categoriaRepository.findBy({ id: In(categoriasIds) });
 
         if (categorias.length !== categoriasIds.length) {
-          throw new BadRequestException('Algunas categorías no existen');
+          throw new BadRequestException('Algunas categorías no existen', error.message);
         }
 
         proveedor.categorias = categorias;
@@ -113,7 +113,7 @@ export class ProveedoresService {
       return await this.proveedorRepository.save(proveedor);
     } catch (error) {
       console.error(error);
-      throw new InternalServerErrorException('Error al actualizar el proveedor');
+      throw new InternalServerErrorException('Error al actualizar el proveedor', error.message);
     }
   }
 
@@ -134,7 +134,7 @@ export class ProveedoresService {
       // devolver un mensaje
       return 'La proveedor fue eliminada'
     } catch (error) {
-      throw new Error('Error Algo Salió Mal')
+      throw new InternalServerErrorException('Error Algo Salió Mal', error.message)
     }
   }
 
@@ -157,7 +157,7 @@ export class ProveedoresService {
     } catch (error) {
       console.error('Error al limpiar registros eliminados:', error);
       throw new InternalServerErrorException(
-        'Ocurrió un error al eliminar proveedore obsoletas.',
+        'Ocurrió un error al eliminar proveedore obsoletas.', error.message,
       );
     }
   }

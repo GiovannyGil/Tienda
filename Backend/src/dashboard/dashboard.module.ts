@@ -8,10 +8,11 @@ import { ProveedoresModule } from 'src/proveedores/proveedores.module';
 import { ProductosModule } from 'src/productos/productos.module';
 import { VentasModule } from 'src/ventas/ventas.module';
 import { ComprasModule } from 'src/compras/compras.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [UsuariosModule, RolesModule, CategoriasModule, ProveedoresModule, ProductosModule, VentasModule, ComprasModule],
   controllers: [DashboardController],
-  providers: [DashboardService],
+  providers: [DashboardService, TypeOrmModule],
 })
 export class DashboardModule {}

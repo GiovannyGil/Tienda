@@ -17,25 +17,50 @@ export class AuthService {
   ) { }
 
   async login(nombreUsuario: string, clave: string): Promise<{ access_token: string }> {
-    const usuario = await this.usuariosService.findOneByNombreUsuario(nombreUsuario);
-    if (!usuario) { throw new UnauthorizedException('Usuario Inválido'); }
-
-    const isPasswordValid = await bcrypt.compare(clave, usuario.clave);
-    if (!isPasswordValid) { throw new UnauthorizedException('Clave inválida'); }
-
-    const payload = { sub: usuario.id, nombreUsuario: usuario.NombreUsuario, clave: usuario.clave };
-    const token = await this.jwtService.signAsync(payload);
-    return { access_token: token };
+    try {
+      const usuario = await this.usuariosService.findOneByNombreUsuario(nombreUsuario);
+      if (!usuario) { throw new UnauthorizedException('Usuario Inválido'); }
+  
+      const isPasswordValid = await bcrypt.compare(clave, usuario.clave);
+      if (!isPasswordValid) { throw new UnauthorizedException('Clave inválida'); }
+  
+      const payload = {
+        sub: usuario.id,
+        nombreUsuario: usuario.NombreUsuario,
+        roles: usuario.rol, // Asegúrate de que la propiedad "roles" exista en el objeto usuario
+      };
+      
+      const token = await this.jwtService.signAsync(payload);
+      return { access_token: token };
+    } catch (error) {
+      throw new UnauthorizedException('Credenciales inválidas');
+    }
   }
 
   // Método para invalidar un token
   logout(token: string): void {
-    this.invalidatedTokens.add(token); // Agregar el token a la lista negra
+    try {
+      this.invalidatedTokens.add(token); // Agregar el token a la lista negra
+    } catch (error) {
+      throw new UnauthorizedException('No se pudo invalidar el token 1');
+    }
   }
 
   // Validar si el token está en la lista negra
+  invalidateToken(token: string) {
+    try {
+      this.invalidatedTokens.add(token);
+    } catch (error) {
+      throw new UnauthorizedException('No se pudo invalidar el token 2');
+    }
+  }
+
   isTokenInvalidated(token: string): boolean {
-    return this.invalidatedTokens.has(token);
+    try {
+      return this.invalidatedTokens.has(token);
+    } catch (error) {
+      throw new UnauthorizedException('No se pudo validar el token 3');      
+    }
   }
 
 }

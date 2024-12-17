@@ -7,8 +7,7 @@ import { RolesGuard } from '../roles/guards/roles.guard';
 import { Roles } from '../roles/decorators/roles.decorator';
 
 @Controller('categorias')
-@UseGuards(JwtAuthGuard)
-@UseGuards(RolesGuard) // Aplicar el guard a todo el controlador
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class CategoriasController {
   constructor(private readonly categoriasService: CategoriasService) {}
 

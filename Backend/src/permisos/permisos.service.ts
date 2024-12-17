@@ -19,7 +19,7 @@ export class PermisosService {
       // devuleve true si existe o false si no existe
       return permisoExiste ? true : false
     } catch (error) {
-      throw new Error('Error al verificar la existencia del permiso')
+      throw new InternalServerErrorException('Error al verificar la existencia del permiso', error.message)
     }
   }
 
@@ -37,7 +37,7 @@ export class PermisosService {
       // si es correcto guardar el nuevo permiso
       return await this.permisoRepository.save(permiso)
     } catch (error) {
-      throw new Error('Error al crear el permiso')
+      throw new InternalServerErrorException('Error al crear el permiso', error.message)
     }
   }
 
@@ -52,7 +52,7 @@ export class PermisosService {
       // devolver los permisos
       return permisos
     } catch (error) {
-      throw new Error('Error al buscar los permisos')
+      throw new InternalServerErrorException('Error al buscar los permisos', error.message)
     }
   }
 
@@ -67,7 +67,7 @@ export class PermisosService {
       // devolver el permiso
       return permiso
     } catch (error) {
-      throw new Error('Error al buscar el permiso por id')
+      throw new InternalServerErrorException('Error al buscar el permiso por id', error.message)
     }
   }
 
@@ -82,7 +82,7 @@ export class PermisosService {
       // devolver el permiso
       return permiso
     } catch (error) {
-      throw new Error('Error al buscar el permiso por el nombre')
+      throw new InternalServerErrorException('Error al buscar el permiso por el nombre', error.message)
     }
   }
 
@@ -97,7 +97,7 @@ export class PermisosService {
       // devolver el permiso actualizado
       return permisoUpdated
     } catch (error) {
-      throw new Error('Erro al actualziar el permiso')
+      throw new InternalServerErrorException('Erro al actualziar el permiso', error.message)
     }
   }
 
@@ -120,7 +120,7 @@ export class PermisosService {
 
       return "Permiso eliminado Correctamente"
     } catch (error) {
-      throw new Error('Error al eliminar el ROL')
+      throw new InternalServerErrorException('Error al eliminar el ROL', error.message)
     }
   }
 
@@ -136,7 +136,7 @@ export class PermisosService {
       // eliminar los permisos
       await this.permisoRepository.delete({ deletedAt: LessThan(fechaLimite) })
     } catch (error) {
-      throw new Error('Error al eliminar el permiso')
+      throw new InternalServerErrorException('Error al eliminar el permiso', error.message)
     }
   }
 
@@ -159,7 +159,7 @@ export class PermisosService {
     } catch (error) {
       console.error('Error al limpiar registros eliminados:', error);
       throw new InternalServerErrorException(
-        'Ocurrió un error al eliminar permiso obsoletas.',
+        'Ocurrió un error al eliminar permiso obsoletas.', error.message,
       );
     }
   }

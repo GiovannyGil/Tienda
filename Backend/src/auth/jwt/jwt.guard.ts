@@ -3,8 +3,8 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-    // implementacion de la estrategia de autenticacion
     handleRequest(err, user, info) {
+        console.log('Usuario autenticado:', user);
         if (err || !user) {
             throw err || new UnauthorizedException();
         }

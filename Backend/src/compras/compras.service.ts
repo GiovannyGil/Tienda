@@ -180,7 +180,7 @@ export class ComprasService {
       // devolver mensaje de exito
       return "compra eliminada correctamente"
     } catch (error) {
-      throw new BadRequestException('Error al eliminar la compra')
+      throw new BadRequestException('Error al eliminar la compra', error.message)
     }
   }
 
@@ -203,7 +203,7 @@ export class ComprasService {
     } catch (error) {
       console.error('Error al limpiar registros eliminados:', error);
       throw new InternalServerErrorException(
-        'Ocurrió un error al eliminar compras obsoletas.',
+        'Ocurrió un error al eliminar compras obsoletas.', error.message,
       );
     }
   }

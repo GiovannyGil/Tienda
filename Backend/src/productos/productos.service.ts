@@ -39,7 +39,7 @@ export class ProductosService {
       // Guardar el producto en la base de datos
       return await this.productoRepository.save(nuevoProducto);
     } catch (error) {
-      throw new BadRequestException('Error al crear el producto');
+      throw new BadRequestException('Error al crear el producto', error.message);
     }
   }
 
@@ -52,7 +52,7 @@ export class ProductosService {
       // devolver los productos
       return productos
     } catch (error) {
-      throw new BadRequestException('Error al buscar los productos')
+      throw new BadRequestException('Error al buscar los productos', error.message)
     }
   }
 
@@ -69,7 +69,7 @@ export class ProductosService {
       // devolver los productos
       return producto
     } catch (error) {
-      throw new BadRequestException('Error al buscar el producto por ID')
+      throw new BadRequestException('Error al buscar el producto por ID', error.message)
     }
   }
 
@@ -100,7 +100,7 @@ export class ProductosService {
       // Guardar el producto actualizado en la base de datos
       return this.productoRepository.save(producto);
     } catch (error) {
-      throw new BadRequestException('Error al actualizar el producto')
+      throw new BadRequestException('Error al actualizar el producto', error.message);
     }
   }
 
@@ -122,7 +122,7 @@ export class ProductosService {
       // devolver un mensaje
       return `El producto con ID ${id} fue eliminado correctamente.`;
     } catch (error) {
-      throw new BadRequestException('Error al eliminar el producto')
+      throw new BadRequestException('Error al eliminar el producto', error.message);
     }
   }
 
@@ -145,7 +145,7 @@ export class ProductosService {
     } catch (error) {
       console.error('Error al limpiar registros eliminados:', error);
       throw new InternalServerErrorException(
-        'Ocurrió un error al eliminar producto obsoletas.',
+        'Ocurrió un error al eliminar producto obsoletas.', error.message,
       );
     }
   }

@@ -21,7 +21,7 @@ export class RolesService {
       // buscar el rol
       return !!(await this.roleRepository.findOne({ where: { nombreRol, deletedAt: null } }));
     } catch (error) {
-      throw new InternalServerErrorException('Error al verificar la existencia del ROL')
+      throw new InternalServerErrorException('Error al verificar la existencia del ROL', error.message)
     }
   }
 
@@ -44,7 +44,7 @@ export class RolesService {
       if(!nuevoRol) throw new BadRequestException('Error al crear el ROL')
       return await this.roleRepository.save(nuevoRol);
     } catch (error) {
-      throw new InternalServerErrorException('Error al crear el ROL')
+      throw new InternalServerErrorException('Error al crear el ROL', error.message)
     }
   }
 
@@ -59,7 +59,7 @@ export class RolesService {
 
       return roles
     } catch (error) {
-      throw new InternalServerErrorException('Error al buscar los roles')
+      throw new InternalServerErrorException('Error al buscar los roles', error.message)
     }
   }
 
@@ -73,7 +73,7 @@ export class RolesService {
       // retornar el rol
       return rol
     } catch (error) {
-      throw new Error('Error al buscar el rol')
+      throw new Error('Error al buscar el rol', error.message)
     }
   }
 
@@ -87,7 +87,7 @@ export class RolesService {
       // retornar el rol
       return rol
     } catch (error) {
-      throw new InternalServerErrorException('Error al buscar el rol')
+      throw new InternalServerErrorException('Error al buscar el rol', error.message)
     }
   }
 
@@ -111,7 +111,7 @@ export class RolesService {
     Object.assign(role, { nombreRol, estado, descripcion });
     return await this.roleRepository.save(role);
     } catch (error) {
-      throw new InternalServerErrorException('Error al actualizar el rol')
+      throw new InternalServerErrorException('Error al actualizar el rol', error.message)
     }
   }
 
@@ -122,7 +122,7 @@ export class RolesService {
       await this.roleRepository.softRemove(role);
       return `El rol con ID ${id} ha sido eliminado (soft delete)`;
     } catch (error) {
-      throw new InternalServerErrorException('Error al eliminar el ROL')
+      throw new InternalServerErrorException('Error al eliminar el ROL', error.message)
     }
   }
 
@@ -145,7 +145,7 @@ export class RolesService {
     } catch (error) {
       console.error('Error al limpiar registros eliminados:', error);
       throw new InternalServerErrorException(
-        'Ocurrió un error al eliminar role obsoletas.',
+        'Ocurrió un error al eliminar role obsoletas.', error.message,
       );
     }
   }
