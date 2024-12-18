@@ -14,6 +14,6 @@ export class CreatePermisoDto {
 
     @IsInt({ message: 'El estado del permiso debe ser un número entero' })
     @IsNotEmpty({ message: 'El estado del permiso no debe estar vacío' })
-    @Length(1, 1, { message: 'El estado del permiso debe tener 1 caracteres' })
+    // @Length(1, 1, { message: 'El estado del permiso debe tener 1 caracteres' })
     estado: number
 }

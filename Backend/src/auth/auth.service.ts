@@ -19,20 +19,32 @@ export class AuthService {
   async login(nombreUsuario: string, clave: string): Promise<{ access_token: string }> {
     try {
       const usuario = await this.usuariosService.findOneByNombreUsuario(nombreUsuario);
-      if (!usuario) { throw new UnauthorizedException('Usuario Inválido'); }
+      if (!usuario) { 
+        throw new UnauthorizedException('Usuario Inválido'); 
+      }
   
       const isPasswordValid = await bcrypt.compare(clave, usuario.clave);
-      if (!isPasswordValid) { throw new UnauthorizedException('Clave inválida'); }
+      if (!isPasswordValid) { 
+        throw new UnauthorizedException('Clave inválida'); 
+      }
+  
+      // Asegúrate de cargar el rol
+      await usuario.rol;
   
       const payload = {
         sub: usuario.id,
         nombreUsuario: usuario.NombreUsuario,
-        roles: usuario.rol, // Asegúrate de que la propiedad "roles" exista en el objeto usuario
+        rol: usuario.rol?.nombreRol || 'Sin rol' // Aquí está la clave
       };
       
-      const token = await this.jwtService.signAsync(payload);
+      const token = await this.jwtService.signAsync(payload, {
+        secret: process.env.JWT_SECRET,
+        expiresIn: '1h'
+      });
+  
       return { access_token: token };
     } catch (error) {
+      console.error('Error en login:', error);
       throw new UnauthorizedException('Credenciales inválidas');
     }
   }

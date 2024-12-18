@@ -19,6 +19,8 @@ const create_usuario_dto_1 = require("./dto/create-usuario.dto");
 const update_usuario_dto_1 = require("./dto/update-usuario.dto");
 const update_clave_dto_1 = require("./dto/update-clave.dto");
 const jwt_guard_1 = require("../auth/jwt/jwt.guard");
+const roles_decorator_1 = require("../roles/decorators/roles.decorator");
+const roles_guard_1 = require("../roles/guards/roles.guard");
 let UsuariosController = class UsuariosController {
     constructor(usuariosService) {
         this.usuariosService = usuariosService;
@@ -54,6 +56,7 @@ let UsuariosController = class UsuariosController {
 exports.UsuariosController = UsuariosController;
 __decorate([
     (0, common_1.Post)(),
+    (0, roles_decorator_1.Roles)('Administrador'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_usuario_dto_1.CreateUsuarioDto]),
@@ -61,12 +64,14 @@ __decorate([
 ], UsuariosController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, roles_decorator_1.Roles)('Administrador', 'empleado', 'Contador', 'Analista'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], UsuariosController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    (0, roles_decorator_1.Roles)('Administrador', 'empleado', 'Contador', 'Analista'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -74,6 +79,7 @@ __decorate([
 ], UsuariosController.prototype, "findOneByID", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    (0, roles_decorator_1.Roles)('Administrador', 'empleado', 'Contador', 'Analista'),
     __param(0, (0, common_1.Param)('NombreUsuario')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -81,6 +87,7 @@ __decorate([
 ], UsuariosController.prototype, "findOneByNombreUsuario", null);
 __decorate([
     (0, common_1.Get)(':correo'),
+    (0, roles_decorator_1.Roles)('Administrador', 'empleado', 'Contador', 'Analista'),
     __param(0, (0, common_1.Param)('correo')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -88,6 +95,7 @@ __decorate([
 ], UsuariosController.prototype, "findOneByCorreo", null);
 __decorate([
     (0, common_1.Patch)(':id'),
+    (0, roles_decorator_1.Roles)('Administrador'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -96,6 +104,7 @@ __decorate([
 ], UsuariosController.prototype, "update", null);
 __decorate([
     (0, common_1.Patch)(':id/cambiar-clave'),
+    (0, roles_decorator_1.Roles)('Administrador', 'empleado', 'Contador', 'Analista'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -104,6 +113,7 @@ __decorate([
 ], UsuariosController.prototype, "updatePassword", null);
 __decorate([
     (0, common_1.Delete)(':id'),
+    (0, roles_decorator_1.Roles)('Administrador'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -117,7 +127,7 @@ __decorate([
 ], UsuariosController.prototype, "cleanDeletedRecords", null);
 exports.UsuariosController = UsuariosController = __decorate([
     (0, common_1.Controller)('usuarios'),
-    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     __metadata("design:paramtypes", [usuarios_service_1.UsuariosService])
 ], UsuariosController);
 //# sourceMappingURL=usuarios.controller.js.map

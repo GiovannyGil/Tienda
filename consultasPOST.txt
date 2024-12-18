@@ -9,7 +9,8 @@
 {
     "nombreRol": "",
     "descripcion": "",
-    "estado": 1
+    "estado": 1,
+    "permisosIds": []
 }
 
 // usuarios
@@ -20,12 +21,18 @@
    "PrimerApellido": "Chica",
    "SegundoApellido": "Gil",
    "NombreUsuario": "GioGil",
-   "rolId": 2,
-   "clave": "12345",
+   "rolId": 1,
+   "clave": "123456",
    "añoNace": "01/03/2001",
    "genero": 1,
    "celular": "3043209834",
    "correo": "arvey@ejemplo.com"
+}
+
+// AUTH LOGIN
+{
+    "nombreUsuario": "GioGil",
+    "clave": "123456"
 }
 
 

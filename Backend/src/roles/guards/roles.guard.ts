@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable, ForbiddenException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 
@@ -8,33 +8,45 @@ export const ROLES_KEY = 'roles';
 // Injectable del guard
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private readonly reflector: Reflector) {}
+  constructor(private reflector: Reflector) {}
 
-  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(context: ExecutionContext): boolean {
     try {
+      // Obtener los roles requeridos del decorador
       const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
         context.getHandler(),
-        context.getClass(),
+        context.getClass()
       ]);
   
+      console.log('Roles requeridos:', requiredRoles);
+  
+      // Si no se especifican roles, permitir acceso
       if (!requiredRoles) {
-        // Si no hay roles definidos, se permite el acceso
         return true;
       }
   
-      const request = context.switchToHttp().getRequest();
-      const user = request.user;
+      // Obtener el usuario de la solicitud
+      const { user } = context.switchToHttp().getRequest();
+      
+      console.log('Usuario en la solicitud:', user);
   
-      // Validar que el usuario tiene los roles requeridos
-      const hasRole = requiredRoles.some((role) => user.roles?.includes(role));
-  
-      if (!hasRole) {
-        throw new ForbiddenException('No tienes permisos para realizar esta acción.');
+      // Verificar si el usuario está autenticado
+      if (!user) {
+        throw new UnauthorizedException('Usuario no autenticado');
       }
   
-      return hasRole;
+      // Verificar si el rol del usuario está en los roles requeridos
+      const hasRequiredRole = requiredRoles.some(
+        (role) => user.rol?.toLowerCase() === role.toLowerCase()
+      );
+  
+      if (!hasRequiredRole) {
+        throw new ForbiddenException('No tienes permisos suficientes');
+      }
+  
+      return true;
     } catch (error) {
-      throw new ForbiddenException('No tienes permisos para realizar esta acción.');  
+      throw new UnauthorizedException('No autorizado');      
     }
   }
 }

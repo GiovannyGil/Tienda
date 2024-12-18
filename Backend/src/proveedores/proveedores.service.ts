@@ -77,7 +77,7 @@ export class ProveedoresService {
       // devolver la proveedor
       return proveedor
     } catch (error) {
-      throw new Error('Error Algo Salió Mal', error.message)
+      throw new InternalServerErrorException('Error Algo Salió Mal', error.message)
     }
   }
 
@@ -91,7 +91,7 @@ export class ProveedoresService {
     });
 
     if (!proveedor) {
-      throw new BadRequestException('El proveedor no existe', error.message);
+      throw new BadRequestException('El proveedor no existe');
     }
 
     // Actualizar los campos del proveedor
@@ -103,7 +103,7 @@ export class ProveedoresService {
         const categorias = await this.categoriaRepository.findBy({ id: In(categoriasIds) });
 
         if (categorias.length !== categoriasIds.length) {
-          throw new BadRequestException('Algunas categorías no existen', error.message);
+          throw new BadRequestException('Algunas categorías no existen');
         }
 
         proveedor.categorias = categorias;

@@ -73,7 +73,7 @@ export class RolesService {
       // retornar el rol
       return rol
     } catch (error) {
-      throw new Error('Error al buscar el rol', error.message)
+      throw new InternalServerErrorException('Error al buscar el rol', error.message)
     }
   }
 

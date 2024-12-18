@@ -21,23 +21,55 @@ let AuthService = class AuthService {
         this.invalidatedTokens = new Set();
     }
     async login(nombreUsuario, clave) {
-        const usuario = await this.usuariosService.findOneByNombreUsuario(nombreUsuario);
-        if (!usuario) {
-            throw new common_1.UnauthorizedException('Usuario Inválido');
+        try {
+            const usuario = await this.usuariosService.findOneByNombreUsuario(nombreUsuario);
+            if (!usuario) {
+                throw new common_1.UnauthorizedException('Usuario Inválido');
+            }
+            const isPasswordValid = await bcrypt.compare(clave, usuario.clave);
+            if (!isPasswordValid) {
+                throw new common_1.UnauthorizedException('Clave inválida');
+            }
+            await usuario.rol;
+            const payload = {
+                sub: usuario.id,
+                nombreUsuario: usuario.NombreUsuario,
+                rol: usuario.rol?.nombreRol || 'Sin rol'
+            };
+            const token = await this.jwtService.signAsync(payload, {
+                secret: process.env.JWT_SECRET,
+                expiresIn: '1h'
+            });
+            return { access_token: token };
         }
-        const isPasswordValid = await bcrypt.compare(clave, usuario.clave);
-        if (!isPasswordValid) {
-            throw new common_1.UnauthorizedException('Clave inválida');
+        catch (error) {
+            console.error('Error en login:', error);
+            throw new common_1.UnauthorizedException('Credenciales inválidas');
         }
-        const payload = { sub: usuario.id, nombreUsuario: usuario.NombreUsuario, clave: usuario.clave };
-        const token = await this.jwtService.signAsync(payload);
-        return { access_token: token };
     }
     logout(token) {
-        this.invalidatedTokens.add(token);
+        try {
+            this.invalidatedTokens.add(token);
+        }
+        catch (error) {
+            throw new common_1.UnauthorizedException('No se pudo invalidar el token 1');
+        }
+    }
+    invalidateToken(token) {
+        try {
+            this.invalidatedTokens.add(token);
+        }
+        catch (error) {
+            throw new common_1.UnauthorizedException('No se pudo invalidar el token 2');
+        }
     }
     isTokenInvalidated(token) {
-        return this.invalidatedTokens.has(token);
+        try {
+            return this.invalidatedTokens.has(token);
+        }
+        catch (error) {
+            throw new common_1.UnauthorizedException('No se pudo validar el token 3');
+        }
     }
 };
 exports.AuthService = AuthService;

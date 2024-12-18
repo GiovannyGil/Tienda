@@ -5,18 +5,26 @@ import { UsuariosModule } from 'src/usuarios/usuarios.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
+import { RolesGuard } from './guards/roles.guard';
+import { JwtAuthGuard } from './jwt/jwt.guard';
 // import { TokenBlacklistMiddleware } from './blackList/token-blacklist.middleware';
 
 @Module({
   imports: [
     UsuariosModule,
-    PassportModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'SECRET_KEY',
       signOptions: { expiresIn: '1h' },
     })
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [
+    AuthService, 
+    JwtStrategy, 
+    JwtAuthGuard,
+    RolesGuard
+  ],
+  exports: [JwtStrategy, JwtAuthGuard, RolesGuard, JwtModule]
 })
 export class AuthModule {}

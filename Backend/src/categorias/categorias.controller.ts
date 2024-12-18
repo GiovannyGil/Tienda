@@ -18,13 +18,13 @@ export class CategoriasController {
   }
 
   @Get()
-  @Roles('administrador', 'empleado', 'contador', 'analista') // aplicar el guard a un método específico (permisos)
+  @Roles('Administrador', 'Empleado', 'Contador', 'Analista') 
   findAll() {
     return this.categoriasService.findAll();
   }
 
   @Get(':id')
-  @Roles('administrador', 'empleado', 'contador', 'analista') // aplicar el guard a un método específico (permisos)
+  @Roles('administrador', 'empleado', 'contador', 'analista') 
   findOne(@Param('id') id: string) {
     return this.categoriasService.findOneByID(+id);
   }

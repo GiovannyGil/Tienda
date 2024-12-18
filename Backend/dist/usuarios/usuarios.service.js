@@ -44,7 +44,7 @@ let UsuariosService = class UsuariosService {
             return await this.usuarioRepository.save(nuevoUsuario);
         }
         catch (error) {
-            throw new common_1.BadRequestException(`Error al crear el usuario: ${error.message}`);
+            throw new common_1.InternalServerErrorException(`Error al crear el usuario: ${error.message}`);
         }
     }
     async findAll() {
@@ -56,31 +56,33 @@ let UsuariosService = class UsuariosService {
             return usuarios;
         }
         catch (error) {
-            throw new common_1.BadRequestException(`Error al encontrar los usuarios ${error.message}`);
+            throw new common_1.InternalServerErrorException(`Error al encontrar los usuarios ${error.message}`);
         }
     }
     async findOneByID(id) {
         try {
             const usuario = await this.usuarioRepository.findOne({ where: { id, deletedAt: null }, relations: ['rol'] });
+            console.log('Resultado de findOneByID:', usuario);
             if (!usuario) {
                 throw new common_1.NotFoundException(`El usuario con ID ${id} no existe o ya fue eliminado.`);
             }
             return usuario;
         }
         catch (error) {
-            throw new common_1.BadRequestException(`Error al encontrar el usuario ${error.message}`);
+            throw new common_1.InternalServerErrorException(`Error al encontrar el usuario ${error.message}`);
         }
     }
     async findOneByNombreUsuario(nombreUsuario) {
         try {
-            const usuario = await this.usuarioRepository.findOne({ where: { NombreUsuario: nombreUsuario, deletedAt: null } });
+            const usuario = await this.usuarioRepository.findOne({ where: { NombreUsuario: nombreUsuario, deletedAt: null },
+                relations: ['rol'] });
             if (!usuario) {
                 throw new common_1.NotFoundException(`El usuario con NombreUsuario ${nombreUsuario} no existe o ya fue eliminado.`);
             }
             return usuario;
         }
         catch (error) {
-            throw new common_1.BadRequestException(`Error al encontrar el usuario ${error.message}`);
+            throw new common_1.InternalServerErrorException(`Error al encontrar el usuario ${error.message}`);
         }
     }
     async findOneByCorreo(correo) {
@@ -92,7 +94,7 @@ let UsuariosService = class UsuariosService {
             return usuario;
         }
         catch (error) {
-            throw new common_1.BadRequestException(`Error al encontrar el usuario ${error.message}`);
+            throw new common_1.InternalServerErrorException(`Error al encontrar el usuario ${error.message}`);
         }
     }
     async update(id, updateUsuarioDto) {
@@ -116,7 +118,7 @@ let UsuariosService = class UsuariosService {
             return await this.usuarioRepository.save(usuario);
         }
         catch (error) {
-            throw new common_1.BadRequestException(`Error al actualizar el usuario: ${error.message}`);
+            throw new common_1.InternalServerErrorException(`Error al actualizar el usuario: ${error.message}`);
         }
     }
     async updatePassword(id, updateClaveDto) {
@@ -138,7 +140,7 @@ let UsuariosService = class UsuariosService {
             return "Contraseña actualizada correctamente";
         }
         catch (error) {
-            throw new common_1.BadRequestException(`Error al actualizar la contraseña del usuario: ${error.message}`);
+            throw new common_1.InternalServerErrorException(`Error al actualizar la contraseña del usuario: ${error.message}`);
         }
     }
     async softDelete(id) {
@@ -154,7 +156,7 @@ let UsuariosService = class UsuariosService {
             return "Usuario eliminado Correctamente";
         }
         catch (error) {
-            throw new common_1.BadRequestException(`Error al eliminar el usuario ${error.message}`);
+            throw new common_1.InternalServerErrorException(`Error al eliminar el usuario ${error.message}`);
         }
     }
     async cleanDeletedRecords() {

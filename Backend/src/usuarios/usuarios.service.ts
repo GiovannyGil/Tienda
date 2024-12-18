@@ -73,6 +73,8 @@ export class UsuariosService {
     try {
       // buscar el usuario por id
       const usuario = await this.usuarioRepository.findOne({ where: { id, deletedAt: null }, relations: ['rol'] })
+
+      console.log('Resultado de findOneByID:', usuario); // Verifica el usuario completo
       // si no encuentra nada, devolver un array vacio
       if (!usuario) { throw new NotFoundException(`El usuario con ID ${id} no existe o ya fue eliminado.`) }
       // devolver el usuario
@@ -86,7 +88,8 @@ export class UsuariosService {
   async findOneByNombreUsuario(nombreUsuario: string): Promise<Usuario | null> {
     try {
       // buscr el usuario por nombreUsuario
-      const usuario = await this.usuarioRepository.findOne({ where: { NombreUsuario: nombreUsuario, deletedAt: null } })
+      const usuario = await this.usuarioRepository.findOne({ where: { NombreUsuario: nombreUsuario, deletedAt: null },
+        relations: ['rol'] })
 
       // si no encuentra nada, devolver un array vacio
       if (!usuario) { throw new NotFoundException(`El usuario con NombreUsuario ${nombreUsuario} no existe o ya fue eliminado.`) }

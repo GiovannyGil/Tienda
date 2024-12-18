@@ -1,3 +1,4 @@
+import { Type } from "class-transformer";
 import { IsDate, IsEmail, IsIn, IsInt, IsNotEmpty, IsOptional, IsString, Length } from "class-validator";
 
 export class CreateUsuarioDto {
@@ -37,6 +38,7 @@ export class CreateUsuarioDto {
 
     @IsDate({ message: 'La fecha de nacimiento no es válida' })
     @IsNotEmpty({ message: 'La fecha de nacimiento es requerida' })
+    @Type(() => Date)
     añoNace: Date;
 
     @IsInt({ message: 'El género debe ser un número' })

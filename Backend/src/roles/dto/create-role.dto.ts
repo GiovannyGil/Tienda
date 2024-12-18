@@ -11,7 +11,7 @@ export class CreateRoleDto {
     @IsNotEmpty({ message: 'La descripción del rol no puede estar vacía' })
     @Length(1, 100, { message: 'La descripción del rol debe tener entre 1 y 100 caracteres' })
     descripcion: string
-1
+
     @IsInt({ message: 'El estado del rol debe ser un número entero' })
     @IsNotEmpty({ message: 'El estado del rol no puede estar vacío' })
     @Min(1, { message: 'El estado debe ser al menos 1 caracter' })

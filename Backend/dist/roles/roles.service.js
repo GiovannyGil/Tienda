@@ -29,7 +29,7 @@ let RolesService = class RolesService {
             return !!(await this.roleRepository.findOne({ where: { nombreRol, deletedAt: null } }));
         }
         catch (error) {
-            throw new common_1.InternalServerErrorException('Error al verificar la existencia del ROL');
+            throw new common_1.InternalServerErrorException('Error al verificar la existencia del ROL', error.message);
         }
     }
     async create(createRoleDto) {
@@ -48,7 +48,7 @@ let RolesService = class RolesService {
             return await this.roleRepository.save(nuevoRol);
         }
         catch (error) {
-            throw new common_1.InternalServerErrorException('Error al crear el ROL');
+            throw new common_1.InternalServerErrorException('Error al crear el ROL', error.message);
         }
     }
     async findAll() {
@@ -59,7 +59,7 @@ let RolesService = class RolesService {
             return roles;
         }
         catch (error) {
-            throw new common_1.InternalServerErrorException('Error al buscar los roles');
+            throw new common_1.InternalServerErrorException('Error al buscar los roles', error.message);
         }
     }
     async findOneByID(id) {
@@ -70,7 +70,7 @@ let RolesService = class RolesService {
             return rol;
         }
         catch (error) {
-            throw new Error('Error al buscar el rol');
+            throw new common_1.InternalServerErrorException('Error al buscar el rol', error.message);
         }
     }
     async findOneByNombre(nombreRol) {
@@ -81,7 +81,7 @@ let RolesService = class RolesService {
             return rol;
         }
         catch (error) {
-            throw new common_1.InternalServerErrorException('Error al buscar el rol');
+            throw new common_1.InternalServerErrorException('Error al buscar el rol', error.message);
         }
     }
     async update(id, updateRoleDto) {
@@ -101,7 +101,7 @@ let RolesService = class RolesService {
             return await this.roleRepository.save(role);
         }
         catch (error) {
-            throw new common_1.InternalServerErrorException('Error al actualizar el rol');
+            throw new common_1.InternalServerErrorException('Error al actualizar el rol', error.message);
         }
     }
     async softDelete(id) {
@@ -111,7 +111,7 @@ let RolesService = class RolesService {
             return `El rol con ID ${id} ha sido eliminado (soft delete)`;
         }
         catch (error) {
-            throw new common_1.InternalServerErrorException('Error al eliminar el ROL');
+            throw new common_1.InternalServerErrorException('Error al eliminar el ROL', error.message);
         }
     }
     async cleanDeletedRecords() {
@@ -130,7 +130,7 @@ let RolesService = class RolesService {
         }
         catch (error) {
             console.error('Error al limpiar registros eliminados:', error);
-            throw new common_1.InternalServerErrorException('Ocurrió un error al eliminar role obsoletas.');
+            throw new common_1.InternalServerErrorException('Ocurrió un error al eliminar role obsoletas.', error.message);
         }
     }
 };

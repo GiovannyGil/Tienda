@@ -9,5 +9,6 @@ export declare class AuthService {
         access_token: string;
     }>;
     logout(token: string): void;
+    invalidateToken(token: string): void;
     isTokenInvalidated(token: string): boolean;
 }

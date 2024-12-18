@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateUsuarioDto = void 0;
+const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 class CreateUsuarioDto {
 }
@@ -58,6 +59,7 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsDate)({ message: 'La fecha de nacimiento no es válida' }),
     (0, class_validator_1.IsNotEmpty)({ message: 'La fecha de nacimiento es requerida' }),
+    (0, class_transformer_1.Type)(() => Date),
     __metadata("design:type", Date)
 ], CreateUsuarioDto.prototype, "a\u00F1oNace", void 0);
 __decorate([
