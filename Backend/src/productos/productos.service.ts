@@ -26,9 +26,7 @@ export class ProductosService {
       });
   
       // si no existe la categoria, lanzar un error
-      if (!categoria) {
-        throw new BadRequestException(`La categoría con ID ${categoriaId} no existe.`);
-      }
+      if (!categoria) throw new BadRequestException(`La categoría con ID ${categoriaId} no existe.`)
   
       // Crear el producto y asignarle la categoría
       const nuevoProducto = this.productoRepository.create({
@@ -59,13 +57,9 @@ export class ProductosService {
   async findOneByID(id: number): Promise<Producto> {
     try {
       // buscar el producto por id
-      const producto = await this.productoRepository.findOne({
-          where: { id, deletedAt: null },
-      });
+      const producto = await this.productoRepository.findOne({ where: { id, deletedAt: null }});
       // si no encuentra nada, devolver un mensaje de que no existe
-      if (!producto) {
-        throw new NotFoundException(`El producto con ID ${id} no existe.`);
-      }
+      if (!producto) throw new NotFoundException(`El producto con ID ${id} no existe.`)
       // devolver los productos
       return producto
     } catch (error) {
@@ -80,17 +74,13 @@ export class ProductosService {
     
       // buscar el producto y verificar si existe
       const producto = await this.productoRepository.findOneBy({ id });
-      if (!producto) {
-        throw new NotFoundException(`El producto con ID ${id} no existe.`);
-      }
+      if (!producto)  throw new NotFoundException(`El producto con ID ${id} no existe.`)
     
       // buscar la categoria y verificar si existe
       let categoria = producto.categoria;
       if (categoriaId) {
           categoria = await this.categoriaRepository.findOne({ where: { id: categoriaId } });
-          if (!categoria) {
-              throw new BadRequestException(`La categoría con ID ${categoriaId} no existe.`);
-          }
+          if (!categoria)  throw new BadRequestException(`La categoría con ID ${categoriaId} no existe.`);
       }
     
       // actualizar los datos del producto y asignarle la nueva categoría
@@ -109,9 +99,7 @@ export class ProductosService {
       const producto = await this.findOneByID(id);
   
       // verificar si la producto existe
-      if (!producto) {
-        throw new NotFoundException(`El producto con ID ${id} no existe.`);
-      }
+      if (!producto)  throw new NotFoundException(`El producto con ID ${id} no existe.`)
   
       // marcar la producto como eliminada
       producto.deletedAt = new Date()

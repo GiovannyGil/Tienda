@@ -24,7 +24,7 @@ export class CategoriasController {
   }
 
   @Get(':id')
-  @Roles('administrador', 'empleado', 'contador', 'analista') 
+  @Roles('Administrador', 'empleado', 'contador', 'analista') 
   findOne(@Param('id') id: string) {
     return this.categoriasService.findOneByID(+id);
   }
@@ -36,19 +36,20 @@ export class CategoriasController {
   }
 
   @Patch(':id')
-  @Roles('administrador')
+  @Roles('Administrador')
   update(@Param('id') id: string, @Body() updateCategoriaDto: UpdateCategoriaDto) {
     return this.categoriasService.update(+id, updateCategoriaDto);
   }
 
   @Delete(':id')
-  @Roles('administrador')
+  @Roles('Administrador')
   remove(@Param('id') id: string) {
     return this.categoriasService.softDelete(+id);
   }
 
   // ejecución manual de eliminaciones permanentes
   @Delete('cleanup')
+  @Roles('Administrador')
   cleanDeletedRecords() {
     return this.categoriasService.cleanDeletedRecords();
   }

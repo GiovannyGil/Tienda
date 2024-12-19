@@ -47,7 +47,7 @@ export class PermisosService {
       const permisos = await this.permisoRepository.find({ where: { deletedAt: null } })
 
       // si no encuentra nada, devolver un array vacio
-      if(!permisos) { throw new BadRequestException('No hay permisos') }
+      if(!permisos) throw new BadRequestException('No hay permisos')
 
       // devolver los permisos
       return permisos
@@ -77,7 +77,7 @@ export class PermisosService {
       const permiso = await this.permisoRepository.findOneBy({nombrePermiso, deletedAt: null})
 
       // si no encuentra nada, devolver un null
-      if(!permiso) { throw new BadRequestException('El permiso no existe') }
+      if(!permiso) throw new BadRequestException('El permiso no existe')
 
       // devolver el permiso
       return permiso
@@ -108,9 +108,7 @@ export class PermisosService {
       const permiso = await this.findOneByID(id)
 
       // verificar si encontro el rol
-      if(!permiso) {
-        throw new BadRequestException('El rol no existe o ya está eliminado')
-      }
+      if(!permiso) throw new BadRequestException('El rol no existe o ya está eliminado')
 
       // marcar el rol como eliminado estableciendo la fecha en deletedAt
       permiso.deletedAt = new Date()
@@ -124,17 +122,21 @@ export class PermisosService {
     }
   }
 
-  async remove(): Promise<void> {
+  async remove(id: number) {
     try {
-      // establecer la fecha de eliminacion permanente
-      const fechaLimite = new Date()
-      fechaLimite.setDate(fechaLimite.getDate() - 30)
+      const permiso = await this.findOneByID(id)
 
-      // optener los permisos marcados para eliminar
-      const permisos = await this.permisoRepository.find({ where: { deletedAt: LessThan(fechaLimite) } })
+      // verficar si el permiso existe
+      if(!permiso) throw new BadRequestException('El permiso no existe o ya fue eliminado')
 
-      // eliminar los permisos
-      await this.permisoRepository.delete({ deletedAt: LessThan(fechaLimite) })
+      // marcar como eliminado
+      permiso.deletedAt = new Date()
+
+      // guardar los cambios
+      await this.permisoRepository.save(permiso)
+
+      // devolver un mensaje
+      return 'Permiso eliminado Correctamente'
     } catch (error) {
       throw new InternalServerErrorException('Error al eliminar el permiso', error.message)
     }

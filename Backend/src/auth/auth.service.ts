@@ -16,36 +16,32 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) { }
 
-  async login(nombreUsuario: string, clave: string): Promise<{ access_token: string }> {
+  async login(nombreUsuario: string, correo: string, clave: string): Promise<{ access_token: string }> {
     try {
       const usuario = await this.usuariosService.findOneByNombreUsuario(nombreUsuario);
-      if (!usuario) { 
-        throw new UnauthorizedException('Usuario Inválido'); 
-      }
+      const usuarioCorreo = await this.usuariosService.findOneByCorreo(correo);
+      if (!usuario || !usuarioCorreo) throw new UnauthorizedException('Usuario Inválido')
   
-      const isPasswordValid = await bcrypt.compare(clave, usuario.clave);
-      if (!isPasswordValid) { 
-        throw new UnauthorizedException('Clave inválida'); 
-      }
+      const isPasswordValid = await bcrypt.compare(clave, usuario.clave || usuarioCorreo.clave);
+      if (!isPasswordValid) throw new UnauthorizedException('Clave inválida')
   
       // Asegúrate de cargar el rol
-      await usuario.rol;
+      await usuario.rol || usuarioCorreo.rol;
   
       const payload = {
-        sub: usuario.id,
-        nombreUsuario: usuario.NombreUsuario,
-        rol: usuario.rol?.nombreRol || 'Sin rol' // Aquí está la clave
+        sub: usuario.id || usuarioCorreo.id,
+        nombreUsuario: usuario.NombreUsuario || usuarioCorreo.NombreUsuario,
+        rol: usuario.rol?.nombreRol || usuarioCorreo.rol?.nombreRol || 'Sin rol'
       };
       
       const token = await this.jwtService.signAsync(payload, {
-        secret: process.env.JWT_SECRET,
+        secret: process.env.JWT_SECRET || 'SECRET-KEY',
         expiresIn: '1h'
       });
   
       return { access_token: token };
     } catch (error) {
-      console.error('Error en login:', error);
-      throw new UnauthorizedException('Credenciales inválidas');
+      throw new UnauthorizedException('Credenciales inválidas', error.message);
     }
   }
 
@@ -54,7 +50,7 @@ export class AuthService {
     try {
       this.invalidatedTokens.add(token); // Agregar el token a la lista negra
     } catch (error) {
-      throw new UnauthorizedException('No se pudo invalidar el token 1');
+      throw new UnauthorizedException('No se pudo invalidar el token 1', error.message);
     }
   }
 
@@ -63,7 +59,7 @@ export class AuthService {
     try {
       this.invalidatedTokens.add(token);
     } catch (error) {
-      throw new UnauthorizedException('No se pudo invalidar el token 2');
+      throw new UnauthorizedException('No se pudo invalidar el token 2', error.message);
     }
   }
 
@@ -71,8 +67,7 @@ export class AuthService {
     try {
       return this.invalidatedTokens.has(token);
     } catch (error) {
-      throw new UnauthorizedException('No se pudo validar el token 3');      
+      throw new UnauthorizedException('No se pudo validar el token 3', error.message);      
     }
   }
-
 }

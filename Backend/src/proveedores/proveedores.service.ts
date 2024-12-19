@@ -73,7 +73,7 @@ export class ProveedoresService {
       // buscar la proveedor por id
       const proveedor = await this.proveedorRepository.findOneBy({ id, deletedAt: null })
       // si no encuentra nada, devolver un array vacio
-      if (!proveedor) return null
+      if (!proveedor) throw new NotFoundException('No se encontró la proveedor')
       // devolver la proveedor
       return proveedor
     } catch (error) {
@@ -90,9 +90,7 @@ export class ProveedoresService {
       relations: ['categorias'],
     });
 
-    if (!proveedor) {
-      throw new BadRequestException('El proveedor no existe');
-    }
+    if (!proveedor)  throw new BadRequestException('El proveedor no existe');
 
     // Actualizar los campos del proveedor
     Object.assign(proveedor, data);
@@ -102,9 +100,7 @@ export class ProveedoresService {
       if (categoriasIds) {
         const categorias = await this.categoriaRepository.findBy({ id: In(categoriasIds) });
 
-        if (categorias.length !== categoriasIds.length) {
-          throw new BadRequestException('Algunas categorías no existen');
-        }
+        if (categorias.length !== categoriasIds.length) throw new BadRequestException('Algunas categorías no existen') 
 
         proveedor.categorias = categorias;
       }
@@ -123,9 +119,7 @@ export class ProveedoresService {
       // buscar la proveedor por id
       const proveedor = await this.findOneByID(id)
       // verificar si la proveedor existe
-      if (!proveedor) {
-        throw new Error('La proveedor no existe o ya fue eliminada')
-      }
+      if (!proveedor)  throw new BadRequestException('La proveedor no existe o ya fue eliminada')
 
       // marcar la proveedor como eliminada
       proveedor.deletedAt = new Date()
