@@ -12,7 +12,6 @@ import { UsuariosModule } from './usuarios/usuarios.module';
 
 // Importar el módulo de tareas
 import { ScheduleModule } from '@nestjs/schedule';
-import { PermisosModule } from './permisos/permisos.module';
 import { ProductosModule } from './productos/productos.module';
 import { VentasModule } from './ventas/ventas.module';
 import { ComprasModule } from './compras/compras.module';
@@ -28,7 +27,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
   imports: [
     TypeOrmModule.forRoot(ConexionDDBB),
     ScheduleModule.forRoot(), // Habilita la programación de tareas
-    AuthModule, RolesModule, UsuariosModule, PermisosModule, ProductosModule, VentasModule, ComprasModule, CategoriasModule, ProveedoresModule, DashboardModule],
+    AuthModule, RolesModule, UsuariosModule, ProductosModule, VentasModule, ComprasModule, CategoriasModule, ProveedoresModule, DashboardModule],
   controllers: [AppController],
   providers: [{
     provide: APP_GUARD,

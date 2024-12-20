@@ -25,7 +25,7 @@ export class RolesGuard implements CanActivate {
       context.getClass()
     ]);
   
-    console.log('Roles requeridos:', requiredRoles);
+    console.log('Roles requeridos auth:', requiredRoles);
   
     // Si no hay roles específicos, permitir acceso
     if (!requiredRoles) {
@@ -82,7 +82,7 @@ export class RolesGuard implements CanActivate {
   
       return true;
     } catch (error) {
-      throw new UnauthorizedException('Usuario no Autorizado');
+      throw new UnauthorizedException('Usuario no Autorizado auth');
     }
   }
 }

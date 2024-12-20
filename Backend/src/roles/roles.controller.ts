@@ -3,8 +3,8 @@ import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { RolesGuard } from '../roles/guards/roles.guard';
-import { Roles } from '../roles/decorators/roles.decorator';
+import { Roles  } from '../roles/decorators/roles.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Controller('roles')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -12,13 +12,13 @@ export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
   @Post()
-  @Roles('Administrador')
+  // @Roles('Administrador')
   async create(@Body() createRoleDto: CreateRoleDto) {
     return await this.rolesService.create(createRoleDto);
   }
 
   @Get()
-  @Roles('Administrador', 'Empleado', 'Contador', 'Analista') 
+  @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
   async findAll() {
     return await this.rolesService.findAll();
   }

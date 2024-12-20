@@ -15,18 +15,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
+const roles_guard_1 = require("./guards/roles.guard");
+const roles_decorator_1 = require("../roles/decorators/roles.decorator");
+const jwt_guard_1 = require("./jwt/jwt.guard");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
-    async login(nombreUsuario, clave) {
-        return this.authService.login(nombreUsuario, clave);
+    async login(nombreUsuario, correo, clave) {
+        return this.authService.login(nombreUsuario, correo, clave);
     }
     logout(req) {
         const token = req.headers.authorization?.split(' ')[1];
-        if (!token) {
+        if (!token)
             throw new common_1.UnauthorizedException('Token no proporcionado');
-        }
         this.authService.logout(token);
         return { message: 'Logout exitoso' };
     }
@@ -35,13 +37,16 @@ exports.AuthController = AuthController;
 __decorate([
     (0, common_1.Post)('login'),
     __param(0, (0, common_1.Body)('nombreUsuario')),
-    __param(1, (0, common_1.Body)('clave')),
+    __param(1, (0, common_1.Body)('correo')),
+    __param(2, (0, common_1.Body)('clave')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
 __decorate([
     (0, common_1.Post)('logout'),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)('Administrador', 'Empleado', 'Contador', 'Analista'),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

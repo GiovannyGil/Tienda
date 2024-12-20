@@ -3,7 +3,7 @@ import { ProductosService } from './productos.service';
 import { CreateProductoDto } from './dto/create-producto.dto';
 import { UpdateProductoDto } from './dto/update-producto.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { RolesGuard } from '../roles/guards/roles.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from '../roles/decorators/roles.decorator';
 @Controller('productos')
 @UseGuards(JwtAuthGuard, RolesGuard)

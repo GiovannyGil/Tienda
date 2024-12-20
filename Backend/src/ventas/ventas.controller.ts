@@ -3,7 +3,7 @@ import { VentasService } from './ventas.service';
 import { CreateVentaDto } from './dto/create-venta.dto';
 import { UpdateVentaDto } from './dto/update-venta.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { RolesGuard } from '../roles/guards/roles.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from '../roles/decorators/roles.decorator';
 
 @Controller('ventas')

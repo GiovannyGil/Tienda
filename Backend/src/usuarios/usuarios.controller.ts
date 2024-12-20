@@ -5,7 +5,7 @@ import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { UpdateClaveDto } from './dto/update-clave.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { Roles } from 'src/roles/decorators/roles.decorator';
-import { RolesGuard } from 'src/roles/guards/roles.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Controller('usuarios')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -19,25 +19,25 @@ export class UsuariosController {
   }
 
   @Get()
-  @Roles('Administrador', 'empleado', 'Contador', 'Analista') 
+  @Roles('Administrador', 'Empleado', 'Contador', 'Analista') 
   findAll() {
     return this.usuariosService.findAll();
   }
 
   @Get(':id')
-  @Roles('Administrador', 'empleado', 'Contador', 'Analista') 
+  @Roles('Administrador', 'Empleado', 'Contador', 'Analista') 
   findOneByID(@Param('id') id: string) {
     return this.usuariosService.findOneByID(+id);
   }
 
   @Get(':id')
-  @Roles('Administrador', 'empleado', 'Contador', 'Analista') 
+  @Roles('Administrador', 'Empleado', 'Contador', 'Analista') 
   findOneByNombreUsuario(@Param('NombreUsuario') NombreUsuario: string) {
     return this.usuariosService.findOneByNombreUsuario(NombreUsuario);
   }
 
   @Get(':correo')
-  @Roles('Administrador', 'empleado', 'Contador', 'Analista') 
+  @Roles('Administrador', 'Empleado', 'Contador', 'Analista') 
   findOneByCorreo(@Param('correo') correo: string) {
     return this.usuariosService.findOneByCorreo(correo);
   }
@@ -49,7 +49,7 @@ export class UsuariosController {
   }
 
   @Patch(':id/cambiar-clave')
-  @Roles('Administrador', 'empleado', 'Contador', 'Analista') 
+  @Roles('Administrador', 'Empleado', 'Contador', 'Analista') 
   updatePassword(@Param('id', ParseIntPipe) id: string, @Body() updateClaveDto: UpdateClaveDto) {
     return this.usuariosService.updatePassword(+id, updateClaveDto);
   }

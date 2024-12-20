@@ -28,12 +28,9 @@ let UsuariosService = class UsuariosService {
     async create(createUsuarioDto) {
         try {
             const { rolId, clave, ...usuarioData } = createUsuarioDto;
-            const rol = await this.roleRepository.findOne({
-                where: { id: rolId, deletedAt: null },
-            });
-            if (!rol) {
+            const rol = await this.roleRepository.findOne({ where: { id: rolId, deletedAt: null } });
+            if (!rol)
                 throw new common_1.NotFoundException(`El rol con ID ${rolId} no existe`);
-            }
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(clave, salt);
             const nuevoUsuario = this.usuarioRepository.create({
@@ -50,9 +47,8 @@ let UsuariosService = class UsuariosService {
     async findAll() {
         try {
             const usuarios = await this.usuarioRepository.find({ where: { deletedAt: null }, relations: ['rol'] });
-            if (!usuarios) {
+            if (!usuarios)
                 throw new common_1.NotFoundException('No hay usuarios registrados.');
-            }
             return usuarios;
         }
         catch (error) {
@@ -62,10 +58,8 @@ let UsuariosService = class UsuariosService {
     async findOneByID(id) {
         try {
             const usuario = await this.usuarioRepository.findOne({ where: { id, deletedAt: null }, relations: ['rol'] });
-            console.log('Resultado de findOneByID:', usuario);
-            if (!usuario) {
+            if (!usuario)
                 throw new common_1.NotFoundException(`El usuario con ID ${id} no existe o ya fue eliminado.`);
-            }
             return usuario;
         }
         catch (error) {
@@ -74,11 +68,9 @@ let UsuariosService = class UsuariosService {
     }
     async findOneByNombreUsuario(nombreUsuario) {
         try {
-            const usuario = await this.usuarioRepository.findOne({ where: { NombreUsuario: nombreUsuario, deletedAt: null },
-                relations: ['rol'] });
-            if (!usuario) {
+            const usuario = await this.usuarioRepository.findOne({ where: { NombreUsuario: nombreUsuario, deletedAt: null }, relations: ['rol'] });
+            if (!usuario)
                 throw new common_1.NotFoundException(`El usuario con NombreUsuario ${nombreUsuario} no existe o ya fue eliminado.`);
-            }
             return usuario;
         }
         catch (error) {
@@ -88,9 +80,8 @@ let UsuariosService = class UsuariosService {
     async findOneByCorreo(correo) {
         try {
             const usuario = await this.usuarioRepository.findOne({ where: { correo: correo, deletedAt: null } });
-            if (!usuario) {
+            if (!usuario)
                 throw new common_1.NotFoundException(`El usuario con correo ${correo} no existe o ya fue eliminado.`);
-            }
             return usuario;
         }
         catch (error) {
@@ -104,14 +95,12 @@ let UsuariosService = class UsuariosService {
                 where: { id, deletedAt: null },
                 relations: ['rol'],
             });
-            if (!usuario) {
+            if (!usuario)
                 throw new common_1.NotFoundException(`El usuario con ID ${id} no existe o ya fue eliminado.`);
-            }
             if (rolId && usuario.rol?.id !== rolId) {
                 const nuevoRol = await this.roleRepository.findOne({ where: { id: rolId } });
-                if (!nuevoRol) {
+                if (!nuevoRol)
                     throw new common_1.NotFoundException(`El rol con ID ${rolId} no existe.`);
-                }
                 usuario.rol = nuevoRol;
             }
             Object.assign(usuario, usuarioData);
@@ -127,9 +116,8 @@ let UsuariosService = class UsuariosService {
             const usuario = await this.usuarioRepository.findOne({
                 where: { id, deletedAt: null },
             });
-            if (!usuario) {
+            if (!usuario)
                 throw new common_1.NotFoundException('El usuario no existe o ya fue eliminado');
-            }
             const claveValida = await bcrypt.compare(claveActual, usuario.clave);
             if (!claveValida) {
                 throw new common_1.BadRequestException('La contraseña actual no es correcta');
@@ -148,9 +136,8 @@ let UsuariosService = class UsuariosService {
             const usuario = await this.usuarioRepository.findOne({
                 where: { id, deletedAt: null },
             });
-            if (!usuario) {
+            if (!usuario)
                 throw new common_1.NotFoundException('El usuario no existe o ya fue eliminado');
-            }
             usuario.deletedAt = new Date();
             await this.usuarioRepository.save(usuario);
             return "Usuario eliminado Correctamente";

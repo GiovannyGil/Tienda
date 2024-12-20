@@ -3,7 +3,7 @@ import { CategoriasService } from './categorias.service';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { RolesGuard } from '../roles/guards/roles.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from '../roles/decorators/roles.decorator';
 
 @Controller('categorias')
@@ -12,7 +12,7 @@ export class CategoriasController {
   constructor(private readonly categoriasService: CategoriasService) {}
 
   @Post()
-  @Roles('administrador')
+  @Roles('Administrador')
   create(@Body() createCategoriaDto: CreateCategoriaDto) {
     return this.categoriasService.create(createCategoriaDto);
   }
@@ -24,13 +24,13 @@ export class CategoriasController {
   }
 
   @Get(':id')
-  @Roles('Administrador', 'empleado', 'contador', 'analista') 
+  @Roles('Administrador', 'Empleado', 'Contador', 'Analista') 
   findOne(@Param('id') id: string) {
     return this.categoriasService.findOneByID(+id);
   }
 
   @Get('nombre/:nombre')
-  @Roles('administrador', 'empleado', 'contador', 'analista') // aplicar el guard a un método específico (permisos)
+  @Roles('administrador', 'Empleado', 'Contador', 'Analista')
   findOneByName(@Param('nombre') nombre: string) {
     return this.categoriasService.findOneByName(nombre);
   }

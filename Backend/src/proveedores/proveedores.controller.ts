@@ -3,7 +3,7 @@ import { ProveedoresService } from './proveedores.service';
 import { CreateProveedoreDto } from './dto/create-proveedore.dto';
 import { UpdateProveedoreDto } from './dto/update-proveedore.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { RolesGuard } from '../roles/guards/roles.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from '../roles/decorators/roles.decorator';
 
 @Controller('proveedores')

@@ -1,20 +1,12 @@
 
-// PERMISOS
-{
-   "nombrePermiso": "",
-   "descripcion": "",
-   "estado": 1
-}
 // ROLES
 {
     "nombreRol": "",
     "descripcion": "",
-    "estado": 1,
-    "permisosIds": []
+    "estado": 1
 }
 
 // usuarios
-
 {
    "PrimerNombre": "Arbey",
    "SegundoNombre": "Giovanny",
