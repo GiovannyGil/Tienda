@@ -4,10 +4,12 @@ import { Usuario } from './entities/usuario.entity';
 import { Repository } from 'typeorm';
 import { Role } from 'src/roles/entities/role.entity';
 import { UpdateClaveDto } from './dto/update-clave.dto';
+import { JwtService } from '@nestjs/jwt';
 export declare class UsuariosService {
     private usuarioRepository;
     private roleRepository;
-    constructor(usuarioRepository: Repository<Usuario>, roleRepository: Repository<Role>);
+    private jwtService;
+    constructor(usuarioRepository: Repository<Usuario>, roleRepository: Repository<Role>, jwtService: JwtService);
     create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario>;
     findAll(): Promise<Usuario[]>;
     findOneByID(id: number): Promise<Usuario>;

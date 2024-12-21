@@ -8,13 +8,15 @@ import { Role } from 'src/roles/entities/role.entity';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import * as bcrypt from 'bcrypt';
 import { UpdateClaveDto } from './dto/update-clave.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsuariosService {
 
   constructor(
     @InjectRepository(Usuario) private usuarioRepository: Repository<Usuario>,
-    @InjectRepository(Role) private roleRepository: Repository<Role>
+    @InjectRepository(Role) private roleRepository: Repository<Role>,
+    private jwtService: JwtService,
   ) {}
 
   // metodo para crear un usuario

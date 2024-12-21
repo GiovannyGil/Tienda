@@ -22,6 +22,10 @@ exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            jwt_1.JwtModule.register({
+                secret: process.env.JWT_SECRET || 'SECRET-KEY',
+                signOptions: { expiresIn: '60s' },
+            }),
             usuarios_module_1.UsuariosModule,
             passport_1.PassportModule.register({ defaultStrategy: 'jwt' }),
             jwt_1.JwtModule.register({

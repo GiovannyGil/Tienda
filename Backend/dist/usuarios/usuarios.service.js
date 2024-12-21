@@ -20,10 +20,12 @@ const typeorm_2 = require("typeorm");
 const role_entity_1 = require("../roles/entities/role.entity");
 const schedule_1 = require("@nestjs/schedule");
 const bcrypt = require("bcrypt");
+const jwt_1 = require("@nestjs/jwt");
 let UsuariosService = class UsuariosService {
-    constructor(usuarioRepository, roleRepository) {
+    constructor(usuarioRepository, roleRepository, jwtService) {
         this.usuarioRepository = usuarioRepository;
         this.roleRepository = roleRepository;
+        this.jwtService = jwtService;
     }
     async create(createUsuarioDto) {
         try {
@@ -178,6 +180,7 @@ exports.UsuariosService = UsuariosService = __decorate([
     __param(0, (0, typeorm_1.InjectRepository)(usuario_entity_1.Usuario)),
     __param(1, (0, typeorm_1.InjectRepository)(role_entity_1.Role)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        typeorm_2.Repository])
+        typeorm_2.Repository,
+        jwt_1.JwtService])
 ], UsuariosService);
 //# sourceMappingURL=usuarios.service.js.map

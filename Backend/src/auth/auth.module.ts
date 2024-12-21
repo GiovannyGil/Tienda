@@ -11,6 +11,10 @@ import { JwtAuthGuard } from './jwt/jwt.guard';
 
 @Module({
   imports: [
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'SECRET-KEY',
+      signOptions: { expiresIn: '60s' },
+    }),
     UsuariosModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({

@@ -16,7 +16,7 @@ export class RolesGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private jwtService: JwtService,
-    readonly usuariosService: UsuariosService
+    private usuariosService: UsuariosService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
