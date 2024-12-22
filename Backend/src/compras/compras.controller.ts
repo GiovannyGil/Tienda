@@ -3,33 +3,40 @@ import { ComprasService } from './compras.service';
 import { CreateCompraDto } from './dto/create-compra.dto';
 import { UpdateCompraDto } from './dto/update-compra.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { RolesGuard } from 'src/roles/guards/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('compras')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class ComprasController {
   constructor(private readonly comprasService: ComprasService) {}
 
   @Post()
+  @Roles('Administrador')
   create(@Body() createCompraDto: CreateCompraDto) {
     return this.comprasService.create(createCompraDto);
   }
 
   @Get()
+  @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
   findAll() {
     return this.comprasService.findAll();
   }
 
   @Get(':id')
+  @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
   findOne(@Param('id') id: string) {
     return this.comprasService.findOne(+id);
   }
 
   @Patch(':id')
+  @Roles('Administrador')
   update(@Param('id') id: string, @Body() updateCompraDto: UpdateCompraDto) {
     return this.comprasService.update(+id, updateCompraDto);
   }
 
   @Delete(':id')
+  @Roles('Administrador')
   remove(@Param('id') id: string) {
     return this.comprasService.softDelete(+id);
   }

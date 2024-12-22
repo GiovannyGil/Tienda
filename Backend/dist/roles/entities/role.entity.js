@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Role = void 0;
-const permiso_entity_1 = require("../../permisos/entities/permiso.entity");
 const usuario_entity_1 = require("../../usuarios/entities/usuario.entity");
 const typeorm_1 = require("typeorm");
 let Role = class Role {
@@ -54,11 +53,6 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => usuario_entity_1.Usuario, (usuario) => usuario.rol),
     __metadata("design:type", Array)
 ], Role.prototype, "usuarios", void 0);
-__decorate([
-    (0, typeorm_1.ManyToMany)(() => permiso_entity_1.Permiso, (permiso) => permiso.roles),
-    (0, typeorm_1.JoinTable)({ name: 'roles_permisos' }),
-    __metadata("design:type", Array)
-], Role.prototype, "permisos", void 0);
 __decorate([
     (0, typeorm_1.BeforeInsert)(),
     __metadata("design:type", Function),

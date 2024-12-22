@@ -18,6 +18,8 @@ const roles_service_1 = require("./roles.service");
 const create_role_dto_1 = require("./dto/create-role.dto");
 const update_role_dto_1 = require("./dto/update-role.dto");
 const jwt_guard_1 = require("../auth/jwt/jwt.guard");
+const roles_guard_1 = require("./guards/roles.guard");
+const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 let RolesController = class RolesController {
     constructor(rolesService) {
         this.rolesService = rolesService;
@@ -47,6 +49,7 @@ let RolesController = class RolesController {
 exports.RolesController = RolesController;
 __decorate([
     (0, common_1.Post)(),
+    (0, roles_decorator_1.Roles)('Administrador'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_role_dto_1.CreateRoleDto]),
@@ -54,12 +57,14 @@ __decorate([
 ], RolesController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, roles_decorator_1.Roles)('Administrador', 'Empleado', 'Contador', 'Analista'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], RolesController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    (0, roles_decorator_1.Roles)('Administrador', 'Empleado', 'Contador', 'Analista'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -67,6 +72,7 @@ __decorate([
 ], RolesController.prototype, "findOneByID", null);
 __decorate([
     (0, common_1.Get)(':nombreRol'),
+    (0, roles_decorator_1.Roles)('Administrador', 'Empleado', 'Contador', 'Analista'),
     __param(0, (0, common_1.Param)('nombreRol')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -74,6 +80,7 @@ __decorate([
 ], RolesController.prototype, "findOneByNombre", null);
 __decorate([
     (0, common_1.Patch)(':id'),
+    (0, roles_decorator_1.Roles)('Administrador'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -82,6 +89,7 @@ __decorate([
 ], RolesController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
+    (0, roles_decorator_1.Roles)('Administrador'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -95,7 +103,7 @@ __decorate([
 ], RolesController.prototype, "cleanDeletedRecords", null);
 exports.RolesController = RolesController = __decorate([
     (0, common_1.Controller)('roles'),
-    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     __metadata("design:paramtypes", [roles_service_1.RolesService])
 ], RolesController);
 //# sourceMappingURL=roles.controller.js.map

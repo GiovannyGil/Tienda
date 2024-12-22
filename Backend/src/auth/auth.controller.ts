@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UnauthorizedException, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UnauthorizedException, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 import { Request } from 'express';
-
+import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { RolesGuard } from 'src/roles/guards/roles.guard';
+import { Roles } from './decorators/roles.decorator';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
@@ -15,6 +15,8 @@ export class AuthController {
   }
 
   @Post('logout')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
   logout(@Req() req: Request) {
     const token = req.headers.authorization?.split(' ')[1]; // Extraer el token del header
     if (!token) {

@@ -1,4 +1,4 @@
-import { Permiso } from "src/permisos/entities/permiso.entity";
+// import { Permiso } from "src/permisos/entities/permiso.entity";
 import { Usuario } from "src/usuarios/entities/usuario.entity";
 import { BeforeInsert, BeforeUpdate, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
@@ -38,9 +38,9 @@ export class Role {
     - Un rol puede tener varios permisos
     - Un permiso puede estar asociado a varios roles
     */
-    @ManyToMany(() => Permiso, (permiso) => permiso.roles)
-    @JoinTable({ name: 'roles_permisos' }) // tabla intermedia (detalles) > se pone en la tabla que tiene la llave foranea
-    permisos: Permiso[]
+    // @ManyToMany(() => Permiso, (permiso) => permiso.roles)
+    // @JoinTable({ name: 'roles_permisos' }) // tabla intermedia (detalles) > se pone en la tabla que tiene la llave foranea
+    // permisos: Permiso[]
 
 
     @BeforeInsert()
