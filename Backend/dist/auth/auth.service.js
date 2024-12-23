@@ -20,31 +20,29 @@ let AuthService = class AuthService {
         this.jwtService = jwtService;
         this.invalidatedTokens = new Set();
     }
-    async login(nombreUsuario, clave) {
+    async login(nombreUsuario, correo, clave) {
         try {
             const usuario = await this.usuariosService.findOneByNombreUsuario(nombreUsuario);
-            if (!usuario) {
+            const usuarioCorreo = await this.usuariosService.findOneByCorreo(correo);
+            if (!usuario || !usuarioCorreo)
                 throw new common_1.UnauthorizedException('Usuario Inválido');
-            }
-            const isPasswordValid = await bcrypt.compare(clave, usuario.clave);
-            if (!isPasswordValid) {
+            const isPasswordValid = await bcrypt.compare(clave, usuario.clave || usuarioCorreo.clave);
+            if (!isPasswordValid)
                 throw new common_1.UnauthorizedException('Clave inválida');
-            }
-            await usuario.rol;
+            await usuario.rol || usuarioCorreo.rol;
             const payload = {
-                sub: usuario.id,
-                nombreUsuario: usuario.NombreUsuario,
-                rol: usuario.rol?.nombreRol || 'Sin rol'
+                sub: usuario.id || usuarioCorreo.id,
+                nombreUsuario: usuario.NombreUsuario || usuarioCorreo.NombreUsuario,
+                rol: usuario.rol?.nombreRol || usuarioCorreo.rol?.nombreRol || 'Sin rol'
             };
             const token = await this.jwtService.signAsync(payload, {
-                secret: process.env.JWT_SECRET,
+                secret: process.env.JWT_SECRET || 'SECRET-KEY',
                 expiresIn: '1h'
             });
             return { access_token: token };
         }
         catch (error) {
-            console.error('Error en login:', error);
-            throw new common_1.UnauthorizedException('Credenciales inválidas');
+            throw new common_1.UnauthorizedException('Credenciales inválidas', error.message);
         }
     }
     logout(token) {
@@ -52,7 +50,7 @@ let AuthService = class AuthService {
             this.invalidatedTokens.add(token);
         }
         catch (error) {
-            throw new common_1.UnauthorizedException('No se pudo invalidar el token 1');
+            throw new common_1.UnauthorizedException('No se pudo invalidar el token 1', error.message);
         }
     }
     invalidateToken(token) {
@@ -60,7 +58,7 @@ let AuthService = class AuthService {
             this.invalidatedTokens.add(token);
         }
         catch (error) {
-            throw new common_1.UnauthorizedException('No se pudo invalidar el token 2');
+            throw new common_1.UnauthorizedException('No se pudo invalidar el token 2', error.message);
         }
     }
     isTokenInvalidated(token) {
@@ -68,7 +66,7 @@ let AuthService = class AuthService {
             return this.invalidatedTokens.has(token);
         }
         catch (error) {
-            throw new common_1.UnauthorizedException('No se pudo validar el token 3');
+            throw new common_1.UnauthorizedException('No se pudo validar el token 3', error.message);
         }
     }
 };

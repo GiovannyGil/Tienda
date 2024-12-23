@@ -3,8 +3,8 @@ import { VentasService } from './ventas.service';
 import { CreateVentaDto } from './dto/create-venta.dto';
 import { UpdateVentaDto } from './dto/update-venta.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { RolesGuard } from 'src/roles/guards/roles.guard';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from '../roles/decorators/roles.decorator';
 @Controller('ventas')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class VentasController {
@@ -17,7 +17,7 @@ export class VentasController {
   }
 
   @Get()
-  @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
+  @Roles('Administrador', 'Empleado', 'Contador', 'Analista') 
   findAll() {
     return this.ventasService.findAll();
   }
@@ -42,6 +42,7 @@ export class VentasController {
 
   // ejecución manual de eliminaciones permanentes
   @Delete('cleanup')
+  @Roles('Administrador')
   cleanDeletedRecords() {
     return this.ventasService.cleanDeletedRecords();
   }

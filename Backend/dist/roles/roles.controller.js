@@ -49,7 +49,6 @@ let RolesController = class RolesController {
 exports.RolesController = RolesController;
 __decorate([
     (0, common_1.Post)(),
-    (0, roles_decorator_1.Roles)('Administrador'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_role_dto_1.CreateRoleDto]),
@@ -97,6 +96,7 @@ __decorate([
 ], RolesController.prototype, "remove", null);
 __decorate([
     (0, common_1.Delete)('cleanup'),
+    (0, roles_decorator_1.Roles)('Administrador'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)

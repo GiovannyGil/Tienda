@@ -3,8 +3,8 @@ import { ProductosService } from './productos.service';
 import { CreateProductoDto } from './dto/create-producto.dto';
 import { UpdateProductoDto } from './dto/update-producto.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { RolesGuard } from 'src/roles/guards/roles.guard';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from '../roles/decorators/roles.decorator';
 @Controller('productos')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ProductosController {
@@ -42,6 +42,7 @@ export class ProductosController {
 
   // ejecución manual de eliminaciones permanentes
   @Delete('cleanup')
+  @Roles('Administrador')
   cleanDeletedRecords() {
     return this.productosService.cleanDeletedRecords();
   }

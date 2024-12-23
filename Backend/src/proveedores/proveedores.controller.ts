@@ -3,8 +3,8 @@ import { ProveedoresService } from './proveedores.service';
 import { CreateProveedoreDto } from './dto/create-proveedore.dto';
 import { UpdateProveedoreDto } from './dto/update-proveedore.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { RolesGuard } from 'src/roles/guards/roles.guard';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from '../roles/decorators/roles.decorator';
 @Controller('proveedores')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ProveedoresController {
@@ -17,7 +17,7 @@ export class ProveedoresController {
   }
 
   @Get()
-  @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
+  @Roles('Administrador', 'Empleado', 'Contador', 'Analista') 
   findAll() {
     return this.proveedoresService.findAll();
   }
@@ -42,6 +42,7 @@ export class ProveedoresController {
 
   // ejecución manual de eliminaciones permanentes
   @Delete('cleanup')
+  @Roles('Administrador')
   cleanDeletedRecords() {
     return this.proveedoresService.cleanDeletedRecords();
   }

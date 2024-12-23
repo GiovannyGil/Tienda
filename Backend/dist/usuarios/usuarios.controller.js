@@ -20,7 +20,7 @@ const update_usuario_dto_1 = require("./dto/update-usuario.dto");
 const update_clave_dto_1 = require("./dto/update-clave.dto");
 const roles_decorator_1 = require("../roles/decorators/roles.decorator");
 const jwt_guard_1 = require("../auth/jwt/jwt.guard");
-const roles_guard_1 = require("../roles/guards/roles.guard");
+const roles_guard_1 = require("../auth/guards/roles.guard");
 let UsuariosController = class UsuariosController {
     constructor(usuariosService) {
         this.usuariosService = usuariosService;

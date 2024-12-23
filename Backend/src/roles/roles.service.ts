@@ -5,14 +5,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from './entities/role.entity';
 import { In, LessThan, Repository } from 'typeorm';
 import { Cron, CronExpression } from '@nestjs/schedule';
-// import { Permiso } from 'src/permisos/entities/permiso.entity';
-
 @Injectable()
 export class RolesService {
-
-
-  constructor(@InjectRepository(Role) private roleRepository: Repository<Role>,
-  // @InjectRepository(Permiso) private permisoRepository: Repository<Permiso>
+  constructor(@InjectRepository(Role) private roleRepository: Repository<Role>
 ) {}
 
   // metodo para verificar si ya exitse le rol a crear
@@ -34,11 +29,6 @@ export class RolesService {
       const RolExiste = await this.verifyExistROL(createRoleDto.nombreRol)
       if(RolExiste) throw new BadRequestException('El rol ya existe')
 
-      // const permisos = await this.permisoRepository.findByIds(createRoleDto.permisosIds);
-      // if (permisos.length !== createRoleDto.permisosIds.length) {
-      //   throw new BadRequestException('Algunos permisos no existen');
-      // }
-
       // crear el rol
       const nuevoRol = this.roleRepository.create({ nombreRol, estado, descripcion });
       if(!nuevoRol) throw new BadRequestException('Error al crear el ROL')
@@ -52,7 +42,7 @@ export class RolesService {
   async findAll(): Promise<Role[]> {
     try {
       // buscar los roles
-      const roles = await this.roleRepository.find({ where: { deletedAt: null }})
+      const roles = await this.roleRepository.find({ where: { deletedAt: null } })
 
       // si no encuentra nada, devolver un array vacio
       if(!roles || roles.length === 0) throw new BadRequestException('No hay roles registrados')
@@ -67,7 +57,7 @@ export class RolesService {
   async findOneByID(id: number): Promise<Role> {
     try {
       // buscar el rol
-      const rol = await this.roleRepository.findOne({ where: { id, deletedAt: null } })
+      const rol = await this.roleRepository.findOne({ where: { id, deletedAt: null }})
       // si no encuentra el rol devolver un null
       if(!rol) throw new BadRequestException('El rol no existe')
       // retornar el rol
@@ -101,12 +91,6 @@ export class RolesService {
     if (nombreRol && role.nombreRol !== nombreRol && (await this.verifyExistROL(nombreRol))) {
       throw new BadRequestException('El nombre del rol ya está en uso');
     }
-
-    // if (permisosIds) {
-    //   const permisos = await this.permisoRepository.findByIds(permisosIds);
-    //   if (permisos.length !== permisosIds.length) throw new BadRequestException('Algunos permisos no existen');
-    //   role.permisos = permisos;
-    // }
 
     Object.assign(role, { nombreRol, estado, descripcion });
     return await this.roleRepository.save(role);

@@ -3,8 +3,8 @@ import { ComprasService } from './compras.service';
 import { CreateCompraDto } from './dto/create-compra.dto';
 import { UpdateCompraDto } from './dto/update-compra.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { RolesGuard } from 'src/roles/guards/roles.guard';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from '../roles/decorators/roles.decorator';
 
 @Controller('compras')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -18,13 +18,13 @@ export class ComprasController {
   }
 
   @Get()
-  @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
+  @Roles('Administrador', 'Empleado', 'Contador', 'Analista') 
   findAll() {
     return this.comprasService.findAll();
   }
 
   @Get(':id')
-  @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
+  @Roles('Administrador', 'Empleado', 'Contador', 'Analista') 
   findOne(@Param('id') id: string) {
     return this.comprasService.findOne(+id);
   }
@@ -43,6 +43,7 @@ export class ComprasController {
 
   // ejecución manual de eliminaciones permanentes
   @Delete('cleanup')
+  @Roles('Administrador')
   cleanDeletedRecords() {
     return this.comprasService.cleanDeletedRecords();
   }

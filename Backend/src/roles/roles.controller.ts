@@ -11,7 +11,6 @@ export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
   @Post()
-  @Roles('Administrador')
   async create(@Body() createRoleDto: CreateRoleDto) {
     return await this.rolesService.create(createRoleDto);
   }
@@ -48,6 +47,7 @@ export class RolesController {
 
   // ejecución manual de eliminaciones permanentes
   @Delete('cleanup')
+  @Roles('Administrador')
   cleanDeletedRecords() {
     return this.rolesService.cleanDeletedRecords();
   }

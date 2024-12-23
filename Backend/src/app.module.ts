@@ -12,7 +12,6 @@ import { UsuariosModule } from './usuarios/usuarios.module';
 
 // Importar el módulo de tareas
 import { ScheduleModule } from '@nestjs/schedule';
-// import { PermisosModule } from './permisos/permisos.module';
 import { ProductosModule } from './productos/productos.module';
 import { VentasModule } from './ventas/ventas.module';
 import { ComprasModule } from './compras/compras.module';

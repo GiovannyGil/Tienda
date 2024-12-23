@@ -3,7 +3,7 @@ import { CategoriasService } from './categorias.service';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { RolesGuard } from '../roles/guards/roles.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from '../roles/decorators/roles.decorator';
 
 @Controller('categorias')
@@ -24,13 +24,13 @@ export class CategoriasController {
   }
 
   @Get(':id')
-  @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
+  @Roles('Administrador', 'Empleado', 'Contador', 'Analista') 
   findOne(@Param('id') id: string) {
     return this.categoriasService.findOneByID(+id);
   }
 
   @Get('nombre/:nombre')
-  @Roles('Administrador', 'Empleado', 'Contador', 'Analista') // aplicar el guard a un método específico (permisos)
+  @Roles('administrador', 'Empleado', 'Contador', 'Analista')
   findOneByName(@Param('nombre') nombre: string) {
     return this.categoriasService.findOneByName(nombre);
   }
@@ -49,6 +49,7 @@ export class CategoriasController {
 
   // ejecución manual de eliminaciones permanentes
   @Delete('cleanup')
+  @Roles('Administrador')
   cleanDeletedRecords() {
     return this.categoriasService.cleanDeletedRecords();
   }

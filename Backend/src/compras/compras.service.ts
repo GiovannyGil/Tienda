@@ -24,7 +24,7 @@ export class ComprasService {
     try {
       // verificar que el usuario existe
       const usuario = await this.usuariosRepository.findOne({ where: {id: usuariosId, deletedAt: null} })
-      if(!usuario) { throw new NotFoundException('Usuario no encontrado') }
+      if(!usuario) throw new NotFoundException('Usuario no encontrado')
 
       // verificar que los productos existen
       const productos = await this.productosRepository.find({ where: { id: In(productosIds), deletedAt: null }, select: ['id', 'nombre', 'precio', 'marca', 'estado'] });
@@ -37,9 +37,7 @@ export class ComprasService {
         where: { id: In(proveedorIds), deletedAt: null }, select: [
           'id', 'nombreAsesor', 'nombreEmpresa', 'email', 'celular', 'telefono', 'direccion'
         ] });
-      if (proveedores.length !== proveedorIds.length) {
-        throw new NotFoundException('Uno o más proveedores no existen o han sido eliminados') 
-      }
+      if (proveedores.length !== proveedorIds.length) throw new NotFoundException('Uno o más proveedores no existen o han sido eliminados')
 
       // crear la compra
       const nuevaCompra = this.comprasRepository.create({
@@ -72,7 +70,7 @@ export class ComprasService {
       const compras = await this.comprasRepository.find({ where: {deletedAt: null}, relations: ['productos', 'usuario', 'proveedores'] });
 
       // si no encuentra nada
-      if (!compras) { throw new NotFoundException('No se encontraron compras') }
+      if (!compras) throw new NotFoundException('No se encontraron compras')
 
       // devolver las compras
       return compras;
@@ -87,7 +85,7 @@ export class ComprasService {
       const compra = await this.comprasRepository.findOne({ where: {id, deletedAt: null}, relations: ['productos', 'usuario', 'proveedores'] });
 
       // si no encuentra nada
-      if(!compra) { throw new NotFoundException('No se encontro la compra') }
+      if(!compra) throw new NotFoundException('No se encontro la compra')
 
       // devolver la compra
       return compra;
@@ -107,7 +105,7 @@ export class ComprasService {
         relations: ['productos', 'usuario', 'proveedores'],
       });
 
-      if (!compra) { throw new NotFoundException('Compra no encontrada'); }
+      if (!compra) throw new NotFoundException('Compra no encontrada')
 
       // validar que hay algo que actualizar
       const hasChanges =
@@ -117,14 +115,12 @@ export class ComprasService {
         (updateCompraDto.productosIds && updateCompraDto.productosIds.length > 0) ||
         (updateCompraDto.proveedorIds && updateCompraDto.proveedorIds.length > 0);
 
-      if (!hasChanges) { throw new BadRequestException('No se encontraron datos para actualizar'); }
+      if (!hasChanges) throw new BadRequestException('No se encontraron datos para actualizar')
 
       // verificar que los productos existen
       if (productosIds) {
         const productos = await this.productosRepository.find({ where: { id: In(updateCompraDto.productosIds), deletedAt: null }, select: ['id', 'nombre', 'precio', 'marca', 'estado'] });
-        if (productos.length !== updateCompraDto.productosIds.length) {
-          throw new NotFoundException('Uno o más productos no existen o han sido eliminados') 
-        }
+        if (productos.length !== updateCompraDto.productosIds.length) throw new NotFoundException('Uno o más productos no existen o han sido eliminados') 
         compra.productos = productos;
       }
 
@@ -133,9 +129,7 @@ export class ComprasService {
         const proveedores = await this.proveedoresRepository.find({ where: { id: In(updateCompraDto.proveedorIds), deletedAt: null }, select: [
           'id', 'nombreAsesor', 'nombreEmpresa', 'email', 'celular', 'telefono', 'direccion'
         ] });
-        if (proveedores.length !== updateCompraDto.proveedorIds.length) {
-          throw new NotFoundException('Uno o más proveedores no existen o han sido eliminados') 
-        }
+        if (proveedores.length !== updateCompraDto.proveedorIds.length) throw new NotFoundException('Uno o más proveedores no existen o han sido eliminados')
         compra.proveedores = proveedores;
       }
 
@@ -169,7 +163,7 @@ export class ComprasService {
       const compra = await this.comprasRepository.findOne({ where: { id, deletedAt: null } })
 
       // si no encuentra nada
-      if (!compra) { throw new NotFoundException('No se encontro la compra') }
+      if (!compra) throw new NotFoundException('No se encontro la compra')
 
       // actualizar la compra
       compra.deletedAt = new Date()

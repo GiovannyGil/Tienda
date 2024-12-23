@@ -60,7 +60,7 @@ export class VentasService {
       // buscar las ventas
       const ventas = await this.ventasRepository.find({ where: {deletedAt: null}, relations: ['productos', 'usuario'] });
       // si no encuentra nada
-      if(!ventas) { throw new NotFoundException('No se encontraron ventas') }
+      if(!ventas) throw new NotFoundException('No se encontraron ventas')
       // devolver las ventas
       return ventas;
     } catch (error) {
@@ -73,7 +73,7 @@ export class VentasService {
       // buscar la venta por id
       const venta = await this.ventasRepository.findOne({ where: {id, deletedAt: null}, relations: ['productos', 'usuario'] })
       // si no encuentra nada
-      if(!venta) { throw new NotFoundException('No se encontro la venta') }
+      if(!venta) throw new NotFoundException('No se encontro la venta')
       // devolver la venta
       return venta
     } catch (error) {
@@ -91,9 +91,7 @@ export class VentasService {
         relations: ['productos', 'usuario'],
       });
 
-      if (!venta) {
-        throw new NotFoundException(`No se encontró la venta con ID ${id}`);
-      }
+      if (!venta) throw new NotFoundException(`No se encontró la venta con ID ${id}`)
 
       // Validar que hay algo que actualizar
       const hasChanges =
@@ -102,9 +100,7 @@ export class VentasService {
         updateVentaDto.metodoPago != null ||
         (updateVentaDto.productosIds && updateVentaDto.productosIds.length > 0);
 
-      if (!hasChanges) {
-        throw new BadRequestException('No se proporcionaron datos para actualizar');
-      }
+      if (!hasChanges) throw new BadRequestException('No se proporcionaron datos para actualizar')
 
       // Validar productos asociados si se proporcionan
       if (productosIds && updateVentaDto.productosIds.length > 0) {
@@ -112,11 +108,7 @@ export class VentasService {
           where: { id: In(updateVentaDto.productosIds), deletedAt: null }, select: ['id', 'nombre', 'precio', 'marca', 'estado']
         });
 
-        if (productos.length !== updateVentaDto.productosIds.length) {
-          throw new NotFoundException(
-            'Uno o más productos no existen o han sido eliminados',
-          );
-        }
+        if (productos.length !== updateVentaDto.productosIds.length) throw new NotFoundException( 'Uno o más productos no existen o han sido eliminados')
 
         // Asignar productos actualizados a la venta
         venta.productos = productos;
@@ -157,7 +149,7 @@ export class VentasService {
       const venta = await this.ventasRepository.findOne({ where: {id, deletedAt: null} })
 
       // si no encuentra nada
-      if(!venta) { throw new NotFoundException('No se encontro la venta') }
+      if(!venta) throw new NotFoundException('No se encontro la venta')
 
       // actualizar la venta
       venta.deletedAt = new Date()

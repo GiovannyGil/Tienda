@@ -8,13 +8,15 @@ import { Role } from 'src/roles/entities/role.entity';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import * as bcrypt from 'bcrypt';
 import { UpdateClaveDto } from './dto/update-clave.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsuariosService {
 
   constructor(
     @InjectRepository(Usuario) private usuarioRepository: Repository<Usuario>,
-    @InjectRepository(Role) private roleRepository: Repository<Role>
+    @InjectRepository(Role) private roleRepository: Repository<Role>,
+    private jwtService: JwtService,
   ) {}
 
   // metodo para crear un usuario
@@ -23,14 +25,10 @@ export class UsuariosService {
       const { rolId, clave, ...usuarioData } = createUsuarioDto;
   
       // Buscar el rol y verificar si existe
-      const rol = await this.roleRepository.findOne({
-        where: { id: rolId, deletedAt: null },
-      });
+      const rol = await this.roleRepository.findOne({ where: { id: rolId, deletedAt: null }});
   
       // Si no existe el rol, lanzar una excepción de tipo BadRequestException
-      if (!rol) {
-        throw new NotFoundException(`El rol con ID ${rolId} no existe`);
-      }
+      if (!rol) throw new NotFoundException(`El rol con ID ${rolId} no existe`)
       
       // encriptar la contraseña
       const salt = await bcrypt.genSalt(10);
@@ -48,9 +46,7 @@ export class UsuariosService {
       return await this.usuarioRepository.save(nuevoUsuario);
     } catch (error) {
       // Mejor manejo de errores
-      throw new InternalServerErrorException(
-        `Error al crear el usuario: ${error.message}`,
-      );
+      throw new InternalServerErrorException(`Error al crear el usuario: ${error.message}` );
     }
   }
   
@@ -61,7 +57,7 @@ export class UsuariosService {
       // buscar todos los usuarios
       const usuarios = await this.usuarioRepository.find({ where: { deletedAt: null }, relations: ['rol'] })
       // si no encuentra nada, devolver un array vacio
-      if (!usuarios) { throw new NotFoundException('No hay usuarios registrados.') }
+      if (!usuarios) throw new NotFoundException('No hay usuarios registrados.')
       return usuarios
     } catch (error) {
       throw new InternalServerErrorException(`Error al encontrar los usuarios ${error.message}`)
@@ -74,9 +70,7 @@ export class UsuariosService {
       // buscar el usuario por id
       const usuario = await this.usuarioRepository.findOne({ where: { id, deletedAt: null }, relations: ['rol'] })
 
-      console.log('Resultado de findOneByID:', usuario); // Verifica el usuario completo
-      // si no encuentra nada, devolver un array vacio
-      if (!usuario) { throw new NotFoundException(`El usuario con ID ${id} no existe o ya fue eliminado.`) }
+      if (!usuario) throw new NotFoundException(`El usuario con ID ${id} no existe o ya fue eliminado.`)
       // devolver el usuario
       return usuario
     } catch (error) {
@@ -88,11 +82,10 @@ export class UsuariosService {
   async findOneByNombreUsuario(nombreUsuario: string): Promise<Usuario | null> {
     try {
       // buscr el usuario por nombreUsuario
-      const usuario = await this.usuarioRepository.findOne({ where: { NombreUsuario: nombreUsuario, deletedAt: null },
-        relations: ['rol'] })
+      const usuario = await this.usuarioRepository.findOne({ where: { NombreUsuario: nombreUsuario, deletedAt: null }, relations: ['rol'] })
 
       // si no encuentra nada, devolver un array vacio
-      if (!usuario) { throw new NotFoundException(`El usuario con NombreUsuario ${nombreUsuario} no existe o ya fue eliminado.`) }
+      if (!usuario) throw new NotFoundException(`El usuario con NombreUsuario ${nombreUsuario} no existe o ya fue eliminado.`)
       // devolver el usuario
       return usuario
     } catch (error) {
@@ -107,7 +100,7 @@ export class UsuariosService {
       const usuario = await this.usuarioRepository.findOne({ where: { correo: correo, deletedAt: null } })
 
       // si no encuentra nada, devolver un array vacio
-      if (!usuario) { throw new NotFoundException(`El usuario con correo ${correo} no existe o ya fue eliminado.`) }
+      if (!usuario) throw new NotFoundException(`El usuario con correo ${correo} no existe o ya fue eliminado.`)
       // devolver el usuario
       return usuario
     } catch (error) {
@@ -127,18 +120,14 @@ export class UsuariosService {
         relations: ['rol'], // Cargar el rol actual para la comparación
       });
   
-      if (!usuario) {
-        throw new NotFoundException(`El usuario con ID ${id} no existe o ya fue eliminado.`);
-      }
+      if (!usuario)  throw new NotFoundException(`El usuario con ID ${id} no existe o ya fue eliminado.`)
   
       // Manejar el cambio de rol, si es necesario
       if (rolId && usuario.rol?.id !== rolId) {
         // Buscar el nuevo rol
         const nuevoRol = await this.roleRepository.findOne({ where: { id: rolId } });
   
-        if (!nuevoRol) {
-          throw new NotFoundException(`El rol con ID ${rolId} no existe.`);
-        }
+        if (!nuevoRol) throw new NotFoundException(`El rol con ID ${rolId} no existe.`)
   
         // Asignar el nuevo rol al usuario
         usuario.rol = nuevoRol;
@@ -165,7 +154,7 @@ export class UsuariosService {
       });
 
       // verificar si el usuario existe
-      if (!usuario) { throw new NotFoundException('El usuario no existe o ya fue eliminado'); }
+      if (!usuario) throw new NotFoundException('El usuario no existe o ya fue eliminado')
 
       // verificar si la contraseña actual es correcta
       const claveValida = await bcrypt.compare(claveActual, usuario.clave);
@@ -194,9 +183,7 @@ export class UsuariosService {
       });
 
       // verificar si el usuario existe
-      if (!usuario) {
-        throw new NotFoundException('El usuario no existe o ya fue eliminado');
-      }
+      if (!usuario) throw new NotFoundException('El usuario no existe o ya fue eliminado')
 
       // marcar el usuario como eliminado
       usuario.deletedAt = new Date();
