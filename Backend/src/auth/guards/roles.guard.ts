@@ -1,88 +1,52 @@
-import { 
-  CanActivate, 
-  ExecutionContext, 
-  Injectable, 
-  UnauthorizedException,
-  ForbiddenException 
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
-import { UsuariosService } from 'src/usuarios/usuarios.service';
+import { Observable } from 'rxjs';
 
+// Constante que define el metadata personalizado
 export const ROLES_KEY = 'roles';
 
+// Injectable del guard
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(
-    private reflector: Reflector,
-    private jwtService: JwtService,
-    private usuariosService: UsuariosService,
-  ) {}
+  constructor(private reflector: Reflector) { }
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
-      context.getHandler(),
-      context.getClass()
-    ]);
-  
-    console.log('Roles requeridos auth:', requiredRoles);
-  
-    // Si no hay roles específicos, permitir acceso
-    if (!requiredRoles) {
-      return true;
-    }
-  
-    const request = context.switchToHttp().getRequest();
-    
-    const authHeader = request.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new UnauthorizedException('Token no proporcionado');
-    }
-  
-    const token = authHeader.split(' ')[1];
-  
+  canActivate(context: ExecutionContext): boolean {
     try {
-      const decoded = await this.jwtService.verifyAsync(token, {
-        secret: process.env.JWT_SECRET
-      });
-  
-      console.log('Token completo decodificado:', decoded);
-  
-      // Obtener información del usuario para depurar
-      const usuario = await this.usuariosService.findOneByID(decoded.sub);
-      
-      console.log('Usuario encontrado:', usuario);
-      console.log('Rol del usuario:', usuario?.rol.nombreRol);
-  
-      // Si no hay usuario o no tiene rol, lanzar excepción
-      if (!usuario || !usuario.rol) {
-        throw new UnauthorizedException('Usuario sin rol asignado');
+      // Obtener los roles requeridos del decorador
+      const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
+        context.getHandler(),
+        context.getClass()
+      ]);
+
+      console.log('Roles requeridos:', requiredRoles);
+
+      // Si no se especifican roles, permitir acceso
+      if (!requiredRoles) {
+        return true;
       }
-  
-      // Pasar el rol del usuario al token
-      decoded.rol = usuario.rol.nombreRol;
-  
-      // Establecer el usuario en el request
-      request.user = {
-        id: decoded.sub,
-        nombreUsuario: decoded.nombreUsuario,
-        rol: decoded.rol
-      };
-  
-      // Verificar roles
-      const tienePermiso = requiredRoles.some(
-        (rol) => rol.toLowerCase() === decoded.rol.toLowerCase()
+
+      // Obtener el usuario de la solicitud
+      const { user } = context.switchToHttp().getRequest();
+
+      console.log('Usuario en la solicitud:', user);
+
+      // Verificar si el usuario está autenticado
+      if (!user) {
+        throw new UnauthorizedException('Usuario no autenticado');
+      }
+
+      // Verificar si el rol del usuario está en los roles requeridos
+      const hasRequiredRole = requiredRoles.some(
+        (role) => user.rol?.toLowerCase() === role.toLowerCase()
       );
-  
-      if (!tienePermiso) {
-        console.log('Rol actual:', decoded.rol);
-        console.log('Roles requeridos:', requiredRoles);
+
+      if (!hasRequiredRole) {
         throw new ForbiddenException('No tienes permisos suficientes');
       }
-  
+
       return true;
     } catch (error) {
-      throw new UnauthorizedException('Usuario no Autorizado auth');
+      throw new UnauthorizedException('No autorizado');
     }
   }
 }
