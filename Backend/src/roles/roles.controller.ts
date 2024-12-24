@@ -47,7 +47,6 @@ export class RolesController {
 
   // ejecución manual de eliminaciones permanentes
   @Delete('cleanup')
-  @Roles('Administrador')
   cleanDeletedRecords() {
     return this.rolesService.cleanDeletedRecords();
   }

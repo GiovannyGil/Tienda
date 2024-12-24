@@ -42,7 +42,6 @@ export class VentasController {
 
   // ejecución manual de eliminaciones permanentes
   @Delete('cleanup')
-  @Roles('Administrador')
   cleanDeletedRecords() {
     return this.ventasService.cleanDeletedRecords();
   }

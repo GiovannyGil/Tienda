@@ -42,7 +42,6 @@ export class ProveedoresController {
 
   // ejecución manual de eliminaciones permanentes
   @Delete('cleanup')
-  @Roles('Administrador')
   cleanDeletedRecords() {
     return this.proveedoresService.cleanDeletedRecords();
   }

@@ -42,7 +42,6 @@ export class ProductosController {
 
   // ejecución manual de eliminaciones permanentes
   @Delete('cleanup')
-  @Roles('Administrador')
   cleanDeletedRecords() {
     return this.productosService.cleanDeletedRecords();
   }
