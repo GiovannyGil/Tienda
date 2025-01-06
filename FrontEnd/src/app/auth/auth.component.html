@@ -1,9 +1,9 @@
 <div class="container">
-    <form action="" class="formulario">
+    <form action="" class="formulario" (ngSubmit)="login()">
         <h1 class="titulo"><span class="texto">Login</span></h1>
         <section class="datos-logeo">
-            <input class="campo" type="text" placeholder="Correo o Usuario">
-            <input class="campo" type="password" placeholder="clave">
+            <input class="campo" type="text" placeholder="Usuario" [(ngModel)]="nombreUsuario" name="nombreUsuario" required>
+            <input class="campo" type="password" placeholder="clave" [(ngModel)]="clave" name="clave" required>
         </section>
         <section class="boton-acceso">
             <button class="btn" type="button">Ingresar</button>
