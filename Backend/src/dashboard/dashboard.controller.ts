@@ -8,55 +8,55 @@ import { Roles } from '../roles/decorators/roles.decorator';
 export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 
-  @Get()
+  @Get('estadisticasGenerales')
   @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
   obtenerEstadisticasGenerales() {
     return this.dashboardService.obtenerEstadisticasGenerales();
   }
   
-  @Get()
+  @Get('estadisticasProductos')
   @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
   obtenerEstadisticasProductos(){
     return this.dashboardService.obtenerEstadisticasProductos();
   }
   
-  @Get()
+  @Get('productosMasVendidos')
   @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
   obtenerProductosMasVendidos(){
     return this.dashboardService.obtenerProductosMasVendidos();
   }
 
-  @Get()
+  @Get('estadisticasUsuarios')
   @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
   obtenerEstadisticasUsuarios(){
     return this.dashboardService.obtenerEstadisticasUsuarios();
   }
 
-  @Get()
+  @Get('estadisticasRoles')
   @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
   obtenerEstadisticasRoles(){
     return this.dashboardService.obtenerEstadisticasRoles();
   }
 
-  @Get()
+  @Get('estadisticasCategorias')
   @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
   obtenerEstadisticasCategorias(){
     return this.dashboardService.obtenerEstadisticasCategorias();
   }
 
-  @Get()
+  @Get('estadisticasProveedores')
   @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
   obtenerEstadisticasProveedores(){
     return this.dashboardService.obtenerEstadisticasProveedores();
   }
 
-  @Get()
+  @Get('estadisticasVentas')
   @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
   obtenerEstadisticasVentas(){
     return this.dashboardService.obtenerEstadisticasVentas();
   }
 
-  @Get()
+  @Get('estadisticasCompras')
   @Roles('Administrador', 'Empleado', 'Contador', 'Analista')
   obtenerEstadisticasCompras(){
     return this.dashboardService.obtenerEstadisticasCompras();
