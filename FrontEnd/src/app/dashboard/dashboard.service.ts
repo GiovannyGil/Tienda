@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { GeneralStatisticsDto } from './interfaces/dashboard.interface';
+import { EstadisticasProductos, GeneralStatisticsDto } from './interfaces/dashboard.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +22,8 @@ export class DashboardService {
   }
 
   //* obtener estadisticas productos
-  obtenerEstadisticasProductos(): Observable<any> {
-    return this.http.get(`${this.URL}/estadisticasProductos`);
+  obtenerEstadisticasProductos(): Observable<EstadisticasProductos> {
+    return this.http.get<EstadisticasProductos>(`${this.URL}/estadisticasProductos`);
   }
 
   //* obtener productos mas vendidos
