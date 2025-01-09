@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DashboardService } from './dashboard.service';
 import { Router } from '@angular/router';
+import { Chart, registerables } from 'chart.js';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,6 +12,9 @@ export class DashboardComponent {
   estadisticasGenerales: any;
   estadisticasProductos: any;
 
+  productosMasVendidosChart: any;
+  ventasChart: any;
+
   constructor(private dashService: DashboardService, private router: Router) { }
 
   //todo: inicializar los metodos automaticamente
@@ -19,24 +23,40 @@ export class DashboardComponent {
     this.getEstadisticasProductos();
   }
 
-  //* obtener estadisticas generales
+  ///* Obtener estadísticas generales
   private getEstadisticasGenerales(): void {
-    this.dashService.obtenerEstadisticasGenerales().subscribe(data => {
-      console.log(data);
-      this.estadisticasGenerales = data;
-    }, error => {
-      console.log(`Error al obtener las estadisticas generales: ${error}`);
-    })
+    this.dashService.obtenerEstadisticasGenerales().subscribe(
+      (data) => {
+        this.estadisticasGenerales = data;
+      },
+      (error) => {
+        console.error(`Error al obtener estadísticas generales: ${error}`);
+      }
+    );
   }
 
-  //* obtener estadisticas productos
+  //* Obtener estadísticas productos
   private getEstadisticasProductos(): void {
-    this.dashService.obtenerEstadisticasProductos().subscribe(data => {
-      console.log(data);
-      this.estadisticasProductos = data;
-    }, error => {
-      console.log(`Error al obtener las estadisticas de productos: ${error}`);
-    })
+    this.dashService.obtenerEstadisticasProductos().subscribe(
+      (data) => {
+        this.estadisticasProductos = data;
+        this.updateProductosMasVendidosChart(data);
+      },
+      (error) => {
+        console.error(`Error al obtener estadísticas de productos: ${error}`);
+      }
+    );
+  }
+
+
+  //* Actualizar gráfico de productos más vendidos
+  private updateProductosMasVendidosChart(data: any): void {
+    const labels = data.map((item: any) => item.nombre);
+    const values = data.map((item: any) => item.cantidadVendida);
+
+    this.productosMasVendidosChart.data.labels = labels;
+    this.productosMasVendidosChart.data.datasets[0].data = values;
+    this.productosMasVendidosChart.update();
   }
 
 }

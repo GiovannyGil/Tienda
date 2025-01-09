@@ -96,7 +96,6 @@ __decorate([
 ], RolesController.prototype, "remove", null);
 __decorate([
     (0, common_1.Delete)('cleanup'),
-    (0, roles_decorator_1.Roles)('Administrador'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)

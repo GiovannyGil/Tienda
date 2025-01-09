@@ -44,10 +44,15 @@ export class AuthService {
   // metodo para obtener fecha/tiempo de expiracion del token
   private obtenerFechaExpiracionToken(): number | null {
     const token = this.getToken(); // obtener token del local storage
-    if (!token || token === '') { return null } // si no hay token, retornar null
+    if (!token) { return null } // si no hay token, retornar null
 
-    const payload = JSON.parse(atob(token.split('.')[1])) // decodificar token
-    return payload.exp ? payload.exp * 1000 : null // retornar fecha de expiracion -> multiplicar por 1000 para convertir a milisegundos
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1])) // decodificar token
+      return payload.exp ? payload.exp * 1000 : null // retornar fecha de expiracion -> multiplicar por 1000 para convertir a milisegundos
+    } catch (error) {
+      console.error('Error al decodificar el token:', error);
+      return null;
+    }
   }
 
   // metodo para programar cierre de sesion automaticamente
