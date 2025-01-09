@@ -19,44 +19,88 @@ export class DashboardComponent {
 
   //todo: inicializar los metodos automaticamente
   ngOnInit(): void {
-    this.getEstadisticasGenerales();
-    this.getEstadisticasProductos();
+    this.obtenerEstadisticasGenerales();
+    this.obtenerEstadisticasProductos();
+    this.obtenerProductosMasVendidos();
+    this.obtenerEstadisticasUsuarios();
+    this.obtenerEstadisticasRoles();
+    this.obtenerEstadisticasCategorias();
+    this.obtenerEstadisticasProveedores();
+    this.obtenerEstadisticasVentas();
+    this.obtenerEstadisticasCompras();
   }
 
   ///* Obtener estadísticas generales
-  private getEstadisticasGenerales(): void {
+  private obtenerEstadisticasGenerales(): void {
     this.dashService.obtenerEstadisticasGenerales().subscribe(
       (data) => {
         this.estadisticasGenerales = data;
       },
-      (error) => {
-        console.error(`Error al obtener estadísticas generales: ${error}`);
-      }
+      (error) => { console.error(`Error al obtener estadísticas generales: ${error}`) }
     );
   }
 
   //* Obtener estadísticas productos
-  private getEstadisticasProductos(): void {
+  private obtenerEstadisticasProductos(): void {
     this.dashService.obtenerEstadisticasProductos().subscribe(
-      (data) => {
-        this.estadisticasProductos = data;
-        this.updateProductosMasVendidosChart(data);
-      },
-      (error) => {
-        console.error(`Error al obtener estadísticas de productos: ${error}`);
-      }
-    );
+      (data) => {},
+      (error) => { console.error(`Error al obtener estadísticas de productos: ${error}`) }
+    )
   }
 
-
-  //* Actualizar gráfico de productos más vendidos
-  private updateProductosMasVendidosChart(data: any): void {
-    const labels = data.map((item: any) => item.nombre);
-    const values = data.map((item: any) => item.cantidadVendida);
-
-    this.productosMasVendidosChart.data.labels = labels;
-    this.productosMasVendidosChart.data.datasets[0].data = values;
-    this.productosMasVendidosChart.update();
+  //* Obtener productos más vendidos
+  private obtenerProductosMasVendidos(): void {
+    this.dashService.obtenerProductosMasVendidos().subscribe(
+      (data) => {},
+      (error) => { console.error(`Error al obtener los productos más vendidos: ${error}`) }
+    )
   }
 
+  //* Obtener estadísticas usuarios
+  private obtenerEstadisticasUsuarios(): void {
+    this.dashService.obtenerEstadisticasUsuarios().subscribe(
+      (data) => {},
+      (error) => { console.error(`Error al obtener las estadísticas de usuarios: ${error}`) }
+    )
+  }
+
+  //* Obtener estadísticas roles
+  private obtenerEstadisticasRoles(): void {
+    this.dashService.obtenerEstadisticasRoles().subscribe(
+      (data) => {},
+      (error) => { console.error(`Error al obtener las estadísticas de roles: ${error}`) }
+    )
+  }
+
+  //* Obtener estadísticas categorías
+  private obtenerEstadisticasCategorias(): void {
+    this.dashService.obtenerEstadisticasCategorias().subscribe(
+      (data) => {},
+      (error) => { console.error(`Error al obtener las estadísticas de categorías: ${error}`) }
+    )
+  }
+
+  //* Obtener estadísticas proveedores
+  private obtenerEstadisticasProveedores(): void {
+    this.dashService.obtenerEstadisticasProveedores().subscribe(
+      (data) => {},
+      (error) => { console.error(`Error al obtener las estadísticas de proveedores: ${error}`) }
+    )
+  }
+
+  //* Obtener estadísticas ventas
+  private obtenerEstadisticasVentas(): void {
+    this.dashService.obtenerEstadisticasVentas().subscribe(
+      (data) => {},
+      (error) => { console.error(`Error al obtener las estadísticas de ventas: ${error}`) }
+    )
+  }
+
+  //* Obtener estadísticas compras
+  private obtenerEstadisticasCompras(): void {
+    this.dashService.obtenerEstadisticasCompras().subscribe(
+      (data) => {},
+      (error) => { console.error(`Error al obtener las estadísticas de compras: ${error}`) }
+    )
+  }
 }
