@@ -1,49 +1,47 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DashboardService } from './dashboard.service';
 import { Router } from '@angular/router';
-import { Chart, registerables } from 'chart.js';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   estadisticasGenerales: any;
   estadisticasProductos: any;
 
-  productosMasVendidosChart: any;
+  productosMasVendidos: any;
   ventasChart: any;
 
   constructor(private dashService: DashboardService, private router: Router) { }
 
   //todo: inicializar los metodos automaticamente
   ngOnInit(): void {
-    this.obtenerEstadisticasGenerales();
-    this.obtenerEstadisticasProductos();
-    this.obtenerProductosMasVendidos();
-    this.obtenerEstadisticasUsuarios();
-    this.obtenerEstadisticasRoles();
-    this.obtenerEstadisticasCategorias();
-    this.obtenerEstadisticasProveedores();
-    this.obtenerEstadisticasVentas();
-    this.obtenerEstadisticasCompras();
+    // this.obtenerEstadisticasGenerales();
+    // this.obtenerEstadisticasProductos();
+    // this.obtenerProductosMasVendidos();
+    // this.obtenerEstadisticasUsuarios();
+    // this.obtenerEstadisticasRoles();
+    // this.obtenerEstadisticasCategorias();
+    // this.obtenerEstadisticasProveedores();
+    // this.obtenerEstadisticasVentas();
+    // this.obtenerEstadisticasCompras();
+    // console.log(this.obtenerEstadisticasGenerales());
   }
 
   ///* Obtener estadísticas generales
   private obtenerEstadisticasGenerales(): void {
-    this.dashService.obtenerEstadisticasGenerales().subscribe(
-      (data) => {
-        this.estadisticasGenerales = data;
-      },
-      (error) => { console.error(`Error al obtener estadísticas generales: ${error}`) }
-    );
+    this.dashService.obtenerEstadisticasGenerales().subscribe({
+      next: (data) => (this.estadisticasGenerales = data.userCount),
+      error: (err) => console.error('Error al cargar estadísticas generales:', err),
+    });
   }
 
   //* Obtener estadísticas productos
   private obtenerEstadisticasProductos(): void {
     this.dashService.obtenerEstadisticasProductos().subscribe(
-      (data) => {},
+      (data) => { this.estadisticasProductos = data.CantidadProductos },
       (error) => { console.error(`Error al obtener estadísticas de productos: ${error}`) }
     )
   }
@@ -51,7 +49,7 @@ export class DashboardComponent {
   //* Obtener productos más vendidos
   private obtenerProductosMasVendidos(): void {
     this.dashService.obtenerProductosMasVendidos().subscribe(
-      (data) => {},
+      (data) => { this.productosMasVendidos },
       (error) => { console.error(`Error al obtener los productos más vendidos: ${error}`) }
     )
   }
@@ -59,7 +57,7 @@ export class DashboardComponent {
   //* Obtener estadísticas usuarios
   private obtenerEstadisticasUsuarios(): void {
     this.dashService.obtenerEstadisticasUsuarios().subscribe(
-      (data) => {},
+      (data) => { },
       (error) => { console.error(`Error al obtener las estadísticas de usuarios: ${error}`) }
     )
   }
@@ -67,7 +65,7 @@ export class DashboardComponent {
   //* Obtener estadísticas roles
   private obtenerEstadisticasRoles(): void {
     this.dashService.obtenerEstadisticasRoles().subscribe(
-      (data) => {},
+      (data) => { },
       (error) => { console.error(`Error al obtener las estadísticas de roles: ${error}`) }
     )
   }
@@ -75,7 +73,7 @@ export class DashboardComponent {
   //* Obtener estadísticas categorías
   private obtenerEstadisticasCategorias(): void {
     this.dashService.obtenerEstadisticasCategorias().subscribe(
-      (data) => {},
+      (data) => { },
       (error) => { console.error(`Error al obtener las estadísticas de categorías: ${error}`) }
     )
   }
@@ -83,7 +81,7 @@ export class DashboardComponent {
   //* Obtener estadísticas proveedores
   private obtenerEstadisticasProveedores(): void {
     this.dashService.obtenerEstadisticasProveedores().subscribe(
-      (data) => {},
+      (data) => { },
       (error) => { console.error(`Error al obtener las estadísticas de proveedores: ${error}`) }
     )
   }
@@ -91,7 +89,7 @@ export class DashboardComponent {
   //* Obtener estadísticas ventas
   private obtenerEstadisticasVentas(): void {
     this.dashService.obtenerEstadisticasVentas().subscribe(
-      (data) => {},
+      (data) => { },
       (error) => { console.error(`Error al obtener las estadísticas de ventas: ${error}`) }
     )
   }
@@ -99,7 +97,7 @@ export class DashboardComponent {
   //* Obtener estadísticas compras
   private obtenerEstadisticasCompras(): void {
     this.dashService.obtenerEstadisticasCompras().subscribe(
-      (data) => {},
+      (data) => { },
       (error) => { console.error(`Error al obtener las estadísticas de compras: ${error}`) }
     )
   }

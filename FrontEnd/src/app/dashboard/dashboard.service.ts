@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -18,17 +18,29 @@ export class DashboardService {
   //! metodos dashboard
   //* obtener estadisticas generales
   obtenerEstadisticasGenerales(): Observable<GeneralStatisticsDto> {
-    return this.http.get<GeneralStatisticsDto>(`${this.URL}/estadisticasGenerales`);
+    const authToken = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${authToken}`
+    });
+    return this.http.get<GeneralStatisticsDto>(`${this.URL}/estadisticasGenerales`, { headers });
   }
 
   //* obtener estadisticas productos
   obtenerEstadisticasProductos(): Observable<EstadisticasProductos> {
-    return this.http.get<EstadisticasProductos>(`${this.URL}/estadisticasProductos`);
+    const authToken = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${authToken}`
+    });
+    return this.http.get<EstadisticasProductos>(`${this.URL}/estadisticasProductos`, { headers });
   }
 
   //* obtener productos mas vendidos
   obtenerProductosMasVendidos(): Observable<ProductosMasVendidos> {
-    return this.http.get<ProductosMasVendidos>(`${this.URL}/productosMasVendidos`);
+    const authToken = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${authToken}`
+    });
+    return this.http.get<ProductosMasVendidos>(`${this.URL}/productosMasVendidos`, { headers });
   }
 
   //* obtener estadisticas usuarios
